@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /dashboard
+Disallow: /login
+Disallow: .staging.
+Allow: /
+Sitemap: https://hcinterior.in/sitemap.xml
+
+

@@ -1,0 +1,413 @@
+"use client";
+import React, { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
+import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
+
+const CmsDesignGallery = () => {
+    const authToken = useSelector((state) => state.auth.authToken);
+    const [pagesList, setPagesList] = useState();
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        title: "",
+        description: "",
+        image: null,
+    });
+    const [selectedId, setSelectedId] = useState(null);
+    const selectedPage = pagesList?.find(page => page.id === selectedId);
+
+    const fetchContentManagerPages = useCallback(async () => {
+        try {
+            const response = await api.get(`/cms-parent-child/h3d_gallery`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`, // Send auth token
+                },
+            });
+
+            if (response.data && response.data) {
+                setPagesList(response.data);
+                setLoading(false);
+            }
+
+
+        } catch (err) {
+            toast.error(err.message ?? "Failed to fetch data. Please try again.");
+            setLoading(false);
+        }
+    }, [authToken]);
+
+    useEffect(() => {
+        fetchContentManagerPages();
+    }, [fetchContentManagerPages]);
+
+    // Handle input change for text fields and image
+    const handleInputChange = (e) => {
+        const { name, value, files } = e.target;
+        if (name === "image" && files.length > 0) {
+            setFormData((prevData) => ({ ...prevData, [name]: files[0] }));
+        } else {
+            setFormData((prevData) => ({ ...prevData, [name]: value }));
+        }
+    };
+
+    const handleAddSubmit = async (e) => {
+        e.preventDefault();
+
+        const formDataToSend = new FormData();
+        formDataToSend.append("page_type", "h3d_gallery");
+        formDataToSend.append("title", formData.title);
+        formDataToSend.append("description", formData.description);
+        if (formData.image) {
+            formDataToSend.append("image", formData.image);
+        }
+
+        try {
+            // Send POST request to save form data
+            const response = await api.post(`/cms-parent-child`, formDataToSend, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${authToken}`, // Send auth token
+                },
+            });
+
+            // Handle success response
+            if (response.status === 201) {
+                fetchContentManagerPages();
+                toast.success("Gallery Added successfully.");
+                setFormData({
+                    title: "",
+                    description: "",
+                    image: null,
+                });
+
+                // Close modal and clear form data
+                document.getElementById('addGalleryModalClose').click();
+            } else {
+                toast.error("Error submitting form. Please try again.");
+            }
+        } catch (error) {
+            toast.error(error.response.data.message ?? "Error fetching data. Please try again.");
+            console.error("Error:", error);
+        }
+    };
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formDataToSend = new FormData();
+        formDataToSend.append("title", formData.title);
+        formDataToSend.append("description", formData.description);
+        if (formData.image) {
+            formDataToSend.append("image", formData.image);
+        }
+
+        try {
+            // Send POST request to save form data
+            const response = await api.patch(`/cms-parent-child/${selectedId}`, formDataToSend, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${authToken}`, // Send auth token
+                },
+            });
+
+            // Handle success response
+            if (response.status === 200) {
+                fetchContentManagerPages();
+                toast.success("Form submitted successfully.");
+                setFormData({
+                    title: "",
+                    description: "",
+                    image: null,
+                });
+
+                // Close modal and clear form data
+            document.getElementById('addNewpageModalClose').click();
+
+            } else {
+                toast.error("Error submitting form. Please try again.");
+            }
+        } catch (error) {
+            toast.error(error.response.data.message ?? "Error fetching data. Please try again.");
+            console.error("Error:", error);
+        }
+    };
+
+    // Set form data when edit button is clicked
+    const handleEditClick = (item) => {
+        console.log("edit item here",item);
+        setSelectedId(item.id);
+        setFormData({
+            title: item.child_content?.title,
+            description: item.child_content?.description,
+            image: null, // Reset image field
+        });
+    };
+
+    const handleChildImageChange = async (index, e) => {
+        e.preventDefault();
+
+        if (e.target.files.length === 0) {
+            return;
+        }
+
+        const childDataToSend = new FormData();
+        childDataToSend.append('childImageIndex', index);
+        childDataToSend.append('image', e.target.files[0]);
+
+        try {
+            const response = await api.patch(`/cms-parent-child/update-child-image/${selectedId}`, childDataToSend, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${authToken}`, // Send auth token
+                },
+            });
+
+            if (response.status === 200) {
+                fetchContentManagerPages();
+                toast.success("Child image updated successfully.");
+            } else {
+                toast.error("Error updating child image. Please try again.");
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message ?? "Error updating child image. Please try again.");
+            console.error("Error:", error);
+        }
+    }
+
+
+    const handleManageChild = (id) => {
+        setSelectedId(id);
+    }
+
+    const deleteHandler = async (id) => {
+        if (!pagesList || pagesList.length <= 6) {
+            toast.error("Cannot delete records. Need more than 8 records.");
+            return;
+        }
+    
+        // Prevent deletion of the last 8 inserted records
+        const protectedRecords = pagesList.slice(-6); // Get the last 8 records
+        const isProtected = protectedRecords.some((record) => record.id === id);
+    
+        if (isProtected) {
+            toast.error("You cannot delete the latest 8 records.");
+            return;
+        }
+    
+        if (window.confirm("Are you sure you want to delete this item?")) {
+            try {
+                const response = await api.delete(`/cms-parent-child/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`, // Send auth token
+                    },
+                });
+    
+                if (response.status === 200) {
+                    fetchContentManagerPages();
+                    toast.success("Item deleted successfully.");
+                } else {
+                    toast.error("Failed to delete item. Please try again.");
+                }
+            } catch (error) {
+                toast.error("Failed to delete item. Please try again.");
+                console.error("Error:", error);
+            }
+        }
+    };
+    
+
+
+    return (
+        <AuthMainLayout>
+            <div className="container my-5">
+                <h1 className="mb-4 text-center">CMS - 3D Gallery</h1>
+                <div className="d-flex justify-content-end mb-3">
+                    <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGalleryModal">
+                        Add Gallery
+                    </button>
+                </div>
+                {loading ? (
+                    <div className="text-center">Loading...</div>
+                ) : (
+                    <div className="table-responsive">
+                        <table
+                            id="usersTable"
+                            className="table display table-striped table-bordered"
+                            style={{ width: "100%" }}
+                        >
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th width="80">Image</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {pagesList && pagesList.map((item, index) => {
+    const isRecent = index >= pagesList.length - 6; // Check if it's in the last 8 records
+    return (
+        <tr key={item.id}>
+            <td>{index + 1}</td>
+            <td>
+                <img src={item?.child_content?.image} alt={item?.child_content.title} height="80" />
+            </td>
+            <td>{item?.child_content.title}</td>
+            <td>{item?.child_content?.description}</td>
+            <td>
+                <button onClick={() => handleManageChild(item.id)} type="button" className="btn btn-info me-1" data-bs-toggle="modal" data-bs-target="#manageChildModal">
+                    Manage Child
+                </button>
+                <button onClick={() => handleEditClick(item)} type="button" className="read_morebtn" data-bs-toggle="modal" data-bs-target="#addNewpageModal">
+                    Edit
+                </button>
+                <button 
+                    className="ms-2 btn btn-danger" 
+                    onClick={() => deleteHandler(item.id)} 
+                    disabled={isRecent} // Disable only the latest 8 records
+                >
+                    Delete
+                </button>
+            </td>
+        </tr>
+    );
+})}
+
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
+
+
+              {/* Add Gallery Modal */}
+              <div className="modal fade" id="addGalleryModal" tabIndex="-1" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5">Add Gallery</h1>
+                            <button type="button" className="btn-close" id="addGalleryModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form onSubmit={handleAddSubmit}>
+                            <div className="modal-body">
+                                <div className="mb-3">
+                                    <label className="form-label">Title</label>
+                                    <input type="text" className="form-control" name="title" value={formData.title} onChange={handleInputChange} required />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Description</label>
+                                    <input type="text" className="form-control" name="description" value={formData.description} onChange={handleInputChange}   />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Image</label>
+                                    <input type="file" className="form-control" name="image" accept="image/*" onChange={handleInputChange} required />
+                                </div>
+                                <div className="text-center">
+                                    <button className="btn btn-success" type="submit">Add Gallery</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div className="modal fade" id="addNewpageModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Edit</h1>
+                            <button type="button" className="btn-close" id="addNewpageModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className="modal-body row">
+
+                                <div className="mb-3 col-md-12">
+                                    <label htmlFor="title" className="form-label">Title</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="title"
+                                        placeholder="Title"
+                                        value={formData.title}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-3 col-md-12">
+                                    <label htmlFor="description" className="form-label">Description</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="description"
+                                        placeholder="Description"
+                                        value={formData.description}
+                                        onChange={handleInputChange}
+                                   
+                                    />
+                                </div>
+
+
+                                <div className="mb-3 col-md-12">
+                                    <label className="form-label">Image</label>
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        name="image"
+                                        accept="image/*"
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+
+                                <div className="m-auto mt-2 col-12 d-flex justify-content-center">
+                                    <button className="px-5 read_morebtn" type="submit">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div className="modal fade" id="manageChildModal" tabIndex="-1" aria-labelledby="manageChildModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-lg">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="manageChildModalLabel">Manage Child Images</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            {selectedPage?.child_images?.map((imageItem, index) => (
+                                <div className={`row border-bottom ${index !== 0 ? 'py-2' : ''}`} key={index}>
+                                    <div className="mb-2 col-md-6">
+                                        <label className="form-label">Image {index + 1}</label>
+                                        <input
+                                            type="file"
+                                            className="form-control"
+                                            accept="image/*"
+                                            onChange={(e) => handleChildImageChange(index, e)}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        {imageItem && <img src={imageItem.image} alt={`Image ${index + 1}`} style={{ height: '100px', marginTop: '10px' }} />}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="m-auto mt-2 col-12 d-flex justify-content-center mb-4">
+                            <button className="px-5 read_morebtn" type="button" data-bs-dismiss="modal">
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </AuthMainLayout>
+    );
+};
+
+export default CmsDesignGallery;

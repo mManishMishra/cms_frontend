@@ -1,0 +1,186 @@
+import { IoIosCall } from "react-icons/io";
+import Toggle from "../components/Toggle";
+import "../globals.css";
+const Header = () => {
+  return (
+    <>
+      <div className="hedaer_wrapper fixed-top">
+        <div className="px-3 container-fluid">
+          <div className="d-flex justify-content-between align-items-center">
+            <nav className="navbar navbar-expand-lg p-0 ">
+              <div className="container-fluid">
+                <a className="navbar-brand me-lg-3 me-0" href="/">
+                  <img
+                    src="/images/new_hc_logo.png"
+                    width={90}
+                    height={90}
+                    alt="hc-logo"
+                    className="p-2"
+                  />
+                </a>
+                <button
+                  className="navbar-toggler d-lg-none"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarSupportedContent"
+                  aria-controls="navbarSupportedContent"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation"
+                >
+                  <span className="navbar-toggler-icon"></span>
+                </button>
+                <div
+                  className="collapse navbar-collapse"
+                  id="navbarSupportedContent"
+                >
+                  <ul className="m-auto mb-2 text-center navbar-nav mb-lg-0 ms-0">
+                    <li className="nav-item dropdown">
+                      <a
+                        className="nav-link dropdown-toggle"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Design Ideas
+                      </a>
+                      <ul className="dropdown-menu">
+                        <li>
+                          <a className="dropdown-item" href="/design-idea/">
+                            Design Gallery
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/product/">
+                            Product
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li className="nav-item dropdown">
+                      <a
+                        className="nav-link dropdown-toggle"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Porfolio
+                      </a>
+                      <ul className="dropdown-menu">
+                        <li>
+                          <a
+                            className="dropdown-item"
+                            href="/residential-projects/"
+                          >
+                            Residential Projects
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/luxury-projects/">
+                            Luxury Projects
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li className="nav_item">
+                      <a
+                        className="nav-link"
+                        aria-current="page"
+                        href="/experience-center/"
+                      >
+                        Experience Center
+                      </a>
+                    </li>
+                    {/* <li className="nav_item">
+                      <a
+                        className="nav-link"
+                        aria-current="page"
+                        href="/reallife-portfolio/"
+                      >
+                        Real Time 3D
+                      </a>
+                    </li> */}
+
+                    <li className="nav-item dropdown">
+                      <a
+                        className="nav-link dropdown-toggle"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Exclusive Design
+                      </a>
+                      <ul className="dropdown-menu">
+                        <li>
+                          <a
+                            className="dropdown-item"
+                            href="/ready-togo-design/"
+                          >
+                            Ready To Go Design
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/wallpaper/">
+                            Wallpapers
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            className="dropdown-item"
+                            href="/spacesaving-furniture/"
+                          >
+                            {" "}
+                            Space-Saving Furniture
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            className="dropdown-item"
+                            href="/sustainable-furniture/"
+                          >
+                            Sustainable Furniture
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/furniture/">
+                            Furniture
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li className="nav_item">
+                      <a
+                        className="nav-link"
+                        aria-current="page"
+                        href="/contact/"
+                      >
+                        Contact Us
+                      </a>
+                    </li>
+                    <li className="py-2">
+                      {/* <a href="/estimator-for-home" className="get_btn">
+                        Get Estimate <IoIosCall className="callicon" />
+                      </a> */}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+            <div>
+              <a href="/estimator-for-home" className="get_btn">
+                Get Estimate <IoIosCall className="callicon" />
+              </a>
+            </div>
+            <div>
+              <Toggle />
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Header;

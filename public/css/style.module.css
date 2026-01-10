@@ -1,0 +1,195 @@
+@font-face {
+  font-family: roboto;
+  src: url(../../public/cdn/Roboto-Regular.ttf);
+}
+@font-face {
+  font-family: sans;
+  src: url(../../public/cdn/futura/TextaAltRegular.ttf);
+}
+.nav_item {
+  color: rgb(226, 19, 19);
+  font-size: 16px;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+}
+.dropdown_menu {
+  color: rgb(226, 19, 19);
+  font-size: 16px;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+}
+
+.blog_cards {
+  height: 500px;
+  width: 350px;
+  padding: 12px;
+  border-radius: 24px;
+  background-color: #fff;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  margin-bottom: 30px;
+}
+.savedesign {
+  background-color: rgba(252, 135, 135, 0.568);
+  padding: 4rem 0;
+}
+.cardbhk {
+  padding: 16px;
+  border-radius: 32px;
+  background-color: #fff;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  padding-bottom: 30px;
+}
+.know_more {
+  padding: 8px 20px 10px 20px;
+  border-radius: 32px;
+  border: none;
+  color: #fff;
+  background-color: coral;
+  text-decoration: none;
+}
+.know_more:hover {
+  background-color: rgb(201, 97, 60);
+}
+.cardoffer {
+  padding: 12px;
+  border-radius: 24px;
+  background-color: #fff;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  padding-bottom: 30px;
+}
+.card-img-top {
+  border-radius: 16px;
+}
+.offerimg {
+  border-radius: 16px;
+  object-fit: cover;
+  width: 100%;
+  height: 250px;
+}
+
+.badge_circle {
+  margin: auto;
+  width: 100px;
+  height: 100px;
+  left: 228px;
+  top: -45px;
+  display: flex;
+  font-style: italic;
+  z-index: 999;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background-color: coral;
+  position: absolute;
+}
+.badge_circleblack {
+  margin: auto;
+  width: 100px;
+  height: 100px;
+  left: 228px;
+  top: -45px;
+  display: flex;
+  font-style: italic;
+  z-index: 999;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(0, 0, 0);
+  position: absolute;
+}
+.downarrow {
+  font-size: 80px;
+  padding-bottom: 8px;
+  color: #fff;
+}
+
+.home_video_banner {
+  height: 86vh ;
+}
+.way_wework {
+  background-image: url(../images/wee.jpg);
+  width: 100%;
+  height: 100vh;
+  padding: 6rem 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box1 {
+  width: 190px;
+  height: 270px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: end;
+  background-color: #eb060642;
+}
+.box_heading {
+  color: #fff;
+  font-size: 150px;
+}
+.box_2 {
+  width: 190px;
+  height: 270px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: end;
+  background-color: #81535399;
+}
+.box2_data {
+  width: 190px;
+  height: 270px;
+  background-color: #853216ba;
+}
+.box2 {
+  width: 190px;
+  height: 270px;
+  background-color: coral;
+}
+.box_para {
+  font-size: 14px;
+  color: #fff;
+}
+.know_mores {
+  padding: 3px 20px 6px 20px;
+  border-radius: 32px;
+  border: 2px solid #ffffff;
+  color: #fff;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.box_3 {
+  width: 190px;
+  height: 270px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: end;
+  background-color: #10728348;
+}
+.box3_data {
+  width: 190px;
+  background-color: #065c6be3;
+  height: 270px;
+}
+.contact_form {
+  background-color: #fff;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  padding: 4rem 2rem;
+  border-radius: 24px;
+}
+.blog_span {
+  color: rgb(44, 44, 44);
+  font-size: 14px;
+  font-family: roboto !important;
+}

@@ -1,0 +1,195 @@
+:root {
+    --step_border_width: 1px;
+    --step_border_color: lightgray;
+    --step_active_color: #F5EBE1;
+    --step_default_color: #fff;
+    --step_border_parent_width: 30px;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Step container styles */
+.step-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    background-size: 100% 100%;
+    margin-right: -5px;
+    /* Overlap the steps for the arrow effect */
+    height: 100px;
+    /* Define height of the parent */
+    width: auto;
+    /* Let width be flexible */
+}
+
+/* Step styles */
+.step-progress {
+    min-height: 28px;
+    position: relative;
+    padding: 18px 30px;
+    background-color: var(--step_default_color);
+    border: var(--step_border_width) solid var(--step_border_color);
+    text-align: center;
+    z-index: 2;
+    /* Keep above the arrow */
+}
+
+.step-progress-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+}
+
+.step-progress.active {
+    border-color: var(--step_border_color);
+}
+
+.step-progress .step-icon {
+    font-size: 16px;
+    font-weight: bold;
+    color: #f0ad4e;
+    margin-right: 10px;
+}
+
+.step-progress .step-label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Hide overlapping right border for cleaner effect */
+.step-container:not(:last-child) .step-progress {
+    border-right: 0;
+}
+
+/* Make the SVG responsive within the parent */
+.triangle-wrapper {
+    position: relative;
+    height: 100%;
+    /* Let the height of the parent control the triangle height */
+    width: var(--step_border_parent_width);
+    /* Width of the triangle */
+    display: flex;
+    justify-content: center;
+    /* Center the triangle horizontally */
+    align-items: center;
+    /* Center the triangle vertically */
+}
+
+.triangle-wrapper svg {
+    height: 100%;
+    /* Make the triangle SVG take full height of the parent */
+    width: 100%;
+    /* Make the triangle SVG take full width of the container */
+}
+
+.step-number {
+    padding: 5px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    color: #000;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step_one {
+    z-index: 3;
+}
+
+.step_two {
+    z-index: 2;
+    left: calc(-1 * var(--step_border_parent_width));
+}
+
+.step_two .step-progress {
+    border-left: 0px;
+    padding-left: calc(var(--step_border_parent_width));
+}
+
+.step_two .step-icon {
+    margin-left: 20px;
+}
+
+.step_three {
+    z-index: 1;
+    left: calc(-2 * var(--step_border_parent_width));
+}
+
+.step_three .step-progress {
+    border-left: 0px;
+    border-right: 0px;
+    padding-left: calc(var(--step_border_parent_width));
+}
+
+.step_three .step-icon {
+    margin-left: 20px;
+}
+
+/* Highlight the active step */
+.step-container.active_step .step-progress {
+    background-color: var(--step_active_color);
+    /* Highlight the background color of the container */
+}
+
+.step-container.active_step svg path {
+    fill: var(--step_active_color);
+    /* Highlight the triangle fill */
+}
+
+.step-container svg path {
+    fill: var(--step_default_color);
+    /* Highlight the triangle fill */
+}
+
+.step-container .step-icon {
+    display: none;
+    /* Hidden by default */
+}
+
+.step-container.completed .step-number {
+    display: none;
+    /* Hide number for completed steps */
+}
+
+.step-container.completed .step-icon {
+    display: block;
+}
+
+.step-container.completed .step-number {
+    display: none;
+}
+
+.step-container.need_to_complete .step-number {
+    display: flex;
+}
+
+.step-container.need_to_complete .step-icon {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .progress-container {
+        padding-left: calc(2*var(--step_border_parent_width));
+    }
+    .step-progress .step-label {
+        display: none;
+    }
+    .step-number{
+        height: 22px;
+    }
+    .step-icon {
+        height: 22px;
+    }
+}

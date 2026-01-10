@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Outfit:wght@400;600&display=swap');
+
+
+@font-face {
+  font-family: 'Great Vibes';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Great Vibes'), local('GreatVibes-Regular'),
+       url('https://fonts.gstatic.com/s/greatvibes/v21/RWmMoKWR9v4ksMfaWd_JN9XFiaQoDmlrNlY.woff2') format('woff2');
+}
+
+
+/* @font-face {
+    font-family: roboto;
+    src: url(../../public/cdn/Roboto-Regular.ttf);
+  }
+  @font-face {
+    font-family: sss;
+    src: url(../../public/cdn/MadelynFill-Regular.ttf);
+  }
+  @font-face {
+    font-family: sans;
+    src: url(../../public/cdn/futura/TextaAltBold.ttf);
+  }
+  @font-face {
+    font-family: futura_font;
+    src: url(../../public/cdn/futura-font/Futura\ Light\ font.ttf);
+  } */
+  /* @font-face {
+    font-family: poppins;
+    src: url(../../public/cdn/poppins/Poppins-Regular.ttf);
+  } */
+
+
+  
+  .dashboard-container {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Ensure consistent height for all cards */
+.dashboard-card-link {
+    text-decoration: none;
+    height: 100%; /* Ensure the card link stretches fully */
+}
+
+.dashboard-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure spacing within the card */
+    align-items: center;
+    height: 100%; /* Make all cards the same height */
+    transition: background 0.5s ease, transform 0.3s ease;
+}
+
+.dashboard-card:hover {
+    background: linear-gradient(to bottom, #f9bd5f, #f5a623);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Icon Styling */
+.dashboard-icon {
+    color: var(--card-color);
+    margin-bottom: 1rem;
+    transition: color 0.5s ease;
+}
+
+/* Title Styling */
+.dashboard-card-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--card-color);
+    transition: color 0.5s ease;
+}
+
+/* Text Styling */
+.dashboard-card-text {
+    font-size: 1rem;
+    text-align: center;
+    color: #333;
+    transition: color 0.5s ease;
+}
+
+/* Hover Effects */
+.dashboard-card:hover .dashboard-card-title,
+.dashboard-card:hover .dashboard-icon {
+    color: white;
+}
+
+
+  *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* Ensure the layout takes up the full height of the viewport */
+  body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .footer_wrapper {
+      background-color: #f8f9fa; /* Light grey background */
+      padding: 1.5rem 0;
+    }
+
+    /* Wrapper to make sure the footer sticks to the bottom */
+    .page-container {
+      min-height: 100vh; /* Full height */
+      display: flex;
+      flex-direction: column; /* Column layout */
+    }
+
+    .page-content {
+      flex: 1; /* Take up remaining space */
+    }
+
+    .footer_copyright {
+      background-color: #ececec; /* Light background for copyright */
+      padding: 10px 0;
+    }
+
+    .font_stylish {
+      font-family: 'Great Vibes', cursive;
+      font-size: 60px;
+      font-weight: 400 !important;
+    }
+
+
+  a{
+    text-decoration: none !important;
+  }
+
+  h4,h5,h6{
+    font-family: poppins;
+    font-weight: 600 !important;
+    /* color:#3b3c47; */
+  }
+  h5{
+    font-size: 18px;
+  }
+
+  h1{
+    font-size: 50px;
+    color: #171717;
+    font-family: poppins;
+  }
+  h2,h3{
+    font-size: 50px !important;
+    font-family: poppins;
+    font-weight: 600  !important;
+  }
+
+  p{
+    font-family: poppins;
+    font-weight: 400 !important;
+    font-size: 15px;
+    color: rgb(0, 0, 0);
+  }
+
+  .plusminus{
+    font-size: 25px;
+    background-color: transparent;
+  }
