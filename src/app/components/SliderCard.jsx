@@ -94,10 +94,11 @@ useEffect(() => {
               <Card
                 cardLinkName={`/ready-togo-design/gallery?id=${slider?.id}`}
                 cardoffer="card"
-                imgSrc={slider?.child_content?.image}
-                imgAlt={slider.child_content.title ?? defaultAltText}
+                // 🌟 CMS Fix: Added fallback string to prevent broken image icons
+                imgSrc={slider?.child_content?.image || "/placeholder-image.jpg"}
+                imgAlt={slider.child_content?.title ?? defaultAltText}
                 imgClass={"fastrack_img"}
-                titleCard={slider.child_content.title}
+                titleCard={slider.child_content?.title}
                 titleClass="text-center text-muted mb-0 pb-0"
               />
             </div>

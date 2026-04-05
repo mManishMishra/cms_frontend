@@ -5,7 +5,9 @@ const HomeInterior = (props) => {
         <img
           src={props.homeInterImg}
           alt={props.homeInterAlt}
-          className={props.homeInterClass}
+          className={`responsive-media ${props.homeInterClass || ""}`}
+          loading="lazy"
+          decoding="async"
         />
       </div>
     </div>

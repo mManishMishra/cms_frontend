@@ -6,9 +6,12 @@ import { IoMdContacts, IoIosSettings, IoMdLogOut } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
 import { usePathname, useRouter } from 'next/navigation';
 import { logout } from '../../../store/slices/authSlice';
+import Link from 'next/link';
 
 function AuthSidebar() {
     const { user } = useSelector((state) => state.auth);
+    console.log("User role" , user?.role)
+    const isAdmin = user?.role === "Admin";
     const dispatch = useDispatch();
     const router = useRouter();
     const pathname = usePathname();
@@ -49,6 +52,23 @@ function AuthSidebar() {
                             Blogs
                         </a>
                     </li> */}
+                    {isAdmin && 
+                    <>
+<li className="menu-item">
+            <Link href="/cms/team-management" className={`menu-link ${pathname === '/cms/team-management' ? 'active' : ''}`}>
+                <i className="menu-icon tf-icons bi bi-people-fill"></i>
+                <div data-i18n="Team">Team Management</div>
+            </Link>
+        </li>
+
+        <li className="menu-item">
+            <Link href="/cms/popup-manager" className={`menu-link ${pathname === '/cms/popup-manager' ? 'active' : ''}`}>
+                <i className="menu-icon tf-icons bi bi-people-fill"></i>
+                <div data-i18n="Team">Popup Manager</div>
+            </Link>
+        </li>
+        </>
+}
                     <li className="nav-item">
                         <a className={`nav-link ${isActive('/estimator-for-home/setup')}`} href="/estimator-for-home/setup">
                             <FaCalculator className={`dashboard_icon pe-2 ${isIconActive('/estimator-for-home/setup')}`} />
@@ -107,6 +127,29 @@ function AuthSidebar() {
                             CMS
                         </a>
                         <ul className="dropdown-menu dropdown-menu-dark">
+                        <li className="nav-item">
+                        <a className={`nav-link ${isActive('/cms/pages')}`} href="/cms/pages">
+                            <FaFileAlt className={`dashboard_icon pe-2 ${isIconActive('/cms/pages')}`} />
+                            Create Page
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                                <a className={`nav-link ${isActive('/cms/redirects')}`} href="/cms/redirects">
+                                    <FaFileAlt className={`dashboard_icon pe-2 ${isIconActive('/cms/redirects')}`} />
+                                    Redirect Management
+                                </a>
+                            </li>
+                            
+                    <li className="nav-item">
+    <Link href="/cms/media-library" className="nav-link text-white">
+        <i className="bi bi-images me-2"></i> Media Library
+    </Link>
+</li>
+<li className="nav-item">
+    <Link href="/cms/site-setting" className="nav-link text-white">
+        <i className="bi bi-images me-2"></i> Site Settings
+    </Link>
+</li>
                             <li>
                                 <a className={`${isActive('/cms/design-gallery')}`} href="/cms/design-gallery">
                                     Design Gallery
@@ -150,6 +193,11 @@ function AuthSidebar() {
                             <li>
                                 <a className={`${isActive('/cms/experience-center-gurugram')}`} href="/cms/experience-center-gurugram">
                                     Experience Center Gurugram
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/experience-center-faridabad')}`} href="/cms/experience-center-faridabad">
+                                    Experience Center Faridabad
                                 </a>
                             </li>
                             <li>

@@ -1,0 +1,929 @@
+"use client";
+import RowImage from "../components/RowImage";
+import { IoIosCall } from "react-icons/io";
+import CounterNumber from "../components/CounterNumber";
+import ContactUsPopUp from "../components/ContactUsPopUp";
+import { useCallback, useEffect, useState } from "react";
+import Testimonial from "../components/Testimonial";
+import TestimonialTwo from "../components/TestimonialTwo";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
+const HcLandingTwo = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    contact: "",
+    email: "",
+    place: "",
+    query: "",
+    termsAndConditions: false,
+  });
+
+  const [submissionError, setSubmissionError] = useState("");
+  const [submissionMessage, setSubmissionMessage] = useState("");
+
+  const [homepageBannerData, setHomepageBannerData] = useState();
+
+  const fetchContentManagerPages = useCallback(async () => {
+    try {
+      const response = await api.get("/cms-content/homepage_banner", {});
+      if (response.data && response.data.json_content) {
+        setHomepageBannerData(response.data?.json_content);
+      }
+    } catch (err) {
+      toast.error(err.message ?? "Failed to fetch data. Please try again.");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchContentManagerPages();
+  }, [fetchContentManagerPages]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    console.log(formData);
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({ ...prevData, termsAndConditions: checked }));
+    console.log("Checkbox state:", checked);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.termsAndConditions) {
+      toast.error("You must agree to the Terms & Conditions before submitting.")
+      setSubmissionError(
+        "You must agree to the Terms & Conditions before submitting."
+      );
+      return;
+    }
+
+    const formRequestData = {
+      name: formData.fullName,
+      mobile: formData.contact,
+      email: formData.email,
+      place: formData.place,
+      query: formData.query,
+    };
+
+    try {
+      const response = await api.post("/user-queries", formRequestData);
+      console.log(response);
+      if (response.status === 201) {
+        setSubmissionMessage("Form submitted successfully!");
+        setFormData({
+          fullName: "",
+          contact: "",
+          email: "",
+          place: "",
+          query: "",
+          termsAndConditions: false,
+        });
+        toast.success("Form submitted successfully!");
+      } else {
+        toast.error("Failed to submit form. Please try again.");
+        setSubmissionError("Failed to submit form. Please try again.");
+      }
+    } catch (error) {
+      toast.error(error.message)
+      setSubmissionError("Error submitting form. Please try again.", error);
+      console.error("Error:", error);
+    } finally {
+      // Clear error message after some time
+      setTimeout(() => {
+        setSubmissionError("");
+        setSubmissionMessage("");
+      }, 5000);
+    }
+  };
+
+  const handleModalStateChange = useCallback((isOpen) => {
+    setIsModalOpen(isOpen);
+  }, []);
+  return (
+    <div>
+      <head>
+        <title>
+        Interior Designs From The Future - High Creation Interior
+        </title>
+      </head>
+      <div className={isModalOpen ? "blur-bg" : ""}>
+        <header className="container-fluid px-lg-5 px-3">
+          <nav className="navbar navbar-expand-lg p-0">
+            <div className="container-fluid">
+              <a className="navbar-brand ms-lg-5" href="/">
+                <img
+                  src="/images/new_hc_logo.png"
+                  width={90}
+                  height={90}
+                  alt="hc-logo"
+                  className="p-2"
+                />
+              </a>
+              <button
+                className="navbar-toggler d-block d-lg-none"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <div
+                className="collapse navbar-collapse"
+                id="navbarSupportedContent"
+              >
+                <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+                  <li className="mb-3 mb-lg-0">
+                    <a href="tel:18001200532" className="btn read_morebtn">
+                      <IoIosCall className="callicon me-2" />
+                      1800 1200 532
+                    </a>
+                  </li>
+                  <li className="mb-4 mb-lg-0">
+                    <a href="/contact" className="read_morebtn py-2">
+                      Let’s Connect
+                    </a>
+                  </li>
+                  <li className="mb-3 mb-lg-0">
+                    <a href="/estimator-for-home" className="read_morebtn py-2">
+                      Estimator for Your Home
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
+        <main className="mt-0 pt-0">
+          <section className="contact_wrapper hc_landing_ban_2 position-relative">
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-7 d-flex align-items-center">
+                  <div className="pe-lg-5">
+                    <h6 className="fw-lighter fs-3 pb-0 mb-0 home_subhead text-white">
+                      Bringing Your
+                    </h6>
+                    <h3 className="letheading home_banner_heading text-white">
+                      Dream Home to Life
+                    </h3>
+                    <p className="text-white">
+                      Discover unparalleled quality and on-time delivery with
+                      High Creation Interiors.
+                    </p>
+                  </div>
+                </div>
+                <div className="col-lg-5">
+                  <div className="contact_form contact shadow-none bg-transparent">
+                    <h4 className="text-black form_heading mb-3">
+                      Styles to Suit Every Budget
+                    </h4>
+                    <p className="text-black">
+                      Get Your Dream house today. Let Our experts help you
+                    </p>
+                    <form className="row" onSubmit={handleSubmit}>
+                      <div className="col-md-12 mb-3">
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="validationCustom01"
+                          placeholder="Name"
+                          name="fullName"
+                          onChange={handleInputChange}
+                          value={formData.fullName}
+                          required
+                        />
+                      </div>
+                      <div className="col-md-5 mb-3">
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="validationCustom05"
+                          placeholder="Contact No."
+                          name="contact"
+                          onChange={handleInputChange}
+                          value={formData.contact}
+                          required
+                        />
+                      </div>
+
+                      <div className="col-md-7 mb-3">
+                        <input
+                          type="email"
+                          className="form-control"
+                          id="validationCustom03"
+                          placeholder="Email ID"
+                          name="email"
+                          onChange={handleInputChange}
+                          value={formData.email}
+                          required
+                        />
+                      </div>
+
+                      <div className="col-md-12 mb-3">
+                        <textarea
+                          className="form-control"
+                          id="exampleFormControlTextarea1"
+                          placeholder="Design Name / Message"
+                          name="query"
+                          onChange={handleInputChange}
+                          value={formData.query}
+                          rows="1"
+                        ></textarea>
+                      </div>
+                      <div className="col-12">
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            value={formData.termsAndConditions}
+                            id="invalidCheck"
+                            required
+                            onChange={handleCheckboxChange}
+                          />
+                          <label
+                            className="form-check-label text-black"
+                            htmlFor="invalidCheck "
+                          >
+                            By submitting this form, you agree to the privacy
+                            policy & terms and conditions
+                          </label>
+                          <div className="invalid-feedback text-black">
+                            You must agree before submitting.
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-12 mt-3 d-flex m-auto justify-content-center">
+                        <button
+                          className="btn know_more px-5 w-100"
+                          type="submit"
+                        >
+                          SEND
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="rotate_div container-fluid">
+              <div className="sssss ms-auto me-0">
+                <a href="/contact" className="know_moress">
+                  Enquiry Now
+                </a>
+              </div>
+              <div className="mt-4  ms-auto me-0">
+                <a
+                  href="https://wa.me/919560277787"
+                  className=""
+                  title="WhatsApp"
+                  aria-label="Chat with us on WhatsApp"
+                >
+                  <div>
+                    <img
+                      src="/images/Whatsapp-icon.png"
+                      width="40"
+                      alt="whatsapp"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </section>
+          <div className="video_wrapper container py-5">
+            <div className="row justify-content-center mx-0">
+              <div className="col-lg-8">
+                <iframe
+                  width="100%"
+                  height="400"
+                  className="map"
+                  src="https://www.youtube.com/embed/xb7upH9aeKs"
+                  title="3BHK Home Tour Ghaziabad Wave City | Premium Interior Design by High Creation Interior Noida ✨🤞"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                ></iframe>
+                <div className="mt-5 m-ato d-flex  justify-content-center">
+                  <a href="/estimator-for-home" className="read_morebtn">
+                    Get Estimate
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <section>
+            <Testimonial />
+          </section>
+          <hr />
+          <section className="my-5 about_wrapper">
+            <RowImage
+              imageColLg="4"
+              imageColXl="4"
+              imageColMd="4"
+              imageCol="12"
+              ImgAbout={"/images/hc_landing_2/home_img.png"}
+              ImgAboutClass={"aboout_img_landing2 object-fit-contain w-100"}
+              imgAlt="About"
+              titleHeading="Home Interiors"
+              subHeading=""
+              subHeadingClass="font_stylish ps-3"
+              desClass="team_description"
+              description="Immerse yourself in a world of exceptional design as we delight in presenting our clients with exquisite interiors for modular
+kitchens, kids’ rooms, living spaces, modular wardrobes, and more. Our commitment is to craft interiors that not only meet but
+exceed expectations, turning every space into a love affair.
+Are you ready to evoke awe and admiration? If your answer is yes, then High Creation Interior is poised to embark on your home
+interior project"
+              textAboutBtn="Get Estimate"
+              btnLink="/estimator-for-home"
+              textAboutBtnCLass="read_morebtn mt-2"
+            />
+          </section>
+          <hr />
+          <section className="py-5">
+            <div className="container">
+              <center>
+                <h3 className="pb-3 font_about">
+                  Innovative Resolutions Offered by <br />
+                  Expert Designers.
+                </h3>
+                <p className="team_description px-3 px-lg-5 pb-2">
+                  Immerse yourself in a world of exceptional design as we
+                  delight in presenting our clients with exquisite interiors for
+                  modular kitchens, kids’ rooms, living spaces, modular
+                  wardrobes, and more. Our commitment is to craft interiors that
+                  not only meet but exceed expectations, turning every space
+                  into a love affair. Are you ready to evoke awe and admiration?
+                  If your answer is yes, then High Creation Interior is poised
+                  to embark on your home interior project.
+                </p>
+                <div className="my-2">
+                  <a href="/estimator-for-home" className="read_morebtn py-2">
+                    Get Estimate
+                  </a>
+                </div>
+              </center>
+            </div>
+          </section>
+          <section className="savedesign">
+            <div className="container">
+              <div className="row justify-content-center mx-0">
+                <div className="col-lg-10">
+                  <div className="row justify-content-center">
+                    <div className="col-lg-3 col-6 col-md-3">
+                      <div className="counter">
+                        <CounterNumber
+                          counterStart3="2"
+                          counterEnd3="2000"
+                          counterDuration3="5"
+                          counterSuffix3=""
+                          description1="Accomplished"
+                          description2="Renovations"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-3 col-6 col-md-3">
+                      <div className="counter">
+                        <CounterNumber
+                          counterStart3="2"
+                          counterEnd3="1900"
+                          counterDuration3="5"
+                          counterSuffix3=""
+                          description1="Delighted"
+                          description2="Customers"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-3 col-6 col-md-3">
+                      <div className="counter">
+                        <CounterNumber
+                          counterStart3="2"
+                          counterEnd3="1600"
+                          counterDuration3="5"
+                          counterSuffix3=""
+                          description1="Home"
+                          description2="Renovations"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-3 col-6 col-md-3">
+                      <div className="counter">
+                        <CounterNumber
+                          counterStart3="2"
+                          counterEnd3="8"
+                          counterDuration3="5"
+                          counterSuffix3=""
+                          description1="Years of"
+                          description2="Proficiency"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className="corporate_section py-5">
+            <div className="container">
+              <div className="row justify-content-center mx-0">
+                <div className="col-lg-10">
+                  <div className="row justify-content-center">
+                    <div className="col-lg-6">
+                      <h3 className="font_about text-left pb-2">
+                        Corporate Interiors{" "}
+                      </h3>
+                      <p className="team_description">
+                        Elevating the standards for retail outlets, shops,
+                        restaurants, showrooms, and more, we take pride in
+                        delivering exceptional interiors that captivate and
+                        enamor visitors. Ready to create that ‘wow’ factor? If
+                        your answer is affirmative, then High Creation Interior
+                        is prepared to undertake your corporate project,
+                        transforming spaces into unforgettable experiences
+                      </p>
+                      {/* <hr />
+                    <div className="d-flex">
+                      <div>
+                        <img
+                          src="/images/hc_landing_2/testimonial_2.png"
+                          width={70}
+                          alt="user"
+                        />
+                      </div>
+                      <div className="ps-4">
+                        <p className="mb-1">
+                          <RiDoubleQuotesL className="fs-3 quote" />
+                        </p>
+                        <p className="team_description mb-2">
+                          I got my interior work done through HC interiors. The
+                          project was handled well and the work was completed on
+                          time. Overall, given that interior work has its ups
+                          and downs, I am satisfied with the work done
+                        </p>
+                        <div className="d-flex justify-content-between">
+                          <p className="team_description fw-bold">
+                            - Raman Walia
+                          </p>
+                          <p className="text-end mb-0">
+                            <ImQuotesRight className="fs-3 quote" />
+                          </p>
+                        </div>
+                      </div>
+                    </div> */}
+                    </div>
+                    <div className="col-lg-6">
+                      <div>
+                        <img
+                          src="/images/hc_landing_2/corporate_img.png"
+                          className="w-100 object-fit-contain"
+                          height={250}
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr />
+                <TestimonialTwo />
+              </div>
+            </div>
+          </section>
+          <hr />
+          <section className="faq_wrapper py-5">
+            <div className="container">
+              <div className="text-start">
+                <h3 className="font_about">High Creation Interior</h3>
+                <h3>
+                  <span className="font_stylish our_experts_text_land">
+                    Common Questions
+                  </span>
+                </h3>
+
+                <div className="row justify-content-center mx-0">
+                  <div className="col-lg-12">
+                    <div className="accordion" id="accordionExample">
+                      <div className="accordion-item">
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-transparent faq_landing"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne"
+                            aria-expanded="true"
+                            aria-controls="collapseOne"
+                          >
+                            What services do you offer for luxury office
+                            interior design?
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseOne"
+                          className="accordion-collapse collapse"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body ps-0 faq_description_text_landing">
+                            We offer a wide range of services for luxury office
+                            interior design, including space planning, furniture
+                            selection, lighting design, colour coordination, and
+                            project management.
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-transparent collapsed faq_landing"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo"
+                            aria-expanded="false"
+                            aria-controls="collapseTwo"
+                          >
+                            What services do you offer for luxury home interior
+                            design?
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseTwo"
+                          className="accordion-collapse collapse"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body ps-0 faq_description_text_landing">
+                            At High Creation Interior, we bring together
+                            functionality and aesthetics to provide homeowners
+                            with customised and efficient home designs. Our
+                            designers specialise in home interior designs and
+                            home décor and help you create a personalised home
+                            to suit your lifestyle. From sophisticated living
+                            room designs to space-saving and clutter-free
+                            interior designs, we are here to help you find the
+                            best home decor and design to match your needs and
+                            style. Our products come with up to a 10-year
+                            warranty, unwavering support, and maintenance
+                            services. Explore thousands of inspiring interior
+                            designs or get a free estimate – it’s all here on
+                            hcinterior.in, you’re a one-stop for complete home
+                            interiors.
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-transparent collapsed faq_landing"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree"
+                            aria-expanded="false"
+                            aria-controls="collapseThree"
+                          >
+                            How do you ensure that the design meets our brand’s
+                            aesthetic and functional needs?
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseThree"
+                          className="accordion-collapse collapse"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body ps-0 faq_description_text_landing">
+                            First, meet with our designer, they will help you
+                            out from costing to designing for your complete
+                            house, then finalize your project, start the
+                            production process then the phase of installation
+                            comes you will get your home interiors done
+                            eventually !!
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-transparent collapsed faq_landing"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseFour"
+                            aria-expanded="false"
+                            aria-controls="collapseFour"
+                          >
+                            Can you work with existing layouts or do you prefer
+                            to start from scratch?
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseFour"
+                          className="accordion-collapse collapse"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body ps-0 faq_description_text_landing">
+                            We offer a wide range of services for luxury office
+                            interior design, including space planning, furniture
+                            selection, lighting design, colour coordination, and
+                            project management.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="accordion-item">
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-transparent collapsed faq_landing"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseFifth"
+                            aria-expanded="false"
+                            aria-controls="collapseFifth"
+                          >
+                            What types of materials do you use in corporate and
+                            home interior design?
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseFifth"
+                          className="accordion-collapse collapse show"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body ps-0 faq_description_text_landing">
+                            We work closely with our clients to understand their
+                            brand’s aesthetic and functional needs. We’ll
+                            provide design concepts and options that reflect
+                            their brand’s identity and meet their specific
+                            needs.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="accordion-item">
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-transparent collapsed faq_landing"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseNine"
+                            aria-expanded="false"
+                            aria-controls="collapseNine"
+                          >
+                            Can you provide 3D renderings of my design plan?
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseNine"
+                          className="accordion-collapse collapse show"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body ps-0 faq_description_text_landing">
+                            We work closely with our clients to understand their
+                            brand’s aesthetic and functional needs. We’ll
+                            provide design concepts and options that reflect
+                            their brand’s identity and meet their specific
+                            needs.
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-transparent collapsed faq_landing"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseSix"
+                            aria-expanded="false"
+                            aria-controls="collapseSix"
+                          >
+                            Can you work within my budget?
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseSix"
+                          className="accordion-collapse collapse show"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body ps-0 faq_description_text_landing">
+                            We work closely with our clients to understand their
+                            brand’s aesthetic and functional needs. We’ll
+                            provide design concepts and options that reflect
+                            their brand’s identity and meet their specific
+                            needs.
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-transparent collapsed faq_landing"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseSeven"
+                            aria-expanded="false"
+                            aria-controls="collapseSeven"
+                          >
+                            How do I get started with an interior design
+                            project?
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseSeven"
+                          className="accordion-collapse collapse show"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body ps-0 faq_description_text_landing">
+                            We work closely with our clients to understand their
+                            brand’s aesthetic and functional needs. We’ll
+                            provide design concepts and options that reflect
+                            their brand’s identity and meet their specific
+                            needs.
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header ">
+                          <button
+                            className="accordion-button bg-transparent collapsed faq_landing faq_landing"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseEight"
+                            aria-expanded="false"
+                            aria-controls="collapseEight"
+                          >
+                            How long does an interior design project take?
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseEight"
+                          className="accordion-collapse collapse show"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body ps-0 faq_description_text_landing">
+                            We work closely with our clients to understand their
+                            brand’s aesthetic and functional needs. We’ll
+                            provide design concepts and options that reflect
+                            their brand’s identity and meet their specific
+                            needs.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+      <hr />
+      <footer>
+        <div className="footer_top py-4">
+          <center>
+            <h3 className="font_about">Bring Your Dream Home to Life</h3>
+            <h3>
+              <span className="our_experts_text_land">with Our Experts</span>
+            </h3>
+            <div>
+              <a href="/contact" className="read_morebtn py-2">
+                Let&apos;s Connect
+              </a>
+            </div>
+          </center>
+        </div>
+        <hr />
+        <div className="pt-5 pb-2 mx-0 row justify-content-center">
+          <div className="col-lg-10">
+            <div className="row justify-content-lg-center g-4 mx-0">
+              <div className="col-lg-3 ps-lg-5 col-md-4 col-12">
+                <div>
+                  <a href="/">
+                    {" "}
+                    <img
+                      src="/images/new_hc_logo.png"
+                      alt="hero image"
+                      className=""
+                      width={150}
+                      height={150}
+                    />
+                  </a>
+                </div>
+
+                <div>
+                  <h6 className="pt-3">FOR QUERY</h6>
+                  <p className="mb-0">
+                    <a
+                      href="callto:+19810506301"
+                      className="footer_land text-black"
+                    >
+                      +91 9810506301
+                    </a>
+                  </p>
+                  <a
+                    href="callto:+19810503881"
+                    className="footer_land text-black"
+                  >
+                    +91 9810503881
+                  </a>
+                </div>
+              </div>
+              <div className="col-lg-3 col-md-2 col-12">
+                <h4 className="footer_heading">Our Expertise</h4>
+                <ul className="list-unstyled ps-0">
+                  <li className="footer_land">
+                    <a href="" className="text-black">
+                      Home Interior Designs
+                    </a>
+                  </li>
+                  <li className="footer_land">
+                    <a href="" className="text-black">
+                      Corporate Interior Design
+                    </a>
+                  </li>
+                  <li className="footer_land">
+                    <a href="" className="text-black">
+                      All Interior Designs
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="col-lg-4 ps-lg-0 col-md-6 col-12">
+                <h4 className="footer_heading">Branch Office</h4>
+                <ul className="list-unstyled">
+                  <li className="footer_land pb-2">
+                    <a
+                      href="https://maps.app.goo.gl/6oJ1uEQqPAbde7Ke6"
+                      className="text-black"
+                    >
+                      NOIDA – H101, LGF, Sector-63, Noida, Uttar Pradesh- 201301
+                    </a>
+                  </li>
+                  <li className="footer_land pb-2">
+                    <a
+                      href="/https://maps.app.goo.gl/xkxyztKSbkCcMs8c9/"
+                      className="text-black"
+                    >
+                      NOIDA – H56 , 1st Floor, Sector-63, Noida, Uttar Pradesh-
+                      201301
+                    </a>
+                  </li>
+                  <li className="footer_land pb-2">
+                    <a
+                      href="/https://maps.app.goo.gl/fgvUV2sVYxd3uPct9/"
+                      className="text-black"
+                    >
+                      Our Factory – Plot no 3 , Sorkha Village, SEC – 115, Noida
+                    </a>
+                  </li>
+                  <li className="footer_land pb-2">
+                    <a
+                      href="/https://maps.app.goo.gl/FuyE6B2jZS1qXQuR6/"
+                      className="text-black"
+                    >
+                      Jmd Galleria Mall, Badshahpur Sohna Rd Hwy, Sector 47,
+                      Sector 48, Gurugram, Haryana 122001
+                    </a>
+                  </li>
+                  <ul>
+                    <li className="footer_land">
+                      Phone:{" "}
+                      <a href="callto:+19810506301" className="text-black">
+                        +91 9810503881
+                      </a>{" "}
+                    </li>
+                    <li className="footer_land">
+                      Email:
+                      <a
+                        href="mailto:Info@hcinterior.in"
+                        className="text-black"
+                      >
+                        {" "}
+                        Info@hcinterior.in
+                      </a>
+                    </li>
+                  </ul>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <ContactUsPopUp onModalStateChange={handleModalStateChange} />
+      {/* <style jsx>{`
+        .next {
+          right: -38px;
+          top: 55%;
+        }
+
+        .prev {
+          top: 55%;
+          left: -40px;
+        }
+      `}</style> */}
+    </div>
+  );
+};
+
+export default HcLandingTwo;

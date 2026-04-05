@@ -1,6 +1,7 @@
 import { IoIosCall } from "react-icons/io";
 import Toggle from "../components/Toggle";
 // import "../globals.css";
+
 const Header = () => {
   return (
     <>
@@ -37,6 +38,8 @@ const Header = () => {
                   id="navbarSupportedContent"
                 >
                   <ul className="m-auto mb-2 text-center navbar-nav mb-lg-0 ms-0">
+                    
+                    {/* Design Ideas */}
                     <li className="nav-item dropdown">
                       <a
                         className="nav-link dropdown-toggle"
@@ -60,6 +63,8 @@ const Header = () => {
                         </li>
                       </ul>
                     </li>
+
+                    {/* Portfolio */}
                     <li className="nav-item dropdown">
                       <a
                         className="nav-link dropdown-toggle"
@@ -86,8 +91,8 @@ const Header = () => {
                         </li>
                       </ul>
                     </li>
-                   
 
+                    {/* Experience Center */}
                     <li className="nav-item dropdown">
                       <a
                         className="nav-link dropdown-toggle"
@@ -109,20 +114,15 @@ const Header = () => {
                           Experience Center Gurugram
                           </a>
                         </li>
+                        <li>
+                          <a className="dropdown-item" href="/experience-center-faridabad/">
+                          Experience Center Faridabad
+                          </a>
+                        </li>
                       </ul>
                     </li>
 
-
-                    {/* <li className="nav_item">
-                      <a
-                        className="nav-link"
-                        aria-current="page"
-                        href="/reallife-portfolio/"
-                      >
-                        Real Time 3D
-                      </a>
-                    </li> */}
-
+                    {/* Exclusive Design */}
                     <li className="nav-item dropdown">
                       <a
                         className="nav-link dropdown-toggle"
@@ -171,6 +171,69 @@ const Header = () => {
                         </li>
                       </ul>
                     </li>
+
+                    {/* --- SERVICES DROPDOWN (MOVED HERE) --- */}
+                    <li className="nav-item dropdown">
+                      <a
+                        className="nav-link dropdown-toggle"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Services
+                      </a>
+                      <ul className="dropdown-menu">
+                        <li>
+                          <a className="dropdown-item" href="/interior-designers-in-noida">
+                            Interior Designers In Noida
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/interior-designers-in-ghaziabad">
+                            Interior Designers in Ghaziabad
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/interior-designers-in-greater-noida">
+                            Interior Designers in Greater Noida
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/interior-designers-in-delhi">
+                            Interior Designers in Delhi
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/interior-designers-in-dwarka">
+                            Interior Designers in Dwarka
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/interior-designers-in-faridabad">
+                            Interior Designers in Faridabad
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/interior-designers-in-gurgaon">
+                            Interior Designers in Gurugram
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/interior-designers-in-manesar">
+                            Interior Designers In Manesar
+                          </a>
+                        </li>
+
+                        <li>
+                          <a className="dropdown-item" href="/interior-designer-in-sohna-gurgaon">
+                            Interior Designers in Sohna
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+
+                    {/* Contact Us */}
                     <li className="nav_item">
                       <a
                         className="nav-link"
@@ -181,9 +244,7 @@ const Header = () => {
                       </a>
                     </li>
                     <li className="py-2">
-                      {/* <a href="/estimator-for-home" className="get_btn">
-                        Get Estimate <IoIosCall className="callicon" />
-                      </a> */}
+                      {/* Empty li placeholder */}
                     </li>
                   </ul>
                 </div>

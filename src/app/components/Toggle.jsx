@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import { useEffect, useState } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { FaBars } from "react-icons/fa";
@@ -290,14 +290,6 @@ const Toggle = () => {
                     <ul className="list-unstyled mb-0">
                       <li className="footer_li">
                         <a
-                          href="/interior-designers-in-delhi"
-                          className="offcanvas_anchor"
-                        >
-                          Interior Designers in Delhi
-                        </a>
-                      </li>
-                      <li className="footer_li">
-                        <a
                           href="/interior-designers-in-noida"
                           className="offcanvas_anchor"
                         >
@@ -306,26 +298,26 @@ const Toggle = () => {
                       </li>
                       <li className="footer_li">
                         <a
-                          href="/interior-designers-in-manesar"
-                          className="offcanvas_anchor"
-                        >
-                          Interior Designers In Manesar
-                        </a>
-                      </li>
-                      <li className="footer_li">
-                        <a
-                          href="/interior-designers-in-gurgaon"
-                          className="offcanvas_anchor"
-                        >
-                          Interior Designers in Gurugram
-                        </a>
-                      </li>
-                      <li className="footer_li">
-                        <a
                           href="/interior-designers-in-ghaziabad"
                           className="offcanvas_anchor"
                         >
                           Interior Designers in Ghaziabad
+                        </a>
+                      </li>
+                      <li className="footer_li">
+                        <a
+                          href="/interior-designers-in-greater-noida"
+                          className="offcanvas_anchor"
+                        >
+                          Interior Designers in Greater Noida
+                        </a>
+                      </li>
+                      <li className="footer_li">
+                        <a
+                          href="/interior-designers-in-delhi"
+                          className="offcanvas_anchor"
+                        >
+                          Interior Designers in Delhi
                         </a>
                       </li>
                       <li className="footer_li">
@@ -346,10 +338,26 @@ const Toggle = () => {
                       </li>
                       <li className="footer_li">
                         <a
-                          href="/interior-designers-in-greater-noida"
+                          href="/interior-designers-in-gurgaon"
                           className="offcanvas_anchor"
                         >
-                          Interior Designers in Greater Noida
+                          Interior Designers in Gurugram
+                        </a>
+                      </li>
+                      <li className="footer_li">
+                        <a
+                          href="/interior-designers-in-manesar"
+                          className="offcanvas_anchor"
+                        >
+                          Interior Designers In Manesar
+                        </a>
+                      </li>
+                      <li className="footer_li">
+                        <a
+                          href="/interior-designer-in-sohna-gurgaon"
+                          className="offcanvas_anchor"
+                        >
+                          Interior Designers In Sohna
                         </a>
                       </li>
                     </ul>

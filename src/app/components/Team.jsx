@@ -72,7 +72,9 @@ useEffect(() => {
                       <img
                         src={teamItem?.json_content?.image}
                         alt={teamItem?.json_content?.title ?? defaultAltText}
-                        className="team_img"
+                        className="responsive-media team_img"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                     <div className="card-body text-center">

@@ -93,7 +93,7 @@ useEffect(() => {
     <div>
       <section className="my-5">
         <div className="container">
-          <img src="images/teams.jpeg" className="img-thumbnail"/> 
+          <img src="images/teams.jpeg" className="img-thumbnail responsive-media" alt="Team gallery" loading="lazy" decoding="async" /> 
           {/* <div className="row">
      
             {teamDataList&&teamDataList?.map((teamItem, index) => {
@@ -102,7 +102,7 @@ useEffect(() => {
                   <div className="col-lg-3 col-md-6 col-12">
                     <div className="card border-0">
                       <div className="imgboxteam">
-                        <img src={teamItem?.json_content?.image} alt={teamItem?.json_content?.title ?? defaultAltText} className="team_img" />
+                        <img src={teamItem?.json_content?.image} alt={teamItem?.json_content?.title ?? defaultAltText} className="responsive-media team_img" loading="lazy" decoding="async" />
                       </div>
                       <div className="card-body text-center">
                         <h6 className="">{teamItem?.json_content?.title ?? "-"}</h6>

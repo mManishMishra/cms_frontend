@@ -11,7 +11,7 @@ const RoomOfice = (props) => {
         </span>
         <img
           src={props.imageRoom_Office}
-          className={props.roomImg}
+          className={`responsive-media ${props.roomImg || ""}`}
           alt={props.altImage}
           fetchPriority="high"
           loading="eager"

@@ -6,11 +6,13 @@ const PortfolioCard = (props) => {
           <div className={props.portCard}>
             <div
               className={props.portfolioImgBg}
-              style={
-                props?.portfolioImg
-                  ? { backgroundImage: `url(${props?.portfolioImg})` }
-                  : {}
-              }
+              style={{
+                // 🌟 CMS Fix: Merged background sizing rules to prevent stretching
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                ...(props?.portfolioImg ? { backgroundImage: `url(${props?.portfolioImg})` } : {})
+              }}
             >
               {/* <a href={props.cardDetailLink}>
             </a> */}

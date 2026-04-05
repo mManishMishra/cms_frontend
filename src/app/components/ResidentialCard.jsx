@@ -6,7 +6,9 @@ const ResidentialCard = (props) => {
         <img
           src={props.resiImgUrl}
           alt={props.resiImgAlt}
-          className={props.resiImgClass}
+          className={`responsive-media ${props.resiImgClass || ""}`}
+          loading="lazy"
+          decoding="async"
         />
         <div className="card-body px-3 pt-3">
           <h5 className={props.residentialTitleClass}>

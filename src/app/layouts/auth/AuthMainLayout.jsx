@@ -23,7 +23,7 @@ const AuthMainLayout = ({ children }) => {
 
     return (
         <div className="page-container">
-            {/* <AuthHeader setIsSidebarOpen={setIsSidebarOpen} /> */}
+            <AuthHeader setIsSidebarOpen={setIsSidebarOpen} />
             <main>
                 <section>
                     <div className="px-4 container-fluid">
@@ -38,7 +38,7 @@ const AuthMainLayout = ({ children }) => {
                     </div>
                 </section>
             </main>
-            {/* <AuthFooter /> */}
+            <AuthFooter />
 
             <style jsx>{`
                 .sticky-sidebar {

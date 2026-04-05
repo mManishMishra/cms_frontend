@@ -19,6 +19,8 @@ const SeoTag = () => {
         meta_description: "",
         page_name: "",
         meta_can_tag: "",
+        meta_robots: "index, follow", // New field for Index Control
+        og_image: "",                 // New field for Open Graph Image
         status: "active"
      });
 
@@ -74,13 +76,13 @@ const SeoTag = () => {
     const handleEditClick = (query) => {
         setSelectedId(query.id);
         setFormData({
-            title: query.title,
-            meta_description: query.meta_description,
-            page_name: query.page_name,
-            meta_can_tag: query.meta_can_tag,
- 
- 
-            status: query.status
+            title: query.title || "",
+            meta_description: query.meta_description || "",
+            page_name: query.page_name || "",
+            meta_can_tag: query.meta_can_tag || "",
+            meta_robots: query.meta_robots || "index, follow", // Include new field
+            og_image: query.og_image || "",                    // Include new field
+            status: query.status || "active"
         });
     }
 
@@ -133,7 +135,8 @@ const SeoTag = () => {
                 <h1 className="mb-4 text-center">  Look URL</h1>
                 <div className="d-flex justify-content-end mb-3">
                     <button
-                        onClick={() => setFormData({ title: "", meta_description: "", meta_can_tag: "",  status: "active" })} // Clear form data
+                        // Make sure to clear the new fields when adding a new entry
+                        onClick={() => setFormData({ title: "", meta_description: "", meta_can_tag: "", meta_robots: "index, follow", og_image: "", status: "active" })} 
                         type="button"
                         className="btn btn-primary"
                         data-bs-toggle="modal"
@@ -197,7 +200,7 @@ const SeoTag = () => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">Edit</h1>
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Add New</h1>
                             <button type="button" className="btn-close" id="addNewpageModalClose" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form onSubmit={handleSubmit}>
@@ -251,7 +254,36 @@ const SeoTag = () => {
                                         required
                                     />
                                 </div>
-                               
+                                
+                                {/* NEW FIELD: Meta Robots */}
+                                <div className="mb-3 col-md-12">
+                                    <label className="form-label">Meta Robots (Index Control)</label>
+                                    <select
+                                        className="form-control"
+                                        name="meta_robots"
+                                        value={formData.meta_robots}
+                                        onChange={handleInputChange}
+                                        required
+                                    >
+                                        <option value="index, follow">Index, Follow (Recommended)</option>
+                                        <option value="noindex, nofollow">No Index, No Follow (Hide from Google)</option>
+                                        <option value="index, nofollow">Index, No Follow</option>
+                                        <option value="noindex, follow">No Index, Follow</option>
+                                    </select>
+                                </div>
+
+                                {/* NEW FIELD: OG Image */}
+                                <div className="mb-3 col-md-12">
+                                    <label className="form-label">OG Image URL (Social Media Preview)</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="og_image"
+                                        placeholder="https://yoursite.com/image.jpg"
+                                        value={formData.og_image}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
                                 
                                 <div className="mb-3 col-md-12">
                                     <label className="form-label">Status</label>
@@ -336,6 +368,36 @@ const SeoTag = () => {
                                         value={formData.meta_can_tag}
                                         onChange={handleInputChange}
                                         required
+                                    />
+                                </div>
+
+                                {/* NEW FIELD: Meta Robots */}
+                                <div className="mb-3 col-md-12">
+                                    <label className="form-label">Meta Robots (Index Control)</label>
+                                    <select
+                                        className="form-control"
+                                        name="meta_robots"
+                                        value={formData.meta_robots}
+                                        onChange={handleInputChange}
+                                        required
+                                    >
+                                        <option value="index, follow">Index, Follow (Recommended)</option>
+                                        <option value="noindex, nofollow">No Index, No Follow (Hide from Google)</option>
+                                        <option value="index, nofollow">Index, No Follow</option>
+                                        <option value="noindex, follow">No Index, Follow</option>
+                                    </select>
+                                </div>
+
+                                {/* NEW FIELD: OG Image */}
+                                <div className="mb-3 col-md-12">
+                                    <label className="form-label">OG Image URL (Social Media Preview)</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="og_image"
+                                        placeholder="https://yoursite.com/image.jpg"
+                                        value={formData.og_image}
+                                        onChange={handleInputChange}
                                     />
                                 </div>
                               
