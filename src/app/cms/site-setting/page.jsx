@@ -1,12 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { getCmsAccess } from "@/utils/cmsAccess";
 
 const GlobalSettings = () => {
+    const router = useRouter();
+    const user = useSelector((state) => state.auth.user);
     const authToken = useSelector((state) => state.auth.authToken);
+    const { isAdmin } = getCmsAccess(user);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [formData, setFormData] = useState({
@@ -14,6 +19,13 @@ const GlobalSettings = () => {
         facebook_url: "", instagram_url: "", 
         twitter_url: "", linkedin_url: "", pinterest_url: "", youtube_url: ""
     });
+
+    useEffect(() => {
+        if (user && !isAdmin) {
+            toast.error("Unauthorized Access. Only admins can manage global settings.");
+            router.push("/dashboard");
+        }
+    }, [isAdmin, router, user]);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -49,6 +61,8 @@ const GlobalSettings = () => {
             setSaving(false);
         }
     };
+
+    if (user && !isAdmin) return null;
 
     return (
         <AuthMainLayout>

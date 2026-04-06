@@ -1,5 +1,6 @@
 import BackgroundImageWithHeading from "../components/BackgroundImageWithHeading";
 import MainLayout from "../layouts/MainLayout";
+import { generateFAQSchema } from "@/utils/schemaGenerator";
 
 // --- CONFIGURATION ---
 export const revalidate = 60; // Regenerate page every 60 seconds
@@ -90,9 +91,17 @@ export async function generateMetadata() {
 // --- MAIN SERVER COMPONENT ---
 export default async function FaqPage() {
   const faqData = await getFaqData();
+  const faqSchema = generateFAQSchema(faqData);
 
   return (
     <MainLayout>
+      {faqSchema && (
+        <script
+          id="faq-page-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       <main>
         <BackgroundImageWithHeading
           sectionBgImages="contact_wrapper faq_banner"

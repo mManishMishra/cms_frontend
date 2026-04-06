@@ -1,3 +1,5 @@
+import { getCanonicalUrl, getRobotsDirectives } from "@/utils/seoHelpers";
+
 export async function getPageSEO(pageUrlIdentifier) {
     try {
       const baseURL = process.env.NODE_ENV === "development" 
@@ -17,12 +19,13 @@ export async function getPageSEO(pageUrlIdentifier) {
         );
   
         if (pageSeo) {
-          const robotsString = pageSeo.meta_robots?.toLowerCase() || "";
-          const shouldIndex = robotsString.includes('index') && !robotsString.includes('noindex');
-          const shouldFollow = robotsString.includes('follow') && !robotsString.includes('nofollow');
+          const { index, follow } = getRobotsDirectives(pageSeo);
   
-          let cleanCanonical = pageUrlIdentifier;
-          if (pageSeo.meta_can_tag) {
+          let cleanCanonical = getCanonicalUrl({
+            metaCanonicalTag: pageSeo.meta_can_tag,
+            fallbackPath: pageUrlIdentifier,
+          });
+          if (false && pageSeo.meta_can_tag) {
               if (pageSeo.meta_can_tag.includes("href=")) {
                   const match = pageSeo.meta_can_tag.match(/href=[“"']([^"“']+)["”']/);
                   if (match) cleanCanonical = match[1];
@@ -35,7 +38,7 @@ export async function getPageSEO(pageUrlIdentifier) {
             title: pageSeo.title,
             description: pageSeo.meta_description,
             alternates: { canonical: cleanCanonical },
-            robots: { index: shouldIndex, follow: shouldFollow },
+            robots: { index, follow },
             openGraph: {
               title: pageSeo.title,
               description: pageSeo.meta_description,

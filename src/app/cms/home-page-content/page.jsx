@@ -4,12 +4,13 @@ import { useSelector } from "react-redux";
 import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { getCmsAccess, getDeletePermissionMessage } from "@/utils/cmsAccess";
  
 
 const CmsHowItsWorks = () => {
-
-    
+    const user = useSelector((state) => state.auth.user);
     const authToken = useSelector((state) => state.auth.authToken);
+    const { canDelete } = getCmsAccess(user);
     const [pagesList, setPagesList] = useState([]);
     const [pagesList_what_we_are, setPagesList_what_we_are] = useState([]);
     const [pagesList_meet_us, setPagesList_meet_us] = useState([]);
@@ -435,6 +436,11 @@ const CmsHowItsWorks = () => {
   
 
     const deleteHandler = async (id) => {
+        if (!canDelete) {
+            toast.error(getDeletePermissionMessage("this home page item"));
+            return;
+        }
+
         if (window.confirm("Are you sure you want to delete this team?")) {
             try {
                 const response = await api.delete(`/cms-content/${id}`, {
@@ -603,7 +609,7 @@ const CmsHowItsWorks = () => {
                                             <button onClick={() => handleEditClick(item, index)} type="button" className="read_morebtn" data-bs-toggle="modal" data-bs-target="#editNewpageModal">
                                                 Edit
                                             </button>
-                                            <button className="ms-2 btn btn-danger" onClick={() => deleteHandler(item.id)}>Delete</button>
+                                            {canDelete && <button className="ms-2 btn btn-danger" onClick={() => deleteHandler(item.id)}>Delete</button>}
                                         </td>
                                     </tr>
                                 ))}

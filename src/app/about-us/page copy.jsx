@@ -101,7 +101,7 @@ const AboutUs = () => {
                 <div>
                   <h3>{formData.mid_sub_title}</h3>
                   <p className="team_description text-white pe-lg-5">
-                  <p><span class="font_stylish text-white">Interior designing Company?</span></p>
+                  <p><span className="font_stylish text-white">Interior designing Company?</span></p>
                     {formData.mid_sub_description}
                   </p>
                 </div>

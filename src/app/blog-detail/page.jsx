@@ -63,7 +63,7 @@ const BlogDetail = () => {
                       <img
                         src={blogDetails?.image}
                         className="image_blog"
-                        alt={blogDetails?.title ?? defaultAltText}
+                        alt={blogDetails?.image_alt || blogDetails?.title || defaultAltText}
                       />
                     )}
                   </div>

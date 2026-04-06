@@ -6,11 +6,14 @@ import { IoIosCall } from "react-icons/io";
 import { FaComments } from "react-icons/fa";
 import ContactUsPopUp from "../components/ContactUsPopUp";
 import { useCallback, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import VideoBox from "../components/VideoBox";
 import { toast } from "react-toastify";
 import api from "@/utils/api";
 import { image } from "@nextui-org/theme";
+import { buildLeadMetadata } from "@/utils/leadForms";
 const HCLandingPage = () => {
+  const pathname = usePathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -203,6 +206,12 @@ const HCLandingPage = () => {
       email: formData.email,
       place: formData.place,
       query: formData.query,
+      ...buildLeadMetadata({
+        pathname,
+        leadFormType: "inline",
+        leadFormName: "Creating The Home Of Your Dreams Lead Form",
+        ctaText: "SEND",
+      }),
     };
 
     try {

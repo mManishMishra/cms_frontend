@@ -1,8 +1,11 @@
 "use client";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import api from "@/utils/api";
+import { buildLeadMetadata } from "@/utils/leadForms";
 
 export default function ContactForm({ mapSrc }) {
+  const pathname = usePathname();
   const [formData, setFormData] = useState({
     fullName: "",
     contact: "",
@@ -36,6 +39,12 @@ export default function ContactForm({ mapSrc }) {
         email: formData.email,
         place: formData.place,
         query: formData.query,
+        ...buildLeadMetadata({
+          pathname,
+          leadFormType: "inline",
+          leadFormName: "Home Contact Form",
+          ctaText: "SEND",
+        }),
       });
       if (response.status === 201) {
         setStatus({ message: "Form submitted successfully!", error: "" });

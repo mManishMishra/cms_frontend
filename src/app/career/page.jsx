@@ -2,7 +2,7 @@ import BackgroundImageWithHeading from "../components/BackgroundImageWithHeading
 import BoxIcon from "../components/BoxIcon";
 import { FaArrowRightLong } from "react-icons/fa6";
 import MainLayout from "../layouts/MainLayout";
-import moment from "moment";
+import Link from "next/link";
 
 // --- CONFIGURATION ---
 export const revalidate = 60; // Regenerate page every 60 seconds
@@ -196,15 +196,15 @@ export default async function Career() {
                             <td>{job?.job_opening ?? "-"}</td>
                             <td>{job?.location ?? "-"}</td>
                             <td>
-                              {moment(job?.created_at).format("DD/MM/YYYY")}
+                              {job?.created_at ? new Date(job.created_at).toLocaleDateString("en-GB") : "-"}
                             </td>
                             <td>
-                              <a
+                              <Link
                                 href={`/career/career-form?jobId=${job.id}`}
                                 className="text-muted"
                               >
                                 <FaArrowRightLong className="fs-4" />
-                              </a>
+                              </Link>
                             </td>
                           </tr>
                         ))

@@ -4,9 +4,12 @@ import { useSelector } from "react-redux";
 import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { getCmsAccess, getDeletePermissionMessage } from "@/utils/cmsAccess";
 
 const CmsDesignGallery = () => {
+    const user = useSelector((state) => state.auth.user);
     const authToken = useSelector((state) => state.auth.authToken);
+    const { canDelete } = getCmsAccess(user);
     const [pagesList, setPagesList] = useState();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -182,6 +185,11 @@ const CmsDesignGallery = () => {
     }
 
     const deleteHandler = async (id) => {
+        if (!canDelete) {
+            toast.error(getDeletePermissionMessage("this gallery item"));
+            return;
+        }
+
         if (!pagesList || pagesList.length <= 8) {
             toast.error("Cannot delete records. Need more than 8 records.");
             return;
@@ -264,13 +272,15 @@ const CmsDesignGallery = () => {
                 <button onClick={() => handleEditClick(item)} type="button" className="read_morebtn" data-bs-toggle="modal" data-bs-target="#addNewpageModal">
                     Edit
                 </button>
-                <button 
-                    className="ms-2 btn btn-danger" 
-                    onClick={() => deleteHandler(item.id)} 
-                    disabled={isRecent} // Disable only the latest 8 records
-                >
-                    Delete
-                </button>
+                {canDelete && (
+                    <button 
+                        className="ms-2 btn btn-danger" 
+                        onClick={() => deleteHandler(item.id)} 
+                        disabled={isRecent} // Disable only the latest 8 records
+                    >
+                        Delete
+                    </button>
+                )}
             </td>
         </tr>
     );

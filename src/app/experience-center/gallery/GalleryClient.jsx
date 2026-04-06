@@ -35,7 +35,7 @@ const ResidentialProjectsGallery = () => {
           {loading ? (
         <div className="loader-container">
           <div className="spinner">
-            <img src="https://raw.githubusercontent.com/Codelessly/FlutterLoadingGIFs/master/packages/cupertino_activity_indicator_large.gif" /> 
+            <img src="https://raw.githubusercontent.com/Codelessly/FlutterLoadingGIFs/master/packages/cupertino_activity_indicator_large.gif"  alt="" /> 
           </div>
         </div>
       ) : (

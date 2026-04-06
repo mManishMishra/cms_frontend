@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import api from "@/utils/api";
+import { buildLeadMetadata } from "@/utils/leadForms";
 
 const ContactForm = () => {
+  const pathname = usePathname();
   const [formData, setFormData] = useState({
     fullName: "",
     contactNo: "",
@@ -47,6 +50,12 @@ const ContactForm = () => {
       email: formData.email,
       place: formData.place,
       query: formData.query,
+      ...buildLeadMetadata({
+        pathname,
+        leadFormType: "inline",
+        leadFormName: "Contact Page Lead Form",
+        ctaText: "SEND",
+      }),
     };
 
     try {

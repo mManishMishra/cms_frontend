@@ -4,14 +4,21 @@ import { useSelector } from "react-redux";
 import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import {
+    getCmsAccess,
+    getDeletePermissionMessage,
+    getPublishWorkflowMessage,
+} from "@/utils/cmsAccess";
 
 const initialFormState = { old_url: "", new_url: "", status_code: 301, is_active: true };
 
 const CmsRedirects = () => {
+    const user = useSelector((state) => state.auth.user);
     const authToken = useSelector((state) => state.auth.authToken);
+    const { canPublish, canDelete } = getCmsAccess(user);
     const [redirectsList, setRedirectsList] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [formData, setFormData] = useState(initialFormState);
+    const [formData, setFormData] = useState({ ...initialFormState, is_active: canPublish });
     const [selectedId, setSelectedId] = useState(null);
     const fileInputRef = useRef(null);
 
@@ -39,6 +46,9 @@ const CmsRedirects = () => {
         e.preventDefault();
         try {
             const token = authToken || localStorage.getItem("token");
+            if (!canPublish && formData.is_active) {
+                toast.info(getPublishWorkflowMessage("This redirect"));
+            }
             const response = await api.post("/redirects", formData, { headers: { Authorization: `Bearer ${token}` } });
             if (response.status === 201 || response.status === 200) {
                 fetchRedirects(); 
@@ -52,6 +62,9 @@ const CmsRedirects = () => {
         e.preventDefault();
         try {
             const token = authToken || localStorage.getItem("token");
+            if (!canPublish && formData.is_active) {
+                toast.info(getPublishWorkflowMessage("This redirect"));
+            }
             const response = await api.patch(`/redirects/${selectedId}`, formData, { headers: { Authorization: `Bearer ${token}` } });
             if (response.status === 200) {
                 fetchRedirects(); 
@@ -62,6 +75,11 @@ const CmsRedirects = () => {
     };
 
     const deleteHandler = async (id) => {
+        if (!canDelete) {
+            toast.error(getDeletePermissionMessage("this redirect"));
+            return;
+        }
+
         if (window.confirm("Are you sure you want to delete this redirect?")) {
             try {
                 const token = authToken || localStorage.getItem("token");
@@ -73,8 +91,12 @@ const CmsRedirects = () => {
     };
 
     const handleEditClick = (item) => {
+        const nextActiveState = canPublish ? item.is_active !== false : false;
+        if (!canPublish && item.is_active) {
+            toast.info("Editing an active redirect will disable it until an admin republishes it.");
+        }
         setSelectedId(item.id);
-        setFormData({ old_url: item.old_url, new_url: item.new_url, status_code: item.status_code || 301, is_active: item.is_active !== false });
+        setFormData({ old_url: item.old_url, new_url: item.new_url, status_code: item.status_code || 301, is_active: nextActiveState });
     };
 
     // --- BULK CSV UPLOAD LOGIC ---
@@ -106,6 +128,9 @@ const CmsRedirects = () => {
 
             try {
                 const token = authToken || localStorage.getItem("token");
+                if (!canPublish) {
+                    toast.info("Bulk uploaded redirects will stay inactive until an admin publishes them.");
+                }
                 await api.post("/redirects/bulk", bulkData, { headers: { Authorization: `Bearer ${token}` } });
                 fetchRedirects();
                 toast.success(`${bulkData.length} redirects uploaded successfully!`);
@@ -118,7 +143,7 @@ const CmsRedirects = () => {
     };
 
     const renderFormBody = () => (
-        <div className="modal-body p-4 bg-light row g-3">
+            <div className="modal-body p-4 bg-light row g-3">
             <div className="col-md-12">
                 <label className="form-label fw-bold">Old URL Path *</label>
                 <input type="text" className="form-control" name="old_url" placeholder="e.g., /old-page-url" value={formData.old_url} onChange={handleInputChange} required />
@@ -136,8 +161,8 @@ const CmsRedirects = () => {
             </div>
             <div className="col-md-6 mt-4 d-flex align-items-end">
                 <div className="form-check form-switch fs-5">
-                    <input className="form-check-input" type="checkbox" name="is_active" id="isActiveSwitch" checked={formData.is_active} onChange={handleInputChange} />
-                    <label className="form-check-label ms-2 fs-6">Active</label>
+                    <input className="form-check-input" type="checkbox" name="is_active" id="isActiveSwitch" checked={formData.is_active} onChange={handleInputChange} disabled={!canPublish} />
+                    <label className="form-check-label ms-2 fs-6">{canPublish ? "Active" : "Admin Publish Required"}</label>
                 </div>
             </div>
         </div>
@@ -148,6 +173,11 @@ const CmsRedirects = () => {
             <div className="container-fluid my-5 px-4">
                 <div className="card shadow-sm border-0">
                     <div className="card-body p-4">
+                        {(!canPublish || !canDelete) && (
+                            <div className="alert alert-info">
+                                Editors can stage redirects here. Publish and delete access can be granted separately by an admin.
+                            </div>
+                        )}
                         <div className="d-flex justify-content-between align-items-center mb-4">
                             <div>
                                 <h1 className="h3 mb-1 text-gray-800">URL Redirects</h1>
@@ -158,7 +188,7 @@ const CmsRedirects = () => {
                                 <button onClick={() => fileInputRef.current.click()} className="btn btn-outline-success shadow-sm px-3">
                                     <i className="bi bi-upload me-2"></i> Bulk Upload CSV
                                 </button>
-                                <button onClick={() => setFormData(initialFormState)} className="btn btn-primary px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addRedirectModal">
+                                <button onClick={() => setFormData({ ...initialFormState, is_active: canPublish })} className="btn btn-primary px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addRedirectModal">
                                     + Add Redirect
                                 </button>
                             </div>
@@ -180,7 +210,7 @@ const CmsRedirects = () => {
                                                 <td>{item.is_active ? <span className="text-success fw-bold">Active</span> : <span className="text-muted">Disabled</span>}</td>
                                                 <td className="text-end">
                                                     <button onClick={() => handleEditClick(item)} className="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#editRedirectModal">Edit</button>
-                                                    <button className="btn btn-sm btn-outline-danger" onClick={() => deleteHandler(item.id)}>Delete</button>
+                                                    {canDelete && <button className="btn btn-sm btn-outline-danger" onClick={() => deleteHandler(item.id)}>Delete</button>}
                                                 </td>
                                             </tr>
                                         )) : (<tr><td colSpan="6" className="text-center py-4 text-muted">No redirects configured.</td></tr>)}

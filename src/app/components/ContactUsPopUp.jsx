@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation"; 
 import api from "@/utils/api";
+import { buildLeadMetadata, getLeadDeviceType, resolveLeadRule } from "@/utils/leadForms";
 
 const ContactUsPopUp = ({ onModalStateChange }) => {
     const router = useRouter();
@@ -10,6 +11,7 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
     const [showModal, setShowModal] = useState(false);
     const [activeRule, setActiveRule] = useState(null);
     const hasTriggered = useRef(false);
+    const lastTriggerType = useRef("time");
 
     // Form state preserved exactly
     const [formData, setFormData] = useState({
@@ -53,12 +55,21 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
             mobile: formData.contact,
             place: formData.place,
             query: formData.query,
+            ...buildLeadMetadata({
+                pathname,
+                leadFormType: "popup",
+                rule: activeRule,
+                leadFormName: activeRule?.lead_form_name || `Popup Lead Form ${pathname || "/"}`,
+                triggerType: lastTriggerType.current || activeRule?.trigger_type || "time",
+                ctaText: activeRule?.cta_text || "SEND",
+                deviceType: getLeadDeviceType(),
+            }),
         };
 
         try {
             const response = await api.post("/user-queries", formRequestData);
             if (response.status === 201) {
-                setSubmissionMessage("Form submitted successfully!");
+                setSubmissionMessage(activeRule?.success_message || "Form submitted successfully!");
                 setFormData({
                     fullName: "",
                     contact: "",
@@ -67,14 +78,21 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
                     query: "",
                     termsAndConditions: false,
                 });
-                
-                // Close modal immediately on success
-                handleClose();
 
-                // Redirect using Next.js router after a short delay
                 setTimeout(() => {
-                    router.push("/thank-you");
-                }, 300);
+                    handleClose();
+                    const redirectUrl = activeRule?.redirect_url || "/thank-you";
+                    if (!redirectUrl) {
+                        return;
+                    }
+
+                    if (/^https?:\/\//i.test(redirectUrl)) {
+                        window.location.href = redirectUrl;
+                        return;
+                    }
+
+                    router.push(redirectUrl);
+                }, 400);
             } else {
                 setSubmissionError("Failed to submit form. Please try again.");
             }
@@ -91,6 +109,10 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
     // --- Dynamic Popup Rules Engine ---
     useEffect(() => {
         hasTriggered.current = false;
+        lastTriggerType.current = "time";
+        setShowModal(false);
+        setActiveRule(null);
+        if (onModalStateChange) onModalStateChange(false);
         let timerId;
         let scrollListener;
         let exitListener;
@@ -101,6 +123,7 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
                 timerId = setTimeout(() => {
                     if (!hasTriggered.current) {
                         hasTriggered.current = true;
+                        lastTriggerType.current = "time";
                         setShowModal(true);
                         if (onModalStateChange) onModalStateChange(true);
                     }
@@ -110,13 +133,7 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
 
         const fetchAndApplyRules = async () => {
             try {
-                const res = await api.get("/popup-rules");
-                const allRules = res.data || [];
-
-                let ruleToApply = allRules.find(r => r.target_url === pathname);
-                if (!ruleToApply) {
-                    ruleToApply = allRules.find(r => r.target_url === "*");
-                }
+                const ruleToApply = await resolveLeadRule(pathname);
 
                 // If no rule exists, or rule is disabled, fallback or abort
                 if (!ruleToApply) {
@@ -125,15 +142,16 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
                 }
                 if (!ruleToApply.is_enabled) return;
 
-                const isMobile = window.innerWidth <= 768;
+                const isMobile = getLeadDeviceType() === "mobile";
                 if (isMobile && !ruleToApply.show_mobile) return; 
                 if (!isMobile && !ruleToApply.show_desktop) return; 
 
                 setActiveRule(ruleToApply);
 
-                const triggerPopup = () => {
+                const triggerPopup = (triggerSource = "time") => {
                     if (!hasTriggered.current) {
                         hasTriggered.current = true;
+                        lastTriggerType.current = triggerSource;
                         setShowModal(true);
                         if (onModalStateChange) onModalStateChange(true);
                     }
@@ -144,7 +162,7 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
                 // EXCLUSIVE TRIGGER 1: Time Delay
                 if (triggerType === 'time') {
                     const delay = (ruleToApply.delay_seconds || 12) * 1000; 
-                    timerId = setTimeout(triggerPopup, delay);
+                    timerId = setTimeout(() => triggerPopup('time'), delay);
                 } 
                 // EXCLUSIVE TRIGGER 2: Scroll Depth
                 else if (triggerType === 'scroll') {
@@ -154,7 +172,7 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
                         
                         const scrollPercent = (window.scrollY / maxScroll) * 100;
                         if (scrollPercent >= (ruleToApply.scroll_percentage || 50)) {
-                            triggerPopup();
+                            triggerPopup('scroll');
                             window.removeEventListener("scroll", scrollListener);
                         }
                     };
@@ -162,13 +180,18 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
                 } 
                 // EXCLUSIVE TRIGGER 3: Exit Intent
                 else if (triggerType === 'exit') {
-                    exitListener = (e) => {
-                        if (e.clientY <= 0) { 
-                            triggerPopup();
-                            document.removeEventListener("mouseleave", exitListener);
-                        }
-                    };
-                    document.addEventListener("mouseleave", exitListener);
+                    if (isMobile) {
+                        const delay = (ruleToApply.delay_seconds || 12) * 1000;
+                        timerId = setTimeout(() => triggerPopup('exit-mobile-fallback'), delay);
+                    } else {
+                        exitListener = (e) => {
+                            if (e.clientY <= 0) { 
+                                triggerPopup('exit');
+                                document.removeEventListener("mouseleave", exitListener);
+                            }
+                        };
+                        document.addEventListener("mouseleave", exitListener);
+                    }
                 }
 
             } catch (error) {
@@ -184,7 +207,7 @@ const ContactUsPopUp = ({ onModalStateChange }) => {
             if (scrollListener) window.removeEventListener("scroll", scrollListener);
             if (exitListener) document.removeEventListener("mouseleave", exitListener);
         };
-    }, [pathname]); // Excluded onModalStateChange to prevent infinite loop
+    }, [pathname, onModalStateChange]);
 
     // Don't render anything if modal is hidden (cleaner DOM)
     if (!showModal) return null;

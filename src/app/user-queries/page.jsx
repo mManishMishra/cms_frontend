@@ -97,6 +97,12 @@ const UserQueries = () => {
                                     <th>Email</th>
                                     <th>Phone Number</th>
                                     <th>Place</th>
+                                    <th>Lead Form</th>
+                                    <th>Lead Type</th>
+                                    <th>Source URL</th>
+                                    <th>Trigger</th>
+                                    <th>CTA</th>
+                                    <th>Device</th>
                                     <th>Query</th>
                                     <th>Submitted At</th>
                                     <th>IP Address</th>
@@ -110,6 +116,12 @@ const UserQueries = () => {
                                         <td>{query.email}</td>
                                         <td>{query.mobile}</td>
                                         <td>{query.place}</td>
+                                        <td>{query.lead_form_name || "General Lead Form"}</td>
+                                        <td>{query.lead_form_type || "inline"}</td>
+                                        <td>{query.source_url || "-"}</td>
+                                        <td>{query.trigger_type || "-"}</td>
+                                        <td>{query.cta_text || "-"}</td>
+                                        <td>{query.device_type || "-"}</td>
                                         <td>{query.query}</td>
                                         <td>{new Date(query.created_at).toLocaleString()}</td>
                                         <td>{query.ip_address}</td>

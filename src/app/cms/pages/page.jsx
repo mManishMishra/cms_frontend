@@ -5,6 +5,16 @@ import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
+import {
+    DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+    DEFAULT_SITEMAP_PRIORITY,
+    SITEMAP_CHANGE_FREQUENCY_OPTIONS
+} from "@/utils/seoHelpers";
+import {
+    getCmsAccess,
+    getDeletePermissionMessage,
+    getPublishWorkflowMessage,
+} from "@/utils/cmsAccess";
 
 const CKEditorComponent = dynamic(() => import('@/app/components/CKEditorComponent'), { ssr: false });
 
@@ -22,8 +32,8 @@ const initialFormState = {
 const CmsPages = () => {
     // 🌟 FIX: Grab the token and user role correctly from Redux
     const user = useSelector((state) => state.auth.user);
-    const authToken = user?.token;
-    const isAdmin = user?.role?.toLowerCase() === "admin";
+    const authToken = useSelector((state) => state.auth.authToken) || user?.token;
+    const { canPublish, canDelete } = getCmsAccess(user);
 
     const [pagesList, setPagesList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -41,6 +51,9 @@ const CmsPages = () => {
         custom_code: "",
         meta_robots_index: "index", 
         meta_robots_follow: "follow", 
+        include_in_sitemap: true,
+        sitemap_change_frequency: DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+        sitemap_priority: String(DEFAULT_SITEMAP_PRIORITY),
         og_title: "", 
         og_description: "", 
         og_image: ""
@@ -52,7 +65,7 @@ const CmsPages = () => {
         setLoading(true);
         try {
             const token = authToken || (typeof window !== "undefined" ? localStorage.getItem("token") : "");
-            const response = await api.get("/cms-pages", { 
+            const response = await api.get("/cms-pages/all", { 
                 headers: { Authorization: `Bearer ${token}` } 
             });
             setPagesList(response.data || []);
@@ -106,7 +119,7 @@ const CmsPages = () => {
     const handleAddContentBlock = () => {
         let newBlock = { type: blockTypeToAdd, data: {} };
         if (blockTypeToAdd === 'testimonial') newBlock.data = { client_name: '', review: '', designation: '' };
-        if (blockTypeToAdd === 'service_row') newBlock.data = { heading: '', description: '', image_url: '', reverse_layout: false };
+        if (blockTypeToAdd === 'service_row') newBlock.data = { heading: '', description: '', image_url: '', image_alt: '', reverse_layout: false };
         if (blockTypeToAdd === 'counter') newBlock.data = { number: '', label: '', icon_url: '' };
 
         setFormData(prev => ({ ...prev, content_blocks: [...prev.content_blocks, newBlock] }));
@@ -133,10 +146,17 @@ const CmsPages = () => {
         e.preventDefault();
         try {
             const token = authToken || localStorage.getItem("token");
+            if (!canPublish && formData.status === "Published") {
+                toast.info(getPublishWorkflowMessage("This page"));
+            }
             const response = await api.post("/cms-pages", formData, { headers: { Authorization: `Bearer ${token}` } });
             if (response.status === 201 || response.status === 200) {
                 fetchPages(); 
-                toast.success("Page created."); 
+                if (!canPublish && response.data?.status === "Pending Approval") {
+                    toast.info("Page saved as Pending Approval for admin review.");
+                } else {
+                    toast.success("Page created.");
+                }
                 setFormData(initialFormState);
                 document.getElementById('addNewpageModalClose').click();
             }
@@ -149,10 +169,17 @@ const CmsPages = () => {
         e.preventDefault();
         try {
             const token = authToken || localStorage.getItem("token");
+            if (!canPublish && formData.status === "Published") {
+                toast.info(getPublishWorkflowMessage("This page"));
+            }
             const response = await api.patch(`/cms-pages/${selectedId}`, formData, { headers: { Authorization: `Bearer ${token}` } });
             if (response.status === 200) {
                 fetchPages(); 
-                toast.success("Page updated."); 
+                if (!canPublish && response.data?.status === "Pending Approval") {
+                    toast.info("Page moved to Pending Approval for admin review.");
+                } else {
+                    toast.success("Page updated.");
+                }
                 setFormData(initialFormState);
                 document.getElementById('editNewpageModalClose').click();
             }
@@ -162,6 +189,11 @@ const CmsPages = () => {
     };
 
     const deleteHandler = async (id) => {
+        if (!canDelete) {
+            toast.error(getDeletePermissionMessage("this page"));
+            return;
+        }
+
         if (window.confirm("Delete this page?")) {
             try {
                 const token = authToken || localStorage.getItem("token");
@@ -197,7 +229,7 @@ const CmsPages = () => {
 
         // 🌟 WORKFLOW: Auto-downgrade status if Editor edits a Published page
         let defaultStatus = item.status || "Draft";
-        if (!isAdmin && defaultStatus === "Published") {
+        if (!canPublish && defaultStatus === "Published") {
             defaultStatus = "Pending Approval";
             toast.info("Editing a live page will change its status to Pending Approval.");
         }
@@ -242,6 +274,9 @@ const CmsPages = () => {
             custom_code: item?.custom_code || "",
             meta_robots_index: item?.meta_robots_index || "index", 
             meta_robots_follow: item?.meta_robots_follow || "follow", 
+            include_in_sitemap: item?.include_in_sitemap ?? true,
+            sitemap_change_frequency: item?.sitemap_change_frequency || DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+            sitemap_priority: String(item?.sitemap_priority ?? DEFAULT_SITEMAP_PRIORITY),
             og_title: item?.og_title || "", 
             og_description: item?.og_description || "", 
             og_image: item?.og_image || "",
@@ -255,7 +290,11 @@ const CmsPages = () => {
             const response = await api.patch(`/cms-pages/seo-content/${selectedId}`, formSeoContentData, { headers: { Authorization: `Bearer ${token}` } });
             if (response.status === 200) { 
                 fetchPages(); 
-                toast.success("SEO saved."); 
+                if (!canPublish && response.data?.status === "Pending Approval") {
+                    toast.info("SEO changes moved this page to Pending Approval for admin review.");
+                } else {
+                    toast.success("SEO saved.");
+                }
                 document.getElementById('seoContentModalClose').click(); 
             }
         } catch (error) { 
@@ -264,8 +303,11 @@ const CmsPages = () => {
     };
 
     const handleSeoContentInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormSeoContentData((prevData) => ({ ...prevData, [name]: value }));
+        const { name, value, type, checked } = e.target;
+        setFormSeoContentData((prevData) => ({
+            ...prevData,
+            [name]: type === "checkbox" ? checked : value
+        }));
     };
 
     // --- UI Renders ---
@@ -305,6 +347,7 @@ const CmsPages = () => {
                                 <div className="col-md-8"><label className="form-label small">Heading</label><input type="text" className="form-control" value={block.data.heading} onChange={(e) => handleContentBlockChange(index, 'heading', e.target.value)} /></div>
                                 <div className="col-md-4"><label className="form-label small">Layout Style</label><select className="form-select" value={block.data.reverse_layout} onChange={(e) => handleContentBlockChange(index, 'reverse_layout', e.target.value === 'true')}><option value="false">Image Left, Text Right</option><option value="true">Text Left, Image Right</option></select></div>
                                 <div className="col-md-12"><label className="form-label small">Image URL</label><input type="text" className="form-control" placeholder="https://..." value={block.data.image_url} onChange={(e) => handleContentBlockChange(index, 'image_url', e.target.value)} /></div>
+                                <div className="col-md-12"><label className="form-label small">Image Alt Text</label><input type="text" className="form-control" placeholder="Describe the image" value={block.data.image_alt || ''} onChange={(e) => handleContentBlockChange(index, 'image_alt', e.target.value)} /></div>
                                 <div className="col-md-12"><label className="form-label small">Description</label><textarea className="form-control" rows="3" value={block.data.description} onChange={(e) => handleContentBlockChange(index, 'description', e.target.value)}></textarea></div>
                             </>
                         )}
@@ -359,7 +402,7 @@ const CmsPages = () => {
                 </div>
             )}            
             {/* Main Content */}
-            <div className="ck-content mb-5" dangerouslySetInnerHTML={{ __html: formData.content || "<p class='text-muted'>Main content will appear here...</p>" }}></div>
+            <div className="ck-content mb-5" dangerouslySetInnerHTML={{ __html: formData.content || "<p className='text-muted'>Main content will appear here...</p>" }}></div>
 
             {/* Blocks Preview */}
             {formData.content_blocks.length > 0 && <hr className="my-5" />}
@@ -381,7 +424,7 @@ const CmsPages = () => {
                             </div>
                             <div className={block.data.reverse_layout ? 'col-md-6 order-1 text-center' : 'col-md-6 text-center'}>
                                 <div style={{width:'100%', height:'200px', backgroundColor:'#e9ecef', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                                    {block.data.image_url ? <img src={block.data.image_url} alt="preview" style={{maxHeight:'100%', maxWidth:'100%', objectFit:'cover'}} /> : "Image Placeholder"}
+                                    {block.data.image_url ? <img src={block.data.image_url} alt={block.data.image_alt || block.data.heading || 'Preview image'} style={{maxHeight:'100%', maxWidth:'100%', objectFit:'cover'}} /> : "Image Placeholder"}
                                 </div>
                             </div>
                         </div>
@@ -418,7 +461,7 @@ const CmsPages = () => {
                             <option value="Draft">Draft</option>
                             <option value="Pending Approval">Pending Approval</option>
                             {/* 🌟 ONLY ADMINS CAN PUBLISH DIRECTLY */}
-                            {isAdmin && <option value="Published">Published</option>}
+                            {canPublish && <option value="Published">Published</option>}
                         </select>
                     </div>
               
@@ -457,6 +500,11 @@ const CmsPages = () => {
             <div className="container-fluid my-5">
                 <div className="card shadow-sm border-0">
                     <div className="card-body p-4">
+                        {(!canPublish || !canDelete) && (
+                            <div className="alert alert-info">
+                                Editors can draft and update pages. Publish and delete access can be granted separately by an admin.
+                            </div>
+                        )}
                         <div className="d-flex justify-content-between align-items-center mb-4">
                             <h1 className="h3 mb-0 text-gray-800">Website Pages</h1>
                             <button onClick={() => { setFormData(initialFormState); setActiveTab('content'); }} type="button" className="btn btn-primary px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addNewpageModal">+ Add New Page</button>
@@ -490,14 +538,13 @@ const CmsPages = () => {
                                                     <button onClick={() => handleEditClick(item)} className="btn btn-sm btn-primary me-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#editNewpageModal">Edit / Preview</button>
                                                     
                                                     {/* 🌟 Quick Approve for Admins */}
-                                                    {isAdmin && item.status === 'Pending Approval' && (
+                                                    {canPublish && item.status === 'Pending Approval' && (
                                                         <button className="btn btn-sm btn-success me-2 shadow-sm fw-bold" onClick={() => quickApproveHandler(item.id)}>
                                                             <i className="bi bi-check-circle me-1"></i> Approve
                                                         </button>
                                                     )}
 
-                                                    {/* 🌟 HIDE DELETE FROM EDITORS */}
-                                                    {isAdmin && (
+                                                    {canDelete && (
                                                         <button className="btn btn-sm btn-danger shadow-sm" onClick={() => deleteHandler(item.id)}>Delete</button>
                                                     )}
                                                 </td>
@@ -594,6 +641,58 @@ const CmsPages = () => {
                                         <option value="follow">Follow (Follow links on page)</option>
                                         <option value="nofollow">No Follow (Do not follow links)</option>
                                     </select>
+                                </div>
+
+                                <div className="col-md-12 mt-4">
+                                    <h6 className="fw-bold text-primary border-bottom pb-2">XML Sitemap Controls</h6>
+                                </div>
+                                <div className="col-md-12">
+                                    <div className="form-check form-switch bg-light rounded border p-3">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="pageIncludeInSitemap"
+                                            name="include_in_sitemap"
+                                            checked={Boolean(formSeoContentData.include_in_sitemap)}
+                                            onChange={handleSeoContentInputChange}
+                                        />
+                                        <label className="form-check-label fw-bold ms-2" htmlFor="pageIncludeInSitemap">
+                                            Include this page in sitemap.xml
+                                        </label>
+                                        <small className="d-block text-muted mt-1">
+                                            Turn this off to exclude the page from the XML sitemap even if it is indexable.
+                                        </small>
+                                    </div>
+                                </div>
+                                <div className="col-md-6 mt-3">
+                                    <label className="form-label fw-bold">Sitemap Change Frequency</label>
+                                    <select
+                                        className="form-select"
+                                        name="sitemap_change_frequency"
+                                        value={formSeoContentData.sitemap_change_frequency}
+                                        onChange={handleSeoContentInputChange}
+                                    >
+                                        {SITEMAP_CHANGE_FREQUENCY_OPTIONS.map((option) => (
+                                            <option key={option} value={option}>
+                                                {option.charAt(0).toUpperCase() + option.slice(1)}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="col-md-6 mt-3">
+                                    <label className="form-label fw-bold">Sitemap Priority</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        name="sitemap_priority"
+                                        min="0"
+                                        max="1"
+                                        step="0.1"
+                                        value={formSeoContentData.sitemap_priority}
+                                        onChange={handleSeoContentInputChange}
+                                    />
+                                    <small className="text-muted">Use a value between 0.0 and 1.0.</small>
                                 </div>
 
                                 {/* Open Graph (OG) Tags */}

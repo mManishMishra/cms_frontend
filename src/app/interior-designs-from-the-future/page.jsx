@@ -4,11 +4,14 @@ import { IoIosCall } from "react-icons/io";
 import CounterNumber from "../components/CounterNumber";
 import ContactUsPopUp from "../components/ContactUsPopUp";
 import { useCallback, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Testimonial from "../components/Testimonial";
 import TestimonialTwo from "../components/TestimonialTwo";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { buildLeadMetadata } from "@/utils/leadForms";
 const HcLandingTwo = () => {
+  const pathname = usePathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -68,6 +71,12 @@ const HcLandingTwo = () => {
       email: formData.email,
       place: formData.place,
       query: formData.query,
+      ...buildLeadMetadata({
+        pathname,
+        leadFormType: "inline",
+        leadFormName: "Interior Designs From The Future Lead Form",
+        ctaText: "SEND",
+      }),
     };
 
     try {

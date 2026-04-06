@@ -7,9 +7,16 @@ import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import moment from "moment";
 import { toast } from "react-toastify";
+import {
+    getCmsAccess,
+    getDeletePermissionMessage,
+    getPublishWorkflowMessage,
+} from "@/utils/cmsAccess";
 
 
 const JobUrl = () => {
+    const user = useSelector((state) => state.auth.user);
+    const { canPublish, canDelete } = getCmsAccess(user);
     const [queries, setQueries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -54,6 +61,9 @@ const JobUrl = () => {
         e.preventDefault();
 
         try {
+            if (!canPublish && formData.status === "active") {
+                toast.info(getPublishWorkflowMessage("This footer link"));
+            }
             await api.post("/footer-link", formData, {
                 headers: {
                     Authorization: `Bearer ${authToken}`, // Send auth token
@@ -73,12 +83,14 @@ const JobUrl = () => {
 
     const handleEditClick = (query) => {
         setSelectedId(query.id);
+        const nextStatus = !canPublish && query.status === "active" ? "inactive" : query.status;
+        if (!canPublish && query.status === "active") {
+            toast.info("Editing an active footer link will save it as inactive until an admin republishes it.");
+        }
         setFormData({
             title: query.title,
             web_url: query.web_url,
- 
- 
-            status: query.status
+            status: nextStatus
         });
     }
 
@@ -86,6 +98,9 @@ const JobUrl = () => {
         e.preventDefault();
 
         try {
+            if (!canPublish && formData.status === "active") {
+                toast.info(getPublishWorkflowMessage("This footer link"));
+            }
             await api.patch(`/footer-link/${selectedId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${authToken}`, // Send auth token
@@ -105,6 +120,11 @@ const JobUrl = () => {
 
     //delete handler with javascript confirm
     const deleteHandler = async (id) => {
+        if (!canDelete) {
+            toast.error(getDeletePermissionMessage("this footer link"));
+            return;
+        }
+
         if (window.confirm("Are you sure you want to delete this URL?")) {
             try {
                 const response = await api.delete(`/footer-link/${id}`, {
@@ -129,9 +149,14 @@ const JobUrl = () => {
         <AuthMainLayout>
             <div className="container my-5">
                 <h1 className="mb-4 text-center">  Footer Link</h1>
+                {(!canPublish || !canDelete) && (
+                    <div className="alert alert-info">
+                        Editors can manage drafts here. Publish and delete access can be granted separately by an admin.
+                    </div>
+                )}
                 <div className="d-flex justify-content-end mb-3">
                     <button
-                        onClick={() => setFormData({ title: "", web_url: "",  status: "active" })} // Clear form data
+                        onClick={() => setFormData({ title: "", web_url: "",  status: canPublish ? "active" : "inactive" })} // Clear form data
                         type="button"
                         className="btn btn-primary"
                         data-bs-toggle="modal"
@@ -177,7 +202,7 @@ const JobUrl = () => {
                                             >
                                                 Edit
                                             </button>
-                                            <button className="ms-2 btn btn-danger" onClick={() => deleteHandler(query.id)}>Delete</button>
+                                            {canDelete && <button className="ms-2 btn btn-danger" onClick={() => deleteHandler(query.id)}>Delete</button>}
                                         </td>
                                     </tr>
                                 ))}
@@ -232,7 +257,7 @@ const JobUrl = () => {
                                         onChange={handleInputChange}
                                         required
                                     >
-                                        <option value="active">Active</option>
+                                        {canPublish && <option value="active">Active</option>}
                                         <option value="inactive">Inactive</option>
                                     </select>
                                 </div>
@@ -292,7 +317,7 @@ const JobUrl = () => {
                                         onChange={handleInputChange}
                                         required
                                     >
-                                        <option value="active">Active</option>
+                                        {canPublish && <option value="active">Active</option>}
                                         <option value="inactive">Inactive</option>
                                     </select>
                                 </div>

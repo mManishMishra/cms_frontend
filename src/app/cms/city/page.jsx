@@ -258,7 +258,7 @@
 //                             <div className="modal-body row">
 
 //                                 <div className="mb-3 col-md-12">
-//                                 <label class="form-label">City Type</label>
+//                                 <label className="form-label">City Type</label>
 //                                     <input
 //                                         type="text"
 //                                         className="form-control"
@@ -271,7 +271,7 @@
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Main Title</label>
+//                                     <label className="form-label">Main Title</label>
 //                                     <input
 //                                         type="text"
 //                                         className="form-control"
@@ -283,12 +283,12 @@
 //                                     />
 //                                 </div>
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Main Description</label>
+//                                     <label className="form-label">Main Description</label>
 //                                     <CKEditorComponent pageData={formData.main_description} setPageData={setMainDescriptionData} />
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Location Image</label>
+//                                     <label className="form-label">Location Image</label>
 //                                     <input
 //                                         type="file"
 //                                         className="form-control"
@@ -299,7 +299,7 @@
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Side Title</label>
+//                                     <label className="form-label">Side Title</label>
 //                                     <input
 //                                         type="text"
 //                                         className="form-control"
@@ -312,12 +312,12 @@
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Side Description</label>
+//                                     <label className="form-label">Side Description</label>
 //                                     <CKEditorComponent pageData={formData.side_description} setPageData={setSideDescriptionData} />
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Side Image</label>
+//                                     <label className="form-label">Side Image</label>
 //                                     <input
 //                                         type="file"
 //                                         className="form-control"
@@ -395,6 +395,11 @@ import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
+import {
+    DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+    DEFAULT_SITEMAP_PRIORITY,
+    SITEMAP_CHANGE_FREQUENCY_OPTIONS
+} from "@/utils/seoHelpers";
 
 const CKEditorComponent = dynamic(() => import('@/app/components/CKEditorComponent'), { ssr: false });
 
@@ -414,7 +419,14 @@ const CmsCity = () => {
     });
     const [formSeoContentData, setFormSeoContentData] = useState({
         meta_title: "",
-        meta_description: ""
+        meta_description: "",
+        meta_keywords: "",
+        canonical_url: "",
+        meta_robots_index: "index",
+        meta_robots_follow: "follow",
+        include_in_sitemap: true,
+        sitemap_change_frequency: DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+        sitemap_priority: String(DEFAULT_SITEMAP_PRIORITY)
     });
     const [selectedId, setSelectedId] = useState(null);
 
@@ -536,13 +548,23 @@ const CmsCity = () => {
         setSelectedId(id);
         setFormSeoContentData({
             meta_title: item?.meta_title ?? "",
-            meta_description: item?.meta_description ?? ""
+            meta_description: item?.meta_description ?? "",
+            meta_keywords: item?.meta_keywords ?? "",
+            canonical_url: item?.canonical_url ?? "",
+            meta_robots_index: item?.meta_robots_index ?? "index",
+            meta_robots_follow: item?.meta_robots_follow ?? "follow",
+            include_in_sitemap: item?.include_in_sitemap ?? true,
+            sitemap_change_frequency: item?.sitemap_change_frequency ?? DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+            sitemap_priority: String(item?.sitemap_priority ?? DEFAULT_SITEMAP_PRIORITY)
         });
     };
 
     const handleSeoContentInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormSeoContentData((prevData) => ({ ...prevData, [name]: value }));
+        const { name, value, type, checked } = e.target;
+        setFormSeoContentData((prevData) => ({
+            ...prevData,
+            [name]: type === "checkbox" ? checked : value
+        }));
     };
 
     const handleSeoContentSubmit = async (e) => {
@@ -551,6 +573,13 @@ const CmsCity = () => {
         const formDataToSend = {
             meta_title: formSeoContentData.meta_title,
             meta_description: formSeoContentData.meta_description,
+            meta_keywords: formSeoContentData.meta_keywords,
+            canonical_url: formSeoContentData.canonical_url,
+            meta_robots_index: formSeoContentData.meta_robots_index,
+            meta_robots_follow: formSeoContentData.meta_robots_follow,
+            include_in_sitemap: formSeoContentData.include_in_sitemap,
+            sitemap_change_frequency: formSeoContentData.sitemap_change_frequency,
+            sitemap_priority: formSeoContentData.sitemap_priority,
         };
 
         try {
@@ -731,7 +760,7 @@ const CmsCity = () => {
             </div>
 
             <div className="modal fade" id="seoContentModal" tabIndex="-1" aria-labelledby="seoContentModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="seoContentModalLabel">Manage SEO Content</h1>
@@ -763,6 +792,96 @@ const CmsCity = () => {
                                         rows="3"
                                         required
                                     ></textarea>
+                                </div>
+                                <div className="mb-3 col-md-12">
+                                    <label className="form-label">Canonical URL</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="canonical_url"
+                                        placeholder="https://hcinterior.in/interior-designers-in-noida"
+                                        value={formSeoContentData?.canonical_url}
+                                        onChange={handleSeoContentInputChange}
+                                    />
+                                </div>
+                                <div className="mb-3 col-md-12">
+                                    <label className="form-label">Meta Keywords</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="meta_keywords"
+                                        placeholder="Meta Keywords"
+                                        value={formSeoContentData?.meta_keywords}
+                                        onChange={handleSeoContentInputChange}
+                                    />
+                                </div>
+                                <div className="mb-3 col-md-6">
+                                    <label className="form-label">Search Engine Indexing</label>
+                                    <select
+                                        className="form-control"
+                                        name="meta_robots_index"
+                                        value={formSeoContentData.meta_robots_index}
+                                        onChange={handleSeoContentInputChange}
+                                    >
+                                        <option value="index">Index</option>
+                                        <option value="noindex">No Index</option>
+                                    </select>
+                                </div>
+                                <div className="mb-3 col-md-6">
+                                    <label className="form-label">Link Following</label>
+                                    <select
+                                        className="form-control"
+                                        name="meta_robots_follow"
+                                        value={formSeoContentData.meta_robots_follow}
+                                        onChange={handleSeoContentInputChange}
+                                    >
+                                        <option value="follow">Follow</option>
+                                        <option value="nofollow">No Follow</option>
+                                    </select>
+                                </div>
+                                <div className="mb-3 col-md-12">
+                                    <div className="form-check form-switch bg-light rounded border p-3">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="cityIncludeInSitemap"
+                                            name="include_in_sitemap"
+                                            checked={Boolean(formSeoContentData.include_in_sitemap)}
+                                            onChange={handleSeoContentInputChange}
+                                        />
+                                        <label className="form-check-label fw-bold ms-2" htmlFor="cityIncludeInSitemap">
+                                            Include this city page in sitemap.xml
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="mb-3 col-md-6">
+                                    <label className="form-label">Sitemap Change Frequency</label>
+                                    <select
+                                        className="form-control"
+                                        name="sitemap_change_frequency"
+                                        value={formSeoContentData.sitemap_change_frequency}
+                                        onChange={handleSeoContentInputChange}
+                                    >
+                                        {SITEMAP_CHANGE_FREQUENCY_OPTIONS.map((option) => (
+                                            <option key={option} value={option}>
+                                                {option.charAt(0).toUpperCase() + option.slice(1)}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-3 col-md-6">
+                                    <label className="form-label">Sitemap Priority</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        name="sitemap_priority"
+                                        min="0"
+                                        max="1"
+                                        step="0.1"
+                                        value={formSeoContentData.sitemap_priority}
+                                        onChange={handleSeoContentInputChange}
+                                    />
                                 </div>
 
                                 <div className="m-auto mt-2 col-12 d-flex justify-content-center">

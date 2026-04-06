@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import {
   FaFacebookF,
   FaInstagram,
@@ -119,12 +120,12 @@ const Footer = () => {
           rel="noopener noreferrer"
         >
           <div>
-            <img
+            <Image
               src="/images/Whatsapp-icon.png"
               width={40}
+              height={40}
               alt="WhatsApp Icon"
-              fetchpriority="high"
-              loading="eager"
+              priority
               data-no-lazy="1"
             />
           </div>
@@ -138,14 +139,12 @@ const Footer = () => {
                 <div className="col-lg-4 ps-lg-5 col-md-5 col-6">
                   <div>
                     <a href="/">
-                      <img
+                      <Image
                         src="/images/new_hc_logo.png"
                         alt="High Creation Interior Logo"
-                        className=""
                         width={150}
                         height={150}
-                        fetchpriority="high"
-                        loading="eager"
+                        priority
                         data-no-lazy="1"
                       />
                     </a>

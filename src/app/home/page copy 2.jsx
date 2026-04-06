@@ -326,7 +326,7 @@ const Home = () => {
             fetchpriority="high"
             loading="eager"
             data-no-lazy="1"
-          /> */}
+           alt="" /> */}
           <h6 className="pb-0 mb-0 fw-lighter fs-3 home_subhead">
             {banner?.top_slogan}
           </h6>
@@ -620,7 +620,7 @@ const Home = () => {
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             ></iframe> */}
-              <div class="col-lg-12 col-md-6 col-12">
+              <div className="col-lg-12 col-md-6 col-12">
                 {/* <VideoBox
                 videoUrl="https://www.youtube.com/embed/REdh8A490Co" // Replace with your video URL
                 imageUrl="/images/video-bg-home.png"

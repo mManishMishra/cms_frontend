@@ -22,6 +22,10 @@ interface User {
     favoriteProperties?: string[];
     isVerified: boolean;
     role: string;
+    cms_permissions?: {
+        canPublish: boolean;
+        canDelete: boolean;
+    };
     savedPaymentMethods?: string[];
     createdAt: string;
     updatedAt: string;
@@ -30,6 +34,7 @@ interface User {
 
 interface AuthState {
     user: User | null;
+    authToken: string | null;
     isLoggedIn: boolean;
     loading: boolean;
     error: string | null;
@@ -37,6 +42,7 @@ interface AuthState {
 
 const initialState: AuthState = {
     user: null,
+    authToken: null,
     isLoggedIn: false,
     loading: false,
     error: null,
@@ -49,6 +55,7 @@ const userFromCookie = getCookie('authUser') ? JSON.parse(getCookie('authUser') 
 // If token and user are present in cookies, set them in the initial state
 if (tokenFromCookie && userFromCookie) {
     initialState.user = { ...userFromCookie, token: tokenFromCookie };
+    initialState.authToken = tokenFromCookie;
     initialState.isLoggedIn = true;
 }
 
@@ -63,6 +70,7 @@ const authSlice = createSlice({
         },
         loginSuccess: (state, action: PayloadAction<User>) => {
             state.user = action.payload;
+            state.authToken = action.payload.token;
             state.isLoggedIn = true;
             state.loading = false;
 
@@ -81,6 +89,7 @@ const authSlice = createSlice({
         },
         registerSuccess: (state, action: PayloadAction<User>) => {
             state.user = action.payload;
+            state.authToken = action.payload.token;
             state.isLoggedIn = true;
             state.loading = false;
 
@@ -95,6 +104,7 @@ const authSlice = createSlice({
         // Logout Action
         logout: (state) => {
             state.user = null;
+            state.authToken = null;
             state.isLoggedIn = false;
             state.loading = false;
 

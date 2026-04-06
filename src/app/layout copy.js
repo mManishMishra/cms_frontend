@@ -162,7 +162,7 @@ export default function RootLayout({ children }) {
             width="1"
             style={{ display: "none" }}
             src="https://www.facebook.com/tr?id=651426977052497&ev=PageView&noscript=1"
-          />
+           alt="" />
         </noscript>
 
         {/* Google Analytics */}

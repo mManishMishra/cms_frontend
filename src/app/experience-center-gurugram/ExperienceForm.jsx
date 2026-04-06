@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import api from "@/utils/api";
+import { buildLeadMetadata } from "@/utils/leadForms";
 
 const ExperienceForm = () => {
+  const pathname = usePathname();
   const [formData, setFormData] = useState({
     fullName: "",
     contactNo: "",
@@ -67,6 +70,12 @@ const ExperienceForm = () => {
       mobile: formData.contactNo,
       place: formData.place,
       query: formData.query,
+      ...buildLeadMetadata({
+        pathname,
+        leadFormType: "inline",
+        leadFormName: "Experience Center Gurugram Lead Form",
+        ctaText: "Get free Quote",
+      }),
     };
 
     try {

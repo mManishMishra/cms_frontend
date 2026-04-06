@@ -3,6 +3,7 @@ import MainLayout from "../../layouts/MainLayout";
 import ServicesRowLeft from "../../components/ServicesRowLeft";
 import api from "@/utils/api";
 import { defaultAltText } from "@/utils/helper";
+import { getCanonicalUrl, getRobotsDirectives } from "@/utils/seoHelpers";
 import { notFound } from "next/navigation";
 
 // --- GSC FIX: ISR (Update content every hour) ---
@@ -18,16 +19,22 @@ export async function generateMetadata({ params }) {
     if (!data) {
       return {
         title: "Service Not Found",
-        robots: "noindex",
+        robots: { index: false, follow: true },
       };
     }
+
+    const canonicalUrl = getCanonicalUrl({
+      canonicalUrl: data?.seo_content?.canonical_url,
+      fallbackPath: `/services-detail/${city}`,
+    });
 
     return {
       title: data?.seo_content?.meta_title || `${city} Interior Design Services`,
       description: data?.seo_content?.meta_description,
       alternates: {
-        canonical: `https://hcinterior.in/services-detail/${city}`,
+        canonical: canonicalUrl,
       },
+      robots: getRobotsDirectives(data?.seo_content),
       openGraph: {
         title: data?.main_title,
         description: data?.main_description?.substring(0, 160),
@@ -37,7 +44,7 @@ export async function generateMetadata({ params }) {
   } catch (error) {
     return {
       title: "Error",
-      robots: "noindex",
+      robots: { index: false, follow: true },
     };
   }
 }

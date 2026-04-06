@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { getCmsAccess } from "@/utils/cmsAccess";
 
 const initialFormState = { 
     firstName: "", 
@@ -15,14 +16,18 @@ const initialFormState = {
     dateOfBirth: "",
     gender: "Male",
     password: "", 
-    role: "Editor" 
+    role: "Editor",
+    cms_permissions: {
+        canPublish: false,
+        canDelete: false,
+    },
 };
 
 const TeamManagement = () => {
     const router = useRouter();
     const user = useSelector((state) => state.auth.user);
     const authToken = useSelector((state) => state.auth.user?.token); 
-    const isAdmin = user?.role?.toLowerCase() === "admin";
+    const { isAdmin } = getCmsAccess(user);
 
     const [usersList, setUsersList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -56,6 +61,16 @@ const TeamManagement = () => {
 
     const handleInputChange = (e) => setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
+    const handleCreatePermissionChange = (permissionKey, checked) => {
+        setFormData((prev) => ({
+            ...prev,
+            cms_permissions: {
+                ...prev.cms_permissions,
+                [permissionKey]: checked,
+            },
+        }));
+    };
+
     const handleCreateUser = async (e) => {
         e.preventDefault();
         try {
@@ -75,10 +90,29 @@ const TeamManagement = () => {
     const handleRoleChange = async (userId, newRole) => {
         try {
             const token = authToken || localStorage.getItem("token");
-            await api.patch(`/cms-users/${userId}/role`, { role: newRole }, { headers: { Authorization: `Bearer ${token}` } });
-            setUsersList((prev) => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
+            const response = await api.patch(`/cms-users/${userId}/role`, { role: newRole }, { headers: { Authorization: `Bearer ${token}` } });
+            setUsersList((prev) => prev.map(u => u.id === userId ? response.data : u));
             toast.success(`User role updated to ${newRole}`);
         } catch (error) { toast.error("Failed to update role."); }
+    };
+
+    const handlePermissionToggle = async (userId, currentPermissions, permissionKey) => {
+        try {
+            const token = authToken || localStorage.getItem("token");
+            const nextPermissions = {
+                ...currentPermissions,
+                [permissionKey]: !currentPermissions?.[permissionKey],
+            };
+            const response = await api.patch(
+                `/cms-users/${userId}/permissions`,
+                { cms_permissions: nextPermissions },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setUsersList((prev) => prev.map(u => u.id === userId ? response.data : u));
+            toast.success("CMS permissions updated.");
+        } catch (error) {
+            toast.error("Failed to update CMS permissions.");
+        }
     };
 
     const handleStatusToggle = async (userId, currentStatus) => {
@@ -131,6 +165,7 @@ const TeamManagement = () => {
                                             <th className="ps-4 py-3">Team Member</th>
                                             <th className="py-3">Contact Info</th>
                                             <th className="py-3">System Role</th>
+                                            <th className="py-3">CMS Permissions</th>
                                             <th className="py-3">Status</th>
                                             <th className="text-end pe-4 py-3">Actions</th>
                                         </tr>
@@ -165,6 +200,36 @@ const TeamManagement = () => {
                                                     </select>
                                                 </td>
                                                 <td>
+                                                    {usr.role === "Admin" ? (
+                                                        <span className="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle px-3 py-2">
+                                                            Full CMS access
+                                                        </span>
+                                                    ) : (
+                                                        <div className="d-flex flex-column gap-2">
+                                                            <label className="form-check form-switch mb-0">
+                                                                <input
+                                                                    className="form-check-input"
+                                                                    type="checkbox"
+                                                                    checked={Boolean(usr.cms_permissions?.canPublish)}
+                                                                    onChange={() => handlePermissionToggle(usr.id, usr.cms_permissions || {}, "canPublish")}
+                                                                    disabled={usr.id === user?.id}
+                                                                />
+                                                                <span className="small ms-2">Publish</span>
+                                                            </label>
+                                                            <label className="form-check form-switch mb-0">
+                                                                <input
+                                                                    className="form-check-input"
+                                                                    type="checkbox"
+                                                                    checked={Boolean(usr.cms_permissions?.canDelete)}
+                                                                    onChange={() => handlePermissionToggle(usr.id, usr.cms_permissions || {}, "canDelete")}
+                                                                    disabled={usr.id === user?.id}
+                                                                />
+                                                                <span className="small ms-2">Delete</span>
+                                                            </label>
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td>
                                                     <span className={`badge rounded-pill px-3 py-2 fw-normal shadow-sm ${usr.status === 'Active' ? 'bg-success bg-opacity-10 text-success border border-success' : 'bg-danger bg-opacity-10 text-danger border border-danger'}`}>
                                                         {usr.status === 'Active' ? <><i className="bi bi-check-circle-fill me-1"></i> Active</> : <><i className="bi bi-x-circle-fill me-1"></i> Suspended</>}
                                                     </span>
@@ -194,7 +259,7 @@ const TeamManagement = () => {
 </td>
                                             </tr>
                                         )) : (
-                                            <tr><td colSpan="5" className="text-center py-5 text-muted">No team members found. Click {"Add Team Member"} to get started.</td></tr>
+                                            <tr><td colSpan="6" className="text-center py-5 text-muted">No team members found. Click {"Add Team Member"} to get started.</td></tr>
                                         )}
                                     </tbody>
                                 </table>
@@ -270,6 +335,35 @@ const TeamManagement = () => {
                                             <option value="Editor">Editor (Content Management)</option>
                                             <option value="Admin">Admin (Full Control)</option>
                                         </select>
+                                    </div>
+                                    <div className="col-12 mt-3">
+                                        <div className="rounded-3 border bg-light p-3">
+                                            <div className="fw-bold small text-muted mb-2">CMS Permission Overrides</div>
+                                            {formData.role === "Admin" ? (
+                                                <p className="mb-0 small text-success">Admins automatically receive publish and delete access across the CMS.</p>
+                                            ) : (
+                                                <div className="d-flex flex-wrap gap-4">
+                                                    <label className="form-check form-switch mb-0">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="checkbox"
+                                                            checked={Boolean(formData.cms_permissions.canPublish)}
+                                                            onChange={(e) => handleCreatePermissionChange("canPublish", e.target.checked)}
+                                                        />
+                                                        <span className="small ms-2">Allow publishing</span>
+                                                    </label>
+                                                    <label className="form-check form-switch mb-0">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="checkbox"
+                                                            checked={Boolean(formData.cms_permissions.canDelete)}
+                                                            onChange={(e) => handleCreatePermissionChange("canDelete", e.target.checked)}
+                                                        />
+                                                        <span className="small ms-2">Allow deleting</span>
+                                                    </label>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -3,6 +3,7 @@ import BackgroundImageWithHeading from "../components/BackgroundImageWithHeading
 import MainLayout from "../layouts/MainLayout";
 import ServicesRowLeft from "../components/ServicesRowLeft";
 import { defaultAltText } from "@/utils/helper";
+import { getCanonicalUrl, getRobotsDirectives } from "@/utils/seoHelpers";
 import Image from "next/image"; 
 import DOMPurify from "isomorphic-dompurify";
 // 1. IMPORT LAZYSECTION
@@ -69,47 +70,30 @@ async function getCityData(city) {
 // }
 
 export async function generateMetadata({ searchParams }) {
-  const baseUrl = "https://hcinterior.in";
-  // Get city from params, default to delhi
   const city = searchParams?.city && searchParams.city !== "undefined" ? searchParams.city : "delhi";
-  
-  // Fetch CMS Data
   const pageData = await getCityData(city);
+  const fallbackPath = cityUrlMap[city] || `/services-detail/${city}`;
+  const canonicalUrl = getCanonicalUrl({
+    canonicalUrl: pageData?.seo_content?.canonical_url,
+    fallbackPath,
+  });
 
-  // 1. Prioritize canonical URL straight from your CMS API if it exists
-  let canonicalUrl = pageData?.page_name || pageData?.seo_content?.page_name || pageData?.seo_content?.canonical_url;
-
-  // 2. If CMS doesn't have it, fallback to your hardcoded map
-  if (!canonicalUrl) {
-    let canonicalPath = "/services-detail";
-    
-    // FIX: Removed the "city !== 'delhi'" restriction so Delhi maps correctly
-    if (city) {
-      if (cityUrlMap[city]) {
-        canonicalPath = cityUrlMap[city]; 
-      } else {
-        canonicalPath = `/services-detail?city=${city}`;
-      }
-    }
-    canonicalUrl = `${baseUrl}${canonicalPath}`;
-  }
-
-  // Handle 404/Missing Data case
   if (!pageData) {
-     return {
+    return {
       title: "Services - High Creation Interior",
       alternates: { canonical: canonicalUrl },
+      robots: { index: false, follow: true },
     };
   }
 
-  // Return final metadata
   return {
     title: pageData?.seo_content?.meta_title ?? "Interior Design Services",
     description: pageData?.seo_content?.meta_description ?? "Best Interior Design Services",
     keywords: pageData?.seo_content?.meta_keywords ?? "",
     alternates: {
-      canonical: canonicalUrl, // Now securely assigns the correct Delhi URL
+      canonical: canonicalUrl,
     },
+    robots: getRobotsDirectives(pageData?.seo_content),
   };
 }
 

@@ -7,11 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { usePathname, useRouter } from 'next/navigation';
 import { logout } from '../../../store/slices/authSlice';
 import Link from 'next/link';
+import { getCmsAccess } from '@/utils/cmsAccess';
 
 function AuthSidebar() {
     const { user } = useSelector((state) => state.auth);
-    console.log("User role" , user?.role)
-    const isAdmin = user?.role === "Admin";
+    const { isAdmin } = getCmsAccess(user);
     const dispatch = useDispatch();
     const router = useRouter();
     const pathname = usePathname();
@@ -145,11 +145,13 @@ function AuthSidebar() {
         <i className="bi bi-images me-2"></i> Media Library
     </Link>
 </li>
+{isAdmin && (
 <li className="nav-item">
-    <Link href="/cms/site-setting" className="nav-link text-white">
-        <i className="bi bi-images me-2"></i> Site Settings
-    </Link>
-</li>
+        <Link href="/cms/site-setting" className="nav-link text-white">
+            <i className="bi bi-images me-2"></i> Site Settings
+        </Link>
+ </li>
+)}
                             <li>
                                 <a className={`${isActive('/cms/design-gallery')}`} href="/cms/design-gallery">
                                     Design Gallery

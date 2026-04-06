@@ -23,6 +23,7 @@ import {
   generateBreadcrumbSchema, 
   generateFAQSchema 
 } from "@/utils/schemaGenerator";
+import { getCanonicalUrl, getRobotsDirectives } from "@/utils/seoHelpers";
 
 // Force Next.js to treat this as a highly dynamic route
 export const dynamic = "force-dynamic";
@@ -40,7 +41,6 @@ const isValidSlug = (slug) => {
   return true;
 };
 
-const BASE_URL = "https://hcinterior.in";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://apidev.hcinterior.in";
 
 /**
@@ -120,7 +120,7 @@ export async function generateMetadata({ params }) {
   const slug = params.blog;
 
   if (!isValidSlug(slug)) {
-    return { title: "Not Found", robots: "noindex, follow" };
+    return { title: "Not Found", robots: { index: false, follow: true } };
   }
 
   let data = await getBlogData(slug);
@@ -131,8 +131,14 @@ export async function generateMetadata({ params }) {
 
   // 🛑 DRAFT PROTECTION
   if (!data || isDraftStatus(data)) {
-    return { title: "Not Found", robots: "noindex, follow" };
+    return { title: "Not Found", robots: { index: false, follow: true } };
   }
+
+  const robots = getRobotsDirectives(data?.seo_content);
+  const canonicalUrl = getCanonicalUrl({
+    canonicalUrl: data?.seo_content?.canonical_url,
+    fallbackPath: `/${slug}`,
+  });
 
   return {
     title:
@@ -144,9 +150,9 @@ export async function generateMetadata({ params }) {
     keywords:
       data?.seo_content?.meta_keywords ?? "",
     alternates: {
-      canonical: data?.seo_content?.canonical_url || `${BASE_URL}/${slug}`, 
+      canonical: canonicalUrl,
     },
-    robots: "index, follow",
+    robots,
   };
 }
 
@@ -221,7 +227,11 @@ const DynamicRootPage = async ({ params }) => {
   const orgSchema = generateOrganizationSchema(siteSettings);
   const localBizSchema = generateLocalBusinessSchema(siteSettings);
   const breadcrumbSchema = generateBreadcrumbSchema(slug, pageData.title);
-  const faqSchema = faqs.length > 0 ? generateFAQSchema(faqs) : null;
+  const hasCustomFaqSchema =
+    typeof pageData?.seo_content?.custom_code === "string" &&
+    /FAQPage/i.test(pageData.seo_content.custom_code);
+  const faqSchema =
+    faqs.length > 0 && !hasCustomFaqSchema ? generateFAQSchema(faqs) : null;
 
   return (
     <MainLayout>
@@ -287,7 +297,7 @@ const DynamicRootPage = async ({ params }) => {
                     <div className="position-relative w-100 mb-4" style={{ minHeight: '300px' }}>
                       <Image
                         src={pageData.image}
-                        alt={pageData.title ?? defaultAltText}
+                        alt={pageData.image_alt || pageData.title || defaultAltText}
                         width={1200}
                         height={600}
                         className="w-100 h-auto object-fit-cover rounded"
@@ -411,7 +421,7 @@ const DynamicRootPage = async ({ params }) => {
                                 {block.data.image_url && (
                                   <img 
                                     src={block.data.image_url} 
-                                    alt={block.data.heading} 
+                                    alt={block.data.image_alt || block.data.heading || defaultAltText} 
                                     className="img-fluid rounded shadow" 
                                     style={{ maxHeight: '350px', objectFit: 'cover' }} 
                                   />

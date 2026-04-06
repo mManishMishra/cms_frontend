@@ -214,7 +214,7 @@ room. Start browsing today to discover designs that perfectly reflect your perso
             <video
               width="100%"
               height="590"
-              class="object-fit-cover"
+              className="object-fit-cover"
               autoPlay
               loop
               muted

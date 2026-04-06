@@ -2,14 +2,24 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
-import $ from "jquery";
 import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
-import moment from "moment";
 import { toast } from "react-toastify";
+import {
+    DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+    DEFAULT_SITEMAP_PRIORITY,
+    SITEMAP_CHANGE_FREQUENCY_OPTIONS
+} from "@/utils/seoHelpers";
+import {
+    getCmsAccess,
+    getDeletePermissionMessage,
+    getPublishWorkflowMessage,
+} from "@/utils/cmsAccess";
 
 
 const SeoTag = () => {
+    const user = useSelector((state) => state.auth.user);
+    const { canPublish, canDelete } = getCmsAccess(user);
     const [queries, setQueries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -21,6 +31,9 @@ const SeoTag = () => {
         meta_can_tag: "",
         meta_robots: "index, follow", // New field for Index Control
         og_image: "",                 // New field for Open Graph Image
+        include_in_sitemap: true,
+        sitemap_change_frequency: DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+        sitemap_priority: String(DEFAULT_SITEMAP_PRIORITY),
         status: "active"
      });
 
@@ -49,13 +62,20 @@ const SeoTag = () => {
 
 
     const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value, type, checked } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: type === "checkbox" ? checked : value
+        }));
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            if (!canPublish && formData.status === "active") {
+                toast.info(getPublishWorkflowMessage("This SEO record"));
+            }
             await api.post("/seo-tag", formData, {
                 headers: {
                     Authorization: `Bearer ${authToken}`, // Send auth token
@@ -75,6 +95,10 @@ const SeoTag = () => {
 
     const handleEditClick = (query) => {
         setSelectedId(query.id);
+        const nextStatus = !canPublish && query.status === "active" ? "inactive" : (query.status || "active");
+        if (!canPublish && query.status === "active") {
+            toast.info("Editing an active SEO record will save it as inactive until an admin republishes it.");
+        }
         setFormData({
             title: query.title || "",
             meta_description: query.meta_description || "",
@@ -82,7 +106,10 @@ const SeoTag = () => {
             meta_can_tag: query.meta_can_tag || "",
             meta_robots: query.meta_robots || "index, follow", // Include new field
             og_image: query.og_image || "",                    // Include new field
-            status: query.status || "active"
+            include_in_sitemap: query.include_in_sitemap ?? true,
+            sitemap_change_frequency: query.sitemap_change_frequency || DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+            sitemap_priority: String(query.sitemap_priority ?? DEFAULT_SITEMAP_PRIORITY),
+            status: nextStatus
         });
     }
 
@@ -90,6 +117,9 @@ const SeoTag = () => {
         e.preventDefault();
 
         try {
+            if (!canPublish && formData.status === "active") {
+                toast.info(getPublishWorkflowMessage("This SEO record"));
+            }
             await api.patch(`/seo-tag/${selectedId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${authToken}`, // Send auth token
@@ -109,6 +139,11 @@ const SeoTag = () => {
 
     //delete handler with javascript confirm
     const deleteHandler = async (id) => {
+        if (!canDelete) {
+            toast.error(getDeletePermissionMessage("this SEO record"));
+            return;
+        }
+
         if (window.confirm("Are you sure you want to delete this URL?")) {
             try {
                 const response = await api.delete(`/seo-tag/${id}`, {
@@ -133,10 +168,26 @@ const SeoTag = () => {
         <AuthMainLayout>
             <div className="container my-5">
                 <h1 className="mb-4 text-center">  Look URL</h1>
+                {(!canPublish || !canDelete) && (
+                    <div className="alert alert-info">
+                        Editors can prepare SEO entries here. Publish and delete access can be granted separately by an admin.
+                    </div>
+                )}
                 <div className="d-flex justify-content-end mb-3">
                     <button
                         // Make sure to clear the new fields when adding a new entry
-                        onClick={() => setFormData({ title: "", meta_description: "", meta_can_tag: "", meta_robots: "index, follow", og_image: "", status: "active" })} 
+                        onClick={() => setFormData({
+                            title: "",
+                            meta_description: "",
+                            page_name: "",
+                            meta_can_tag: "",
+                            meta_robots: "index, follow",
+                            og_image: "",
+                            include_in_sitemap: true,
+                            sitemap_change_frequency: DEFAULT_SITEMAP_CHANGE_FREQUENCY,
+                            sitemap_priority: String(DEFAULT_SITEMAP_PRIORITY),
+                            status: canPublish ? "active" : "inactive"
+                        })} 
                         type="button"
                         className="btn btn-primary"
                         data-bs-toggle="modal"
@@ -163,8 +214,9 @@ const SeoTag = () => {
                                     <th>Menu Title</th>
                                     <th>Meta Description</th>
                                     <th>Canonical Tag</th>
-                                     <th>Status</th>
-                                      <th>Action</th>
+                                    <th>Sitemap</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -173,10 +225,15 @@ const SeoTag = () => {
                                         <td>{index+1}</td>
                                         <td>{query.page_name}</td>
                                         <td>{query.title}</td>
-                                         <td>{query.meta_description}</td>
-                                         <td>{query.meta_can_tag}</td>
+                                        <td>{query.meta_description}</td>
+                                        <td>{query.meta_can_tag}</td>
+                                        <td>
+                                            <span className={`badge ${query.include_in_sitemap === false ? "bg-secondary" : "bg-success"}`}>
+                                                {query.include_in_sitemap === false ? "Excluded" : "Included"}
+                                            </span>
+                                        </td>
                                         <td className="text-capitalize">{query.status}</td>
-                                          <td>
+                                        <td>
                                             <button
                                                 onClick={() => handleEditClick(query)}
                                                 type="button"
@@ -186,7 +243,7 @@ const SeoTag = () => {
                                             >
                                                 Edit
                                             </button>
-                                            <button className="ms-2 btn btn-danger" onClick={() => deleteHandler(query.id)}>Delete</button>
+                                            {canDelete && <button className="ms-2 btn btn-danger" onClick={() => deleteHandler(query.id)}>Delete</button>}
                                         </td>
                                     </tr>
                                 ))}
@@ -197,7 +254,7 @@ const SeoTag = () => {
             </div>
 
             <div className="modal fade" id="addNewpageModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Add New</h1>
@@ -284,6 +341,50 @@ const SeoTag = () => {
                                         onChange={handleInputChange}
                                     />
                                 </div>
+                                <div className="mb-3 col-md-12">
+                                    <div className="form-check form-switch bg-light rounded border p-3">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="seoTagIncludeInSitemapCreate"
+                                            name="include_in_sitemap"
+                                            checked={Boolean(formData.include_in_sitemap)}
+                                            onChange={handleInputChange}
+                                        />
+                                        <label className="form-check-label fw-bold ms-2" htmlFor="seoTagIncludeInSitemapCreate">
+                                            Include this URL in sitemap.xml
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="mb-3 col-md-6">
+                                    <label className="form-label">Sitemap Change Frequency</label>
+                                    <select
+                                        className="form-control"
+                                        name="sitemap_change_frequency"
+                                        value={formData.sitemap_change_frequency}
+                                        onChange={handleInputChange}
+                                    >
+                                        {SITEMAP_CHANGE_FREQUENCY_OPTIONS.map((option) => (
+                                            <option key={option} value={option}>
+                                                {option.charAt(0).toUpperCase() + option.slice(1)}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-3 col-md-6">
+                                    <label className="form-label">Sitemap Priority</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        name="sitemap_priority"
+                                        min="0"
+                                        max="1"
+                                        step="0.1"
+                                        value={formData.sitemap_priority}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
                                 
                                 <div className="mb-3 col-md-12">
                                     <label className="form-label">Status</label>
@@ -294,7 +395,7 @@ const SeoTag = () => {
                                         onChange={handleInputChange}
                                         required
                                     >
-                                        <option value="active">Active</option>
+                                        {canPublish && <option value="active">Active</option>}
                                         <option value="inactive">Inactive</option>
                                     </select>
                                 </div>
@@ -311,7 +412,7 @@ const SeoTag = () => {
             </div>
 
             <div className="modal fade" id="editNewpageModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Edit</h1>
@@ -400,6 +501,50 @@ const SeoTag = () => {
                                         onChange={handleInputChange}
                                     />
                                 </div>
+                                <div className="mb-3 col-md-12">
+                                    <div className="form-check form-switch bg-light rounded border p-3">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="seoTagIncludeInSitemapEdit"
+                                            name="include_in_sitemap"
+                                            checked={Boolean(formData.include_in_sitemap)}
+                                            onChange={handleInputChange}
+                                        />
+                                        <label className="form-check-label fw-bold ms-2" htmlFor="seoTagIncludeInSitemapEdit">
+                                            Include this URL in sitemap.xml
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="mb-3 col-md-6">
+                                    <label className="form-label">Sitemap Change Frequency</label>
+                                    <select
+                                        className="form-control"
+                                        name="sitemap_change_frequency"
+                                        value={formData.sitemap_change_frequency}
+                                        onChange={handleInputChange}
+                                    >
+                                        {SITEMAP_CHANGE_FREQUENCY_OPTIONS.map((option) => (
+                                            <option key={option} value={option}>
+                                                {option.charAt(0).toUpperCase() + option.slice(1)}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-3 col-md-6">
+                                    <label className="form-label">Sitemap Priority</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        name="sitemap_priority"
+                                        min="0"
+                                        max="1"
+                                        step="0.1"
+                                        value={formData.sitemap_priority}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
                               
                                 <div className="mb-3 col-md-12">
                                     <label className="form-label">Status</label>
@@ -410,7 +555,7 @@ const SeoTag = () => {
                                         onChange={handleInputChange}
                                         required
                                     >
-                                        <option value="active">Active</option>
+                                        {canPublish && <option value="active">Active</option>}
                                         <option value="inactive">Inactive</option>
                                     </select>
                                 </div>

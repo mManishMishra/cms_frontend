@@ -4,11 +4,14 @@ import { useSelector } from "react-redux";
 import AuthMainLayout from "../../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { getCmsAccess, getPublishWorkflowMessage } from "@/utils/cmsAccess";
 
 
 const CmsProjectPortfolio = () => {
 
+    const user = useSelector((state) => state.auth.user);
     const authToken = useSelector((state) => state.auth.authToken);
+    const { canPublish } = getCmsAccess(user);
     const [pagesList, setPagesList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -68,6 +71,9 @@ const CmsProjectPortfolio = () => {
         }
 
         try {
+            if (!canPublish && formData.status) {
+                toast.info(getPublishWorkflowMessage("This portfolio project"));
+            }
             // Send POST request to save form data
             const response = await api.patch(`/portfolio-project/${selectedId}`, formDataToSend, {
                 headers: {
@@ -112,6 +118,9 @@ const CmsProjectPortfolio = () => {
         }
 
         try {
+            if (!canPublish && formData.status) {
+                toast.info(getPublishWorkflowMessage("This portfolio project"));
+            }
             // Send POST request to save form data
             const response = await api.post('/portfolio-project', formDataToSend, {
                 headers: {
@@ -145,12 +154,16 @@ const CmsProjectPortfolio = () => {
 
     // Set form data when edit button is clicked
     const handleEditClick = (item) => {
+        const nextStatus = canPublish ? item.status : false;
+        if (!canPublish && item.status) {
+            toast.info("Editing an active portfolio project will save it as inactive until an admin republishes it.");
+        }
         setSelectedId(item.id);
         setFormData({
             title: item.title,
             description: item.description,
             image: null, // Reset image field
-            status: item.status,
+            status: nextStatus,
         });
     };
 
@@ -197,10 +210,15 @@ const CmsProjectPortfolio = () => {
         <AuthMainLayout>
             <div className="container my-5">
                 <h1 className="mb-4 text-center">Portfolio Project - {slug === "residential_projects" ? "Residential Projects" : "Luxury Projects"}</h1>
+                {!canPublish && (
+                    <div className="alert alert-info">
+                        Editors can prepare portfolio entries here. An admin must activate them for the live site.
+                    </div>
+                )}
                 {pagesList?.length > 0 &&
                     <div className="d-flex justify-content-end mb-3">
                         <button
-                            onClick={() => setFormData({ title: "", description: "", image: null, status: true })} // Clear form data
+                            onClick={() => setFormData({ title: "", description: "", image: null, status: canPublish })} // Clear form data
                             type="button"
                             className="btn btn-primary"
                             data-bs-toggle="modal"
@@ -313,15 +331,16 @@ const CmsProjectPortfolio = () => {
                                 </div>
 
                                 <div className="mb-3 col-md-12">
-                                    <div class="form-check form-switch ms-1">
+                                    <div className="form-check form-switch ms-1">
                                         <input
-                                            class="form-check-input"
+                                            className="form-check-input"
                                             type="checkbox"
                                             role="switch"
                                             id="flexSwitchCheckDefault"
                                             name="status"
                                             onChange={(e) => handleInputChange(e)}
                                             checked={formData.status}
+                                            disabled={!canPublish}
                                         />
                                         <p className="text-xs text-nowrap mb-0">Status {formData.status ? "Active" : "Inactive"}</p>
                                     </div>
@@ -385,15 +404,16 @@ const CmsProjectPortfolio = () => {
                                 </div>
 
                                 <div className="mb-3 col-md-12">
-                                    <div class="form-check form-switch ms-1">
+                                    <div className="form-check form-switch ms-1">
                                         <input
-                                            class="form-check-input"
+                                            className="form-check-input"
                                             type="checkbox"
                                             role="switch"
                                             id="flexSwitchCheckDefault"
                                             name="status"
                                             onChange={(e) => handleInputChange(e)}
                                             checked={formData.status}
+                                            disabled={!canPublish}
                                         />
                                         <p className="text-xs text-nowrap mb-0">Status {formData.status ? "Active" : "Inactive"}</p>
                                     </div>

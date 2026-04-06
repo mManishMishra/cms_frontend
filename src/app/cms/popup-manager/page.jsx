@@ -17,7 +17,10 @@ const PopupManager = () => {
         target_url: "", is_enabled: true, show_mobile: true, show_desktop: true, 
         trigger_type: "time", delay_seconds: 12, scroll_percentage: 50, 
         heading: "Let's Connect", sub_heading: "Get Your Dream Home Interior. Let Our experts help you", 
-        cta_text: "SEND" 
+        cta_text: "SEND",
+        lead_form_name: "General Popup Lead Form",
+        redirect_url: "/thank-you",
+        success_message: "Form submitted successfully!"
     };
     
     const [formData, setFormData] = useState(initialFormState);
@@ -97,12 +100,16 @@ const PopupManager = () => {
                             <div className="table-responsive">
                                 <table className="table table-hover align-middle border">
                                     <thead className="table-light">
-                                        <tr><th>Target URL</th><th>Status</th><th>Device Visibility</th><th>Trigger</th><th>Actions</th></tr>
+                                        <tr><th>Target URL</th><th>Lead Form</th><th>Status</th><th>Device Visibility</th><th>Trigger</th><th>CTA</th><th>Actions</th></tr>
                                     </thead>
                                     <tbody>
                                         {rules.map((rule) => (
                                             <tr key={rule.id}>
                                                 <td className="fw-bold">{rule.target_url === '*' ? 'Global (*)' : rule.target_url}</td>
+                                                <td>
+                                                    <div className="fw-semibold">{rule.lead_form_name || "General Popup Lead Form"}</div>
+                                                    <small className="text-muted">{rule.redirect_url || "/thank-you"}</small>
+                                                </td>
                                                 <td><span className={`badge ${rule.is_enabled ? 'bg-success' : 'bg-danger'}`}>{rule.is_enabled ? 'Active' : 'Disabled'}</span></td>
                                                 <td>
                                                     <span className={`badge me-2 ${rule.show_mobile ? 'bg-info text-dark' : 'bg-secondary'}`}>Mobile</span>
@@ -111,15 +118,16 @@ const PopupManager = () => {
                                                 <td className="text-capitalize">
                                                     {rule.trigger_type === 'time' ? `${rule.delay_seconds}s Delay` : rule.trigger_type === 'scroll' ? `${rule.scroll_percentage}% Scroll` : 'Exit Intent'}
                                                 </td>
+                                                <td>{rule.cta_text || "SEND"}</td>
                                                 <td>
-                                                    <button onClick={() => setFormData(rule)} className="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ruleModal">Edit</button>
+                                                    <button onClick={() => setFormData({ ...initialFormState, ...rule })} className="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#ruleModal">Edit</button>
                                                     <button onClick={() => deleteRule(rule.id)} className="btn btn-sm btn-danger">Delete</button>
                                                 </td>
                                             </tr>
                                         ))}
                                         {rules.length === 0 && (
                                             <tr>
-                                                <td colSpan="5" className="text-center py-4 text-muted">No rules found. Add a global fallback rule (*) to get started.</td>
+                                                <td colSpan="7" className="text-center py-4 text-muted">No rules found. Add a global fallback rule (*) to get started.</td>
                                             </tr>
                                         )}
                                     </tbody>
@@ -172,9 +180,15 @@ const PopupManager = () => {
                                 )}
 
                                 {formData.trigger_type === 'exit' && (
-                                    <div className="col-md-8 pt-4">
-                                        <span className="text-muted small"><i className="bi bi-info-circle me-1"></i>Popup will trigger when the user moves their mouse up to close the browser tab.</span>
-                                    </div>
+                                    <>
+                                        <div className="col-md-8 pt-4">
+                                            <span className="text-muted small"><i className="bi bi-info-circle me-1"></i>Popup will trigger when the user moves their mouse up to close the browser tab. On mobile, exit intent falls back to the delay below.</span>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="fw-bold">Mobile Fallback Delay (Seconds)</label>
+                                            <input type="number" className="form-control" name="delay_seconds" value={formData.delay_seconds} onChange={handleChange} required />
+                                        </div>
+                                    </>
                                 )}
 
                                 <div className="col-md-12 mt-4"><h6 className="fw-bold border-bottom pb-2 text-primary">Visibility Controls</h6></div>
@@ -201,6 +215,16 @@ const PopupManager = () => {
                                 <div className="col-md-12 mt-4"><h6 className="fw-bold border-bottom pb-2 text-primary">Text & CTA Customization</h6></div>
 
                                 <div className="col-md-6 mt-2">
+                                    <label className="fw-bold">Lead Form Name</label>
+                                    <input type="text" className="form-control" name="lead_form_name" value={formData.lead_form_name} onChange={handleChange} required />
+                                    <small className="text-muted">Used in lead reporting and exports.</small>
+                                </div>
+                                <div className="col-md-6 mt-2">
+                                    <label className="fw-bold">Redirect URL After Submit</label>
+                                    <input type="text" className="form-control" name="redirect_url" value={formData.redirect_url} onChange={handleChange} placeholder="/thank-you" required />
+                                </div>
+
+                                <div className="col-md-6 mt-2">
                                     <label className="fw-bold">Popup Heading</label>
                                     <input type="text" className="form-control" name="heading" value={formData.heading} onChange={handleChange} required />
                                 </div>
@@ -211,6 +235,10 @@ const PopupManager = () => {
                                 <div className="col-md-12 mt-3">
                                     <label className="fw-bold">Popup Sub-heading</label>
                                     <textarea className="form-control" name="sub_heading" value={formData.sub_heading} onChange={handleChange} rows="2" required></textarea>
+                                </div>
+                                <div className="col-md-12 mt-3">
+                                    <label className="fw-bold">Success Message</label>
+                                    <input type="text" className="form-control" name="success_message" value={formData.success_message} onChange={handleChange} required />
                                 </div>
                             </div>
                             <div className="modal-footer bg-white border-top">

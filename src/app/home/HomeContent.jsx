@@ -9,14 +9,13 @@ import LazySection from "./clientHome/LazySection";
 import ContactForm from "./clientHome/ContactForm";
 
 // --- SERVER IMPORTS ---
-import RowImage from "../components/RowImage";
-import Card from "../components/Card";
-import VideoCardHome from "../components/VideoCardHome";
-import BgImageCard from "../components/BgImageCard";
-import RoomOfice from "../components/RoomOfice";
-import IconBox from "../components/IconBox";
-
 // --- DYNAMIC IMPORTS ---
+const RowImage = dynamic(() => import("../components/RowImage"));
+const Card = dynamic(() => import("../components/Card"));
+const VideoCardHome = dynamic(() => import("../components/VideoCardHome"));
+const BgImageCard = dynamic(() => import("../components/BgImageCard"));
+const RoomOfice = dynamic(() => import("../components/RoomOfice"));
+const IconBox = dynamic(() => import("../components/IconBox"));
 const SliderCard = dynamic(() => import("../components/SliderCard"));
 const VideoTestimonialSlider = dynamic(() => import("../components/VideoTestimonialSlider"));
 const CounterRow = dynamic(() => import("../components/CounterRow"));

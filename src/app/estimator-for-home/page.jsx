@@ -489,7 +489,7 @@
 //               </div>
 //               <div className="triangle-wrapper">
 //                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 100">
-//                   <path d="M0,0 L50,50 L0,100" stroke="var(--step_border_color)" fill="none" stroke-width="1" />
+//                   <path d="M0,0 L50,50 L0,100" stroke="var(--step_border_color)" fill="none" strokeWidth="1" />
 //                 </svg>
 //               </div>
 //             </div>
@@ -505,7 +505,7 @@
 //               </div>
 //               <div className="triangle-wrapper">
 //                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 100">
-//                   <path d="M0,0 L50,50 L0,100" stroke="var(--step_border_color)" fill="none" stroke-width="1" />
+//                   <path d="M0,0 L50,50 L0,100" stroke="var(--step_border_color)" fill="none" strokeWidth="1" />
 //                 </svg>
 //               </div>
 //             </div>
@@ -519,7 +519,7 @@
 //               </div>
 //               <div className="triangle-wrapper">
 //                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 100">
-//                   <path d="M0,0 L50,50 L0,100" stroke="var(--step_border_color)" fill="none" stroke-width="1" />
+//                   <path d="M0,0 L50,50 L0,100" stroke="var(--step_border_color)" fill="none" strokeWidth="1" />
 //                 </svg>
 //               </div>
 //             </div>
@@ -1056,7 +1056,7 @@
 //                         </div>
 //                       </div>
 //                     </div>
-//                     <div class="text-center mt-4"><a href="/thankyou" class="know_more px-3">Next</a></div>
+//                     <div className="text-center mt-4"><a href="/thankyou" className="know_more px-3">Next</a></div>
 //                   </div>
 //                 </div>
 //               </div>
