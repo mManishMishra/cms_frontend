@@ -62,7 +62,7 @@ const Terms = () => {
           width="1"
           style={{ display: "none" }}
           src="https://www.facebook.com/tr?id=768898314129368&ev=PageView&noscript=1"
-        />
+         alt="" />
       </noscript>
 
       <MainLayout>
@@ -81,7 +81,7 @@ const Terms = () => {
                   connect with you soon.
                 </h5>
                 <div className="text-center mt-4">
-                  <a href="/" className="know_more px-3">
+                  <a href="/" className="know_more px-3" aria-label="Home">
                     Back To Home
                   </a>
                 </div>

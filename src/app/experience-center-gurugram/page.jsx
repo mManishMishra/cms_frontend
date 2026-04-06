@@ -258,7 +258,7 @@
 //             <video
 //               width="100%"
 //               height="590"
-//               class="object-fit-cover"
+//               className="object-fit-cover"
 //               autoPlay
 //               loop
 //               muted

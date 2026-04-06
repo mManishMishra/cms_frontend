@@ -397,7 +397,7 @@ const CmsBlog = () => {
                                                     className="ms-2 btn btn-outline-success"
                                                     href={`/${item.seo_content.slug}`}
                                                     target="_blank"
-                                                    rel="noreferrer"
+                                                    rel="noopener noreferrer"
                                                 >
                                                     Live Link
                                                 </a>

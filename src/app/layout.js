@@ -12,7 +12,6 @@ const LazyToast = dynamic(() => import("./common/LazyToast"), {
   ssr: false,
 });
 
-
 const greatVibes = Great_Vibes({
   subsets: ['latin'],
   display: 'swap',
@@ -36,12 +35,45 @@ const outfit = Outfit({
 
 export const metadata = {
   metadataBase: new URL('https://hcinterior.in'),
-  title: "High Creation Interior",
-  description: "Best Interior Designers in Delhi NCR",
-  alternates: {
-    canonical: './',
+  title: "High Creation Interior | Best Interior Designers in Delhi NCR",
+  description: "High Creation Interior offers the best interior design services in Delhi NCR. Transform your space with our expert designers.",
+  keywords: "interior designers, interior decorators, best interior designers in Delhi, home interior, office interior",
+  openGraph: {
+    title: "High Creation Interior | Best Interior Designers in Delhi NCR",
+    description: "High Creation Interior offers the best interior design services in Delhi NCR.",
+    url: "https://hcinterior.in",
+    siteName: "High Creation Interior",
+    images: [
+      {
+        url: "/images/new_hc_logo.png",
+        width: 800,
+        height: 600,
+        alt: "High Creation Interior Logo"
+      },
+    ],
+    locale: "en_IN",
+    type: "website",
   },
-  // Move verification here
+  twitter: {
+    card: "summary_large_image",
+    title: "High Creation Interior",
+    description: "Best Interior Designers in Delhi NCR",
+    images: ["/images/new_hc_logo.png"],
+  },
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   verification: {
     google: 'k0iGFVO_noqQ7H1uUsJXGeReQ5YhgKjfOOgoKkSsrAw',
   },
@@ -53,13 +85,17 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 5, // Important for accessibility
   userScalable: true,
+  themeColor: '#ffffff',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* <meta name="viewport" content="width=device-width, initial-scale=1.0" /> */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
 
         {/* Google Tag Manager - Keep afterInteractive for early tracking (needed for analytics) */}
         <Script 
@@ -72,33 +108,6 @@ export default function RootLayout({ children }) {
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-PRVJK9N');`}
         </Script>
-        {/* <meta
-          name="google-site-verification"
-          content="k0iGFVO_noqQ7H1uUsJXGeReQ5YhgKjfOOgoKkSsrAw"
-        /> */}
-
-        {/* Meta Pixel Code - Loaded lazily to avoid blocking initial render */}
-        {/* <Script id="fb-pixel" strategy="lazyOnload">
-          {`!function(f,b,e,v,n,t,s)
-          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-          n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s)}(window, document,'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '768898314129368');
-          fbq('track', 'PageView');`}
-        </Script> */}
-        {/* <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            alt="Facebook"
-            src="https://www.facebook.com/tr?id=651426977052497&ev=PageView&noscript=1"
-          />
-        </noscript> */}
 
         {/* Meta Pixel Code - Loaded lazily to avoid blocking initial render */}
         <Script id="fb-pixel" strategy="lazyOnload">
@@ -196,19 +205,16 @@ export default function RootLayout({ children }) {
                   "text": "Starting your interior design project is a simple and seamless process. We begin with an initial consultation where we discuss your needs, preferences, and overall vision, gathering essential details about the project scope, budget, and timeline. Based on this discussion, we create a design brief that outlines key objectives, preferred styles, materials, and any specific requirements. Our team then develops initial design concepts, presenting layout ideas, color schemes, furniture selections, and materials for your feedback. Once the concept is approved, we refine and finalize the design, incorporating any requested changes and providing detailed plans or 3D renderings if needed. With the design set, we move into the execution phase, handling material procurement, project management, and installation to ensure a flawless transformation. Upon completion, we review the space with you to ensure it meets your expectations. Throughout the entire process, we provide expert guidance to make your experience smooth and enjoyable. Let's get in touch and bring your vision to life!"
                 }
               }
-              // Add other FAQ entries here
             ]
           })}
         </Script>
         )}
 
-        {/* Organization Schema - JSON-LD for SEO, loaded lazily */}
-        <Script
-          id="org-schema"
+        {/* Organization Schema - JSON-LD for SEO */}
+        <script
           type="application/ld+json"
-          strategy="afterInteractive"
-        >
-          {JSON.stringify({
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "High Creation Interior",
@@ -232,12 +238,11 @@ export default function RootLayout({ children }) {
                 "availableLanguage": "en"
               }
             ]
-          })}
-        </Script>
+            })
+          }}
+        />
       </head>
       <body suppressHydrationWarning={false} className={`${greatVibes.variable} ${poppins.variable} ${outfit.variable}`}>
-        <Script src="https://code.jquery.com/jquery-3.6.0.min.js" strategy="lazyOnload" />
-        <Script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" strategy="lazyOnload" />
         <AddBootstrap />
         <ClientProvider>{children}</ClientProvider>
         <LazyToast />

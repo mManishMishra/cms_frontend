@@ -133,7 +133,7 @@ This helps ensure smooth execution and builds trust throughout the project.
            
          
           
-          <hr></hr>
+          <hr />
         </main>
       </MainLayout>
     </div>

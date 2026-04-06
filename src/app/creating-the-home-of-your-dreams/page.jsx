@@ -264,7 +264,7 @@ const HCLandingPage = () => {
         <header className="container-fluid px-lg-5 px-3">
           <nav className="navbar navbar-expand-lg p-0">
             <div className="container-fluid">
-              <a className="navbar-brand ms-lg-5" href="/">
+              <a className="navbar-brand ms-lg-5" href="/" aria-label="Home">
                 <img
                   src="/images/new_hc_logo.png"
                   width={90}
@@ -803,7 +803,7 @@ const HCLandingPage = () => {
                 <div className="row justify-content-lg-center g-4 mx-0">
                   <div className="col-lg-3 ps-lg-5 col-md-4 col-12">
                     <div>
-                      <a href="/">
+                      <a href="/" aria-label="Home">
                         {" "}
                         <img
                           src="/images/new_hc_logo.png"

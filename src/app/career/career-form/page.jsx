@@ -170,7 +170,7 @@ const Contact = () => {
                         />
                         <label
                           className="input-group-text rounded-5 mt-3 mt-lg-0"
-                          for="inputGroupFile02"
+                          htmlFor="inputGroupFile02"
                         >
                           Upload your resume
                         </label>

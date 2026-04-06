@@ -65,7 +65,7 @@ const Terms = () => {
           width="1"
           style={{ display: "none" }}
           src="https://www.facebook.com/tr?id=768898314129368&ev=PageView&noscript=1"
-        />
+         alt="" />
       </noscript>
 
       <MainLayout>
@@ -83,7 +83,7 @@ const Terms = () => {
                 </h3>
                 
                                 <h5>Thank you for contacting High Creation Interior,  Team will connect with you soon.</h5>
-                                <div class="text-center mt-4"><a href="/" class="know_more px-3">Back To Home</a></div>
+                                <div className="text-center mt-4"><a href="/" className="know_more px-3" aria-label="Home">Back To Home</a></div>
                  {/* <div dangerouslySetInnerHTML={{ __html: pageData }} /> */}
               </div>
             </div>

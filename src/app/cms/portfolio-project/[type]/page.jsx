@@ -331,9 +331,9 @@ const CmsProjectPortfolio = () => {
                                 </div>
 
                                 <div className="mb-3 col-md-12">
-                                    <div class="form-check form-switch ms-1">
+                                    <div className="form-check form-switch ms-1">
                                         <input
-                                            class="form-check-input"
+                                            className="form-check-input"
                                             type="checkbox"
                                             role="switch"
                                             id="flexSwitchCheckDefault"
@@ -404,9 +404,9 @@ const CmsProjectPortfolio = () => {
                                 </div>
 
                                 <div className="mb-3 col-md-12">
-                                    <div class="form-check form-switch ms-1">
+                                    <div className="form-check form-switch ms-1">
                                         <input
-                                            class="form-check-input"
+                                            className="form-check-input"
                                             type="checkbox"
                                             role="switch"
                                             id="flexSwitchCheckDefault"

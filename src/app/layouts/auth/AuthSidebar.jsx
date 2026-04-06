@@ -41,7 +41,7 @@ function AuthSidebar() {
                         </a>
                     </li>
                     {/* <li className="nav-item">
-                        <a className={`nav-link ${isActive('/')}`} href="/">
+                        <a className={`nav-link ${isActive('/')}`} href="/" aria-label="Home">
                             <IoHomeOutline className={`dashboard_icon pe-2 ${isIconActive('/')}`} />
                             Home Page
                         </a>

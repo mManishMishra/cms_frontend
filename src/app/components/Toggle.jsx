@@ -64,7 +64,7 @@ const Toggle = () => {
       >
         <div className="d-flex justify-content-between container-fluid px-lg-5">
           <div className="logo ">
-            <a href="/" className="d-block d-lg-none">
+            <a href="/" className="d-block d-lg-none" aria-label="Home">
               <img
                 src="/images/iconsHC.png"
                 className="bg-white mt-3"

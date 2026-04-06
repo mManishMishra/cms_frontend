@@ -20,7 +20,7 @@ const FourZeroFour = () => {
       <MainLayout>
         <main>
          <section>
-       <a href="/">
+       <a href="/" aria-label="Home">
        <img src="/images/four.png" className="w-100 object-fit-cover" height={500} alt="404" />
        </a>
          </section>

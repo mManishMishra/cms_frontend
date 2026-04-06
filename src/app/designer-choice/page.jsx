@@ -67,7 +67,7 @@
 //       </head>
 //       <MainLayout>
 //         <main>
-//         <div class="container">
+//         <div className="container">
 //         <div className="text-center mt-3 mx-0 row">
 //               <h1 className="wallpaperHeading">Designer Choice</h1>
 //               <p className="px-lg-5 team_description">

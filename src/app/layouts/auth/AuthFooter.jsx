@@ -12,7 +12,7 @@ const AuthFooter = () => {
                             <div className="row justify-content-center">
                                 <div className="col-lg-5 ps-lg-5">
                                     <div>
-                                        <a href="/"> <Image
+                                        <a href="/" aria-label="Home"> <Image
                                             src="/images/Hc-Logo.jpeg"
                                             alt="hero image"
                                             className=""

@@ -1,5 +1,6 @@
 import { IoIosCall } from "react-icons/io";
 import Toggle from "../components/Toggle";
+import Image from "next/image";
 // import "../globals.css";
 
 const Header = () => {
@@ -10,16 +11,14 @@ const Header = () => {
           <div className="d-flex justify-content-between align-items-center">
             <nav className="navbar navbar-expand-lg p-0 ">
               <div className="container-fluid">
-                <a className="navbar-brand me-lg-3 me-0" href="/">
-                  <img
+                <a className="navbar-brand me-lg-3 me-0" href="/" aria-label="Home">
+                  <Image
                     src="/images/new_hc_logo.png"
                     width={90}
                     height={90}
                     alt="High Creation Interior Logo"
                     className="p-2"
-                    fetchpriority="high"
-                    loading="eager"
-                    data-no-lazy="1"
+                    priority
                   />
                 </a>
                 <button

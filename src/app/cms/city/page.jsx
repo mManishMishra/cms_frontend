@@ -258,7 +258,7 @@
 //                             <div className="modal-body row">
 
 //                                 <div className="mb-3 col-md-12">
-//                                 <label class="form-label">City Type</label>
+//                                 <label className="form-label">City Type</label>
 //                                     <input
 //                                         type="text"
 //                                         className="form-control"
@@ -271,7 +271,7 @@
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Main Title</label>
+//                                     <label className="form-label">Main Title</label>
 //                                     <input
 //                                         type="text"
 //                                         className="form-control"
@@ -283,12 +283,12 @@
 //                                     />
 //                                 </div>
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Main Description</label>
+//                                     <label className="form-label">Main Description</label>
 //                                     <CKEditorComponent pageData={formData.main_description} setPageData={setMainDescriptionData} />
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Location Image</label>
+//                                     <label className="form-label">Location Image</label>
 //                                     <input
 //                                         type="file"
 //                                         className="form-control"
@@ -299,7 +299,7 @@
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Side Title</label>
+//                                     <label className="form-label">Side Title</label>
 //                                     <input
 //                                         type="text"
 //                                         className="form-control"
@@ -312,12 +312,12 @@
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Side Description</label>
+//                                     <label className="form-label">Side Description</label>
 //                                     <CKEditorComponent pageData={formData.side_description} setPageData={setSideDescriptionData} />
 //                                 </div>
 
 //                                 <div className="mb-3 col-md-12">
-//                                     <label class="form-label">Side Image</label>
+//                                     <label className="form-label">Side Image</label>
 //                                     <input
 //                                         type="file"
 //                                         className="form-control"

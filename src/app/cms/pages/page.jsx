@@ -402,7 +402,7 @@ const CmsPages = () => {
                 </div>
             )}            
             {/* Main Content */}
-            <div className="ck-content mb-5" dangerouslySetInnerHTML={{ __html: formData.content || "<p class='text-muted'>Main content will appear here...</p>" }}></div>
+            <div className="ck-content mb-5" dangerouslySetInnerHTML={{ __html: formData.content || "<p className='text-muted'>Main content will appear here...</p>" }}></div>
 
             {/* Blocks Preview */}
             {formData.content_blocks.length > 0 && <hr className="my-5" />}
@@ -531,7 +531,7 @@ const CmsPages = () => {
                                                     
                                                     {/* 🌟 Only show live link if Published */}
                                                     {item.status === 'Published' && item.seo_content?.slug && (
-                                                        <a href={`/${item.seo_content.slug}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-success me-2 shadow-sm">Live Link</a>
+                                                        <a href={`/${item.seo_content.slug}`} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-success me-2 shadow-sm">Live Link</a>
                                                     )}
                                                     
                                                     <button onClick={() => duplicateHandler(item.id)} className="btn btn-sm btn-outline-secondary me-2 shadow-sm">Duplicate</button>

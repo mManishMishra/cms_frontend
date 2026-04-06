@@ -486,7 +486,7 @@ const CmsExperienceCenter = () => {
                                 {pagesListVideo && pagesListVideo?.map((item, index) => (
                                     <tr key={item.id}>
                                         <td>{index + 1}</td>
-                                        <td><a target="_blank" href={item?.child_content?.image}>Video </a></td>
+                                        <td><a target="_blank" href={item?.child_content?.image} rel="noopener noreferrer">Video </a></td>
                                        
                                         <td>{item?.child_content.title}</td>
                                         

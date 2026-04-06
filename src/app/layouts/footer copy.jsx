@@ -49,7 +49,7 @@ const Footer = () => {
               <div className="row justify-content-lg-center g-4">
                 <div className="col-lg-4 ps-lg-5 col-md-5 col-6">
                   <div>
-                    <a href="/">
+                    <a href="/" aria-label="Home">
                       {" "}
                       <img
                        src="/images/new_hc_logo.png"

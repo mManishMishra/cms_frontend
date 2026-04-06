@@ -76,7 +76,7 @@ const ManageJob = () => {
                                             <a
                                                 href={query.resume}
                                                 target="_blank"
-                                                rel="noreferrer"
+                                                rel="noopener noreferrer"
                                             >
                                                 View
                                             </a>
