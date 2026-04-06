@@ -1,0 +1,412 @@
+// components/TabsComponent.js
+import { IoMdCloseCircle } from "react-icons/io";
+import { CiCirclePlus, CiCircleMinus, CiCircleCheck } from "react-icons/ci";
+import { useEffect, useState } from "react";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
+
+const estimatercalculationUrl = "https://high.creation.dev.api.crudbyte.com/estimatercalculation"
+
+const Tabs = () => {
+    const [activeTab, setActiveTab] = useState("classic");
+    const [sections, setSections] = useState({
+        classic: [],
+        elite: [],
+        highend: [],
+    });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        setLoading(true);
+        const fetchEstimaterCalculationData = async () => {
+            try {
+                const activeTabId = activeTab === "classic" ? 1 : activeTab === "elite" ? 2 : 3;
+                const response = await api.get(`/estimatercalculation/packagetype/${activeTabId}`);
+                setSections(response.data);
+                if (activeTabId === 1) {
+                    setSections((prevSections) => ({
+                        ...prevSections,
+                        classic: response.data,
+                    }));
+                } else if (activeTabId === 2) {
+                    setSections((prevSections) => ({
+                        ...prevSections,
+                        elite: response.data,
+                    }));
+                } else if (activeTabId === 3) {
+                    setSections((prevSections) => ({
+                        ...prevSections,
+                        highend: response.data,
+                    }));
+                }
+            } catch (err) {
+                console.error("Error fetching estimater calculation:", err);
+                setError(err.message ?? "Failed to load estimater calculation. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEstimaterCalculationData();
+    }
+        , [activeTab]);
+
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+    };
+
+    const handleAddEstimationData = (tab, sectionIndex) => {
+        const newEstimationData = {
+            id: Date.now(), // Using a timestamp as a unique ID for new entries
+            category: "",
+            description: "",
+            quantity: 0,
+            rate: 0,
+            amount: 0,
+            movable_furniture: false,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            isNew: true, // Flag to indicate a new entry
+        };
+
+        const updatedSections = { ...sections };
+        updatedSections[tab][sectionIndex].estimationData.push(newEstimationData);
+        setSections(updatedSections);
+    };
+
+    const handleDeleteEstimationData = async (tab, sectionIndex, estimationId) => {
+        const confirmed = window.confirm("Are you sure you want to delete this estimation data?");
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            await api.delete(`/estimatercalculation/${estimationId}`);
+            const updatedSections = { ...sections };
+            const section = updatedSections[tab][sectionIndex];
+            section.estimationData = section.estimationData.filter((field) => field.id !== estimationId);
+            setSections(updatedSections);
+            toast.success("Estimation data deleted successfully.");
+        } catch (error) {
+            console.error("Error deleting estimation data:", error);
+            toast.error(error.message ?? "Failed to delete estimation data. Please try again.");
+        }
+    };
+
+    const handleAddSection = (tab) => {
+        const newSection = {
+            sizeType: { id: "", name: "" },
+            propertySubType: { id: "", name: "" },
+            estimationData: [
+                {
+                    id: Date.now(), // Using a timestamp as a unique ID for new entries
+                    category: "",
+                    description: "",
+                    quantity: 0,
+                    rate: 0,
+                    amount: 0,
+                    movable_furniture: false,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    isNew: true, // Flag to indicate a new entry
+                },
+            ],
+        };
+        setSections({ ...sections, [tab]: [...sections[tab], newSection] });
+    };
+
+    const handleSubmitCheckButton = async (tab, sectionIndex, estimationId) => {
+        const section = sections[tab][sectionIndex];
+        const { sizeType, propertySubType, estimationData } = section;
+    
+        const estimation = estimationData.find((data) => data.id === estimationId);
+
+        
+        const dataToSubmit = {
+            category: estimation.category,
+            description: estimation.description,
+            quantity: estimation.quantity,
+            rate: estimation.rate,
+            amount: estimation.amount,
+            movable_furniture: estimation.movable_furniture,
+
+            size_type_id : sizeType.id,
+            property_sub_type_id: propertySubType.id,
+            package_id: activeTab === "classic" ? 1 : activeTab === "elite" ? 2 : 3,
+        };
+    
+        console.log("Data to submit:", dataToSubmit);
+    
+        try {
+            if (estimation.isNew) {
+                // POST request for adding new estimation data
+                const response = await api.post("/estimatercalculation", dataToSubmit);
+                console.log("New estimation data added:", response.data);
+                // Update the state to reflect the new data
+                const updatedSections = { ...sections };
+                updatedSections[tab][sectionIndex].estimationData = updatedSections[tab][sectionIndex].estimationData.map((data) =>
+                    data.id === estimationId ? { ...data, ...response.data, isNew: false } : data
+                );
+                setSections(updatedSections);
+                if (response.data) {
+                    toast.success("Estimation data added successfully.");
+                }
+            } else {
+                // PATCH request for updating existing estimation data
+                const response = await api.patch(`/estimatercalculation/${estimationId}`, dataToSubmit);
+                console.log("Estimation data updated:", response.data);
+                // Update the state to reflect the updated data
+                const updatedSections = { ...sections };
+                updatedSections[tab][sectionIndex].estimationData = updatedSections[tab][sectionIndex].estimationData.map((data) =>
+                    data.id === estimationId ? { ...data, ...response.data } : data
+                );
+                setSections(updatedSections);
+                if (response.data) {
+                    toast.success("Estimation data updated successfully.");
+                }
+            }
+        } catch (error) {
+            setError(error.response.data.message ?? "Failed to submit estimation data. Please try again.");
+            console.error("Error submitting estimation data:", error.message);
+            toast.error(error.message ?? "Failed to submit estimation data. Please try again.");
+        }
+        finally {
+            setTimeout(() => {
+                setError("");
+            }, 5000);
+        }
+    };
+
+    const handleInputChange = (e, fieldId, tab, sectionIndex) => {
+        console.log("input data", e.target.value, fieldId, tab, sectionIndex);
+        const name = e.target.name;
+        let value = e.target.value;
+        const updatedSections = { ...sections };
+    
+        // Value for checkbox
+        if (name === "movable_furniture") {
+            value = e.target.checked;
+        }
+
+        // Convert quantity, rate, and amount to int if they are string
+        if (name === "quantity" || name === "rate" || name === "amount") {
+            value = parseInt(value);
+        }
+    
+        // Find the section and field to update
+        const section = updatedSections[tab][sectionIndex];
+        const fieldIndex = section.estimationData.findIndex((field) => field.id === fieldId);
+    
+        if (fieldIndex !== -1) {
+            section.estimationData[fieldIndex] = { ...section.estimationData[fieldIndex], [name]: value };
+            setSections(updatedSections);
+        }
+    };
+    
+    const handleSelectChange = (e, tab, sectionIndex, field) => {
+        const { name, value } = e.target;
+        const updatedSections = { ...sections };
+    
+        // Find the section to update
+        const section = updatedSections[tab][sectionIndex];
+    
+        // Update the sizeType or propertySubType based on the name
+        if (name === "size_type") {
+            section.sizeType = { id: parseInt(value), name: e.target.options[e.target.selectedIndex].text };
+        } else if (name === "property_sub_type") {
+            section.propertySubType = { id: parseInt(value), name: e.target.options[e.target.selectedIndex].text };
+        }
+    
+        setSections(updatedSections);
+    };
+
+    return (
+        <div>
+            {error && <div className="text-center alert alert-danger">{error}</div>}
+            <section className="container my-4 estimater_content">
+                <ul className="nav nav-tabs" id="myTab" role="tablist">
+                    {["classic", "elite", "highend"].map((tab) => (
+                        <li className="nav-item" role="presentation" key={tab}>
+                            <button
+                                className={`nav-link ${activeTab === tab ? "active" : "text-muted"}`}
+                                style={{ color: activeTab === tab ? "orange" : "" }}
+                                id={`${tab}-tab`}
+                                onClick={() => handleTabClick(tab)}
+                                type="button"
+                                role="tab"
+                                aria-controls={tab}
+                                aria-selected={activeTab === tab}
+                            >
+                                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+                <div className="tab-content card" id="myTabContent">
+                    {["classic", "elite", "highend"].map((tab) => (
+                        <div
+                            key={tab}
+                            className={`tab-pane fade ${activeTab === tab ? "show active" : ""}`}
+                            id={tab}
+                            role="tabpanel"
+                            aria-labelledby={`${tab}-tab`}
+                        >
+                            <section className="my-3">
+                                <div className="container">
+                                    {sections[tab]?.map((estimaterItem, sectionIndex) => (
+                                        <div key={sectionIndex} className="my-5 row">
+                                            {/* <div className="col-2">
+                                                <h6>Type & Package</h6>
+                                            </div> */}
+                                            <div className="col-lg-12">
+                                                <div className="d-flex">
+                                                    <select
+                                                        className="w-auto form-select form-control ms-2"
+                                                        aria-label="Default select example"
+                                                        value={estimaterItem?.sizeType?.id}
+                                                        name="size_type"
+                                                        onChange={(e) => handleSelectChange(e, tab, sectionIndex)}
+                                                    >
+                                                        <option value="" hidden>
+                                                            Select Property
+                                                        </option>
+                                                        <option value="1">1 BHK Apartment</option>
+                                                        <option value="2">2 BHK Apartment</option>
+                                                        <option value="3">3 BHK Apartment</option>
+                                                        <option value="4">4 BHK Apartment</option>
+                                                        <option value="5">1 BHK Villa</option>
+                                                        <option value="6">2 BHK Villa</option>
+                                                        <option value="7">3 BHK Villa</option>
+                                                        <option value="8">4 BHK Villa</option>
+                                                        <option value="9">1 BHK Flat</option>
+                                                        <option value="10">2 BHK Flat</option>
+                                                        <option value="11">3 BHK Flat</option>
+                                                        <option value="12">4 BHK Flat</option>
+                                                    </select>
+                                                    <select
+                                                        className="w-auto form-select form-control ms-2"
+                                                        aria-label="Default select example"
+                                                        value={estimaterItem?.propertySubType?.id}
+                                                        name="property_sub_type"
+                                                        onChange={(e) => handleSelectChange(e, tab, sectionIndex)}
+                                                    >
+                                                        <option value="" hidden>
+                                                            Select Type
+                                                        </option>
+                                                        <option value="1">Living</option>
+                                                        <option value="2">Kitchen</option>
+                                                        <option value="3">Bedroom</option>
+                                                        <option value="4">Toilet</option>
+                                                        <option value="5">Services</option>
+                                                    </select>
+                                                    <div className="d-flex fs-2 ms-2">
+                                                        <button
+                                                            className="bg-transparent border-0 ms-2"
+                                                            onClick={() => handleAddEstimationData(activeTab, sectionIndex)}
+                                                        >
+                                                            <CiCirclePlus style={{ cursor: "pointer" }} />
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {estimaterItem?.estimationData?.map((field) => (
+                                                    <div key={field.id} className="my-2 d-flex g-3 align-items-center">
+                                                        <select
+                                                            className="w-auto form-select form-control ms-2"
+                                                            defaultValue={field.category}
+                                                            name="category"
+                                                            onChange={(e) => handleInputChange(e, field.id, tab, sectionIndex)}
+                                                        >
+                                                            <option value="" hidden>
+                                                                Select Category
+                                                            </option>
+                                                            <option value="furniture">Furniture</option>
+                                                            <option value="modular">Modular</option>
+                                                            <option value="services">Services</option>
+                                                        </select>
+                                                        <input
+                                                            type="text"
+                                                            className="w-auto form-control ms-2"
+                                                            placeholder="Description"
+                                                            defaultValue={field.description}
+                                                            name="description"
+                                                            onChange={(e) => handleInputChange(e, field.id, tab, sectionIndex)}
+                                                        />
+                                                        <input
+                                                            type="number"
+                                                            className="form-control ms-2"
+                                                            placeholder="Quantity"
+                                                            defaultValue={field.quantity}
+                                                            name="quantity"
+                                                            onChange={(e) => handleInputChange(e, field.id, tab, sectionIndex)}
+                                                        />
+                                                        <input
+                                                            type="number"
+                                                            className="form-control ms-2"
+                                                            placeholder="Rate"
+                                                            defaultValue={field.rate}
+                                                            name="rate"
+                                                            onChange={(e) => handleInputChange(e, field.id, tab, sectionIndex)}
+                                                        />
+                                                        <input
+                                                            type="number"
+                                                            className="form-control ms-2"
+                                                            placeholder="Amount"
+                                                            defaultValue={field.amount}
+                                                            name="amount"
+                                                            onChange={(e) => handleInputChange(e, field.id, tab, sectionIndex)}
+                                                        />
+                                                            <div class="form-check form-switch ms-1">
+                                                            <input
+                                                                class="form-check-input"
+                                                                type="checkbox"
+                                                                role="switch"
+                                                                id="flexSwitchCheckDefault"
+                                                                defaultChecked={field.movable_furniture}
+                                                                name="movable_furniture"
+                                                                onChange={(e) => handleInputChange(e, field.id, tab, sectionIndex)}
+                                                            />
+                                                                <p className="text-xs text-nowrap mb-0">Movable Furniture</p>
+                                                            </div>
+                                                        <div className="d-flex fs-2 ms-2">
+                                                        <button
+                                                                className="bg-transparent border-0 ms-2"
+                                                                onClick={() =>
+                                                                    handleSubmitCheckButton(activeTab, sectionIndex, field.id)
+                                                                }
+                                                            >
+                                                                <CiCircleCheck style={{ cursor: "pointer" }} />
+                                                            </button>
+                                                            <button
+                                                                className="bg-transparent border-0 ms-2"
+                                                                onClick={() =>
+                                                                    handleDeleteEstimationData(tab, sectionIndex, field.id)
+                                                                }
+                                                            >
+                                                                <CiCircleMinus style={{ cursor: "pointer" }} />
+                                                            </button>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                    <button
+                                        className="mt-3 btn know_more"
+                                        onClick={() => handleAddSection(tab)}
+                                    >
+                                        Add Section
+                                    </button>
+                                </div>
+                            </section>
+                        </div>
+                    ))}
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default Tabs;

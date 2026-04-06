@@ -1,0 +1,217 @@
+"use client";
+import api from "@/utils/api";
+import { useEffect, useState } from "react";
+
+const ContactUsPopUp = ({ onModalStateChange }) => {
+    const [showModal, setShowModal] = useState(false);
+    const [formData, setFormData] = useState({
+        fullName: "",
+        contact: "",
+        email: "",
+        place: "",
+        query: "",
+        termsAndConditions: false,
+    });
+
+    const [submissionError, setSubmissionError] = useState("");
+    const [submissionMessage, setSubmissionMessage] = useState("");
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
+
+    const handleCheckboxChange = (e) => {
+        const { checked } = e.target;
+        setFormData((prevData) => ({ ...prevData, termsAndConditions: checked }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!formData.termsAndConditions) {
+            setSubmissionError("You must agree to the Terms & Conditions before submitting.");
+            return;
+        }
+
+        //db column names -  name, email, mobile, place, query
+        const formRequestData = {
+            name: formData.fullName,
+            email: formData.email,
+            mobile: formData.contact,
+            place: formData.place,
+            query: formData.query,
+        };
+
+        try {
+            const response = await api.post("/user-queries", formRequestData);
+            if (response.status === 201) {
+                setSubmissionMessage("Form submitted successfully!");
+                setFormData({
+                    fullName: "",
+                    contact: "",
+                    email: "",
+                    place: "",
+                    query: "",
+                    termsAndConditions: false,
+                });
+                handleClose();
+            } else {
+                setSubmissionError("Failed to submit form. Please try again.");
+            }
+        } catch (error) {
+            setSubmissionError("Error submitting form. Please try again.");
+        } finally {
+            setTimeout(() => {
+                setSubmissionError("");
+                setSubmissionMessage("");
+            }, 5000);
+        }
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowModal(true);
+            onModalStateChange(true);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    const handleClose = () => {
+        setShowModal(false);
+        onModalStateChange(false);
+    };
+
+    return (
+        <>
+            {showModal && (
+                <div
+                    className="modal fade show"
+                    style={{ display: "block" }}
+                    data-bs-backdrop="static"
+                    data-bs-keyboard="false"
+                    tabIndex="-1"
+                    aria-labelledby="staticBackdropLabel"
+                    aria-hidden="true"
+                >
+                    <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                        <div className="modal-content contact_form contact">
+                            <div className="modal-body">
+                                <h4 className="mb-3 text-black form_heading d-flex justify-content-between">
+                                    Let&apos;s Connect
+                                    <i
+                                        type="button"
+                                        className="btn-close fs-6"
+                                        onClick={handleClose}
+                                    ></i>
+                                </h4>
+                                <form className="row" onSubmit={handleSubmit}>
+                                    {submissionMessage && (
+                                        <div className="text-center alert alert-success alert-dismissible fade show">
+                                            {submissionMessage}
+                                        </div>
+                                    )}
+                                    {submissionError && (
+                                        <div className="text-center alert alert-danger alert-dismissible fade show">
+                                            {submissionError}
+                                        </div>
+                                    )}
+                                    <div className="mb-3 col-md-6">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={formData.fullName}
+                                            id="fullName"
+                                            name="fullName"
+                                            placeholder="Full Name"
+                                            required
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div className="mb-3 col-md-6">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="contact"
+                                            name="contact"
+                                            value={formData.contact}
+                                            placeholder="Contact No."
+                                            required
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+
+                                    <div className="mb-3 col-md-12">
+                                        <input
+                                            type="email"
+                                            className="form-control"
+                                            id="email"
+                                            name="email"
+                                            value={formData.email}
+                                            placeholder="Email"
+                                            required
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div className="mb-3 col-md-12">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="place"
+                                            name="place"
+                                            value={formData.place}
+                                            onChange={handleInputChange}
+                                            placeholder="Place"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3 col-md-12">
+                                        <textarea
+                                            className="form-control"
+                                            id="query"
+                                            name="query"
+                                            value={formData.query}
+                                            placeholder="Query"
+                                            rows="3"
+                                            onChange={handleInputChange}
+                                        ></textarea>
+                                    </div>
+                                    <div className="col-12">
+                                        <div className="form-check">
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                value={formData.termsAndConditions}
+                                                id="termsAndConditions"
+                                                name="terms_and_conditions"
+                                                required
+                                                onChange={handleCheckboxChange}
+                                            />
+                                            <label
+                                                className="text-black form-check-label"
+                                                htmlFor="termsAndConditions"
+                                            >
+                                                Accept Terms & condition
+                                            </label>
+                                            <div className="text-black invalid-feedback">
+                                                You must agree before submitting.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="m-auto mt-3 col-12 d-flex justify-content-center">
+                                        <button className="px-5 btn know_more" type="submit">
+                                            SEND
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+};
+
+export default ContactUsPopUp;

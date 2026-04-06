@@ -1,0 +1,255 @@
+import React from 'react';
+import { MdOutlineDashboard, MdMessage, MdLeaderboard } from "react-icons/md";
+import { FaBlog, FaCalculator, FaFileAlt, FaQuestionCircle, FaRegUser } from "react-icons/fa";
+import { IoHomeOutline } from "react-icons/io5";
+import { IoMdContacts, IoIosSettings, IoMdLogOut } from "react-icons/io";
+import { useDispatch, useSelector } from 'react-redux';
+import { usePathname, useRouter } from 'next/navigation';
+import { logout } from '../../../store/slices/authSlice';
+
+function AuthSidebar() {
+    const { user } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const handleLogout = () => {
+        dispatch(logout());
+        router.push('/login');
+    };
+
+    const isActive = (path) => pathname === path ? 'active-nav-link' : '';
+    const isIconActive = (path) => pathname === path ? 'active' : '';
+
+    return (
+        <div>
+            <div className="mt-3 position-sticky my_admin_sidebar">
+                <div className="usercard">
+                    <center>
+                        <img src="/images/user-icons.svg" width={70} alt="user" />
+                        <h6 className="pt-3 text-white">{user?.firstName} {user?.lastName}</h6>
+                        <p className="text-white team_description">{user?.email}</p>
+                    </center>
+                </div>
+                <ul className="nav flex-column">
+                    <li className="nav-item">
+                        <a className={`nav-link ${isActive('/dashboard')}`} href="/dashboard">
+                            <MdOutlineDashboard className={`dashboard_icon ${isIconActive('/dashboard')}`} /> Dashboard
+                        </a>
+                    </li>
+                    {/* <li className="nav-item">
+                        <a className={`nav-link ${isActive('/')}`} href="/">
+                            <IoHomeOutline className={`dashboard_icon pe-2 ${isIconActive('/')}`} />
+                            Home Page
+                        </a>
+                    </li> */}
+                    {/* <li className="nav-item">
+                        <a className={`nav-link ${isActive('/blogs')}`} href="/blogs">
+                            <FaBlog className={`dashboard_icon pe-2 ${isIconActive('/blogs')}`} />
+                            Blogs
+                        </a>
+                    </li> */}
+                    <li className="nav-item">
+                        <a className={`nav-link ${isActive('/estimator-for-home/setup')}`} href="/estimator-for-home/setup">
+                            <FaCalculator className={`dashboard_icon pe-2 ${isIconActive('/estimator-for-home/setup')}`} />
+                            Estimator Setup
+                        </a>
+                    </li>
+                    {/* <li className="nav-item">
+                        <a className={`nav-link ${isActive('/users')}`} href="/users">
+                            <FaRegUser className={`dashboard_icon pe-2 ${isIconActive('/users')}`} />
+                            Users
+                        </a>
+                    </li> */}
+                    {/* <li className="nav-item">
+                        <a className={`nav-link ${isActive('/contact-us')}`} href="/contact-us">
+                            <IoMdContacts className={`dashboard_icon pe-2 ${isIconActive('/contact-us')}`} />
+                            Contact Us
+                        </a>
+                    </li> */}
+                    {/* <li className="nav-item">
+                        <a className={`nav-link ${isActive('/queries')}`} href="/queries">
+                            <MdMessage className={`dashboard_icon pe-2 ${isIconActive('/queries')}`} />
+                            Queries
+                        </a>
+                    </li> */}
+                    <li className="nav-item">
+                        <a className={`nav-link ${isActive('/leads')}`} href="/leads">
+                            <MdLeaderboard className={`dashboard_icon pe-2 ${isIconActive('/leads')}`} /> Leads
+                        </a>
+                    </li>
+                    {/* <li className="nav-item">
+                        <a className={`nav-link ${isActive('/settings')}`} href="/settings">
+                            <IoIosSettings className={`dashboard_icon pe-2 ${isIconActive('/settings')}`} /> Settings
+                        </a>
+                    </li> */}
+                    <li className="nav-item">
+                        <a className={`nav-link ${isActive('/user-queries')}`} href="/user-queries">
+                            <FaFileAlt className={`dashboard_icon pe-2 ${isIconActive('/user-queries')}`} />
+                            User Queries
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a className={`nav-link ${isActive('/manage-job')}`} href="/manage-job">
+                            <FaFileAlt className={`dashboard_icon pe-2 ${isIconActive('/manage-job')}`} />
+                            Manage Job
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a className={`nav-link ${isActive('/job-application')}`} href="/job-application">
+                            <FaFileAlt className={`dashboard_icon pe-2 ${isIconActive('/job-application')}`} />
+                            Job Application
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle cms-dropdown-link" data-bs-toggle="dropdown" aria-expanded="false">
+                            <FaFileAlt className={`dashboard_icon pe-2`} />
+                            CMS
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li>
+                                <a className={`${isActive('/cms/design-gallery')}`} href="/cms/design-gallery">
+                                    Design Gallery
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/product')}`} href="/cms/product">
+                                    Product
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/experience-center')}`} href="/cms/experience-center">
+                                    Experience Center
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/reallife-portfolio')}`} href="/cms/reallife-portfolio">
+                                    Real Time 3d
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/faq')}`} href="/cms/faq">
+                                    FAQ
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/about-us')}`} href="/cms/about-us">
+                                    About us
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/about-us-slider')}`} href="/cms/about-us-slider">
+                                    About us slider
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/city')}`} href="/cms/city">
+                                    City
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/how-its-works')}`} href="/cms/how-its-works">
+                                    How its works
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/team')}`} href="/cms/team">
+                                    Team
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/blog')}`} href="/cms/blog">
+                                    Blog
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/refer-and-earn')}`} href="/cms/refer-and-earn">
+                                    Refer And Earn
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/cancellation-policy')}`} href="/cms/cancellation-policy">
+                                    Cancellation Policy
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/term-and-condition')}`} href="/cms/term-and-condition">
+                                    Term & Condition
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/privacy-policy')}`} href="/cms/privacy-policy">
+                                    Privacy Policy
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/homepage-banner')}`} href="/cms/homepage-banner">
+                                    Homepage Banner
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/exclusive-design/sustainable_furniture_rattan')}`} href="/cms/exclusive-design/sustainable_furniture_rattan">
+                                    Sustainable Furniture Rattan
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/exclusive-design/sustainable_furniture_reclaimed_wood')}`} href="/cms/exclusive-design/sustainable_furniture_reclaimed_wood">
+                                    Sustainable Furniture Reclaimed Wood
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/exclusive-design/ready_to_go_design')}`} href="/cms/exclusive-design/ready_to_go_design">
+                                    ED - Ready to go design
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/exclusive-design/wallpaper')}`} href="/cms/exclusive-design/wallpaper">
+                                    ED - Wallpapers
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/exclusive-design/space_saving_furniture')}`} href="/cms/exclusive-design/space_saving_furniture">
+                                    ED - Space-Saving Furniture
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/exclusive-design/sustainable_furniture')}`} href="/cms/exclusive-design/sustainable_furniture">
+                                    ED - Sustainable Furniture
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/exclusive-design/furniture')}`} href="/cms/exclusive-design/furniture">
+                                    ED - Furniture
+                                </a>
+                            </li>
+                            <li>
+                                <a className={`${isActive('/cms/portfolio-project/residential_projects')}`} href="/cms/portfolio-project/residential_projects">
+                                    Portfolio - Residential
+                                </a>
+                            </li>
+
+                            <li>
+                                <a className={`${isActive('/cms/portfolio-project/luxury_projects')}`} href="/cms/portfolio-project/luxury_projects">
+                                    Portfolio - Luxury
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                   
+
+                    
+
+                    <li className="nav-item">
+                        <a className="nav-link" onClick={handleLogout} style={{cursor: 'pointer'}}>
+                            <IoMdLogOut className="dashboard_icon pe-2" />
+                            Log Out
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    );
+}
+
+export default AuthSidebar;

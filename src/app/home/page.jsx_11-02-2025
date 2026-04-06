@@ -1,0 +1,1034 @@
+"use client";
+import RowImage from "../components/RowImage";
+import Head from "next/head";
+import { IoIosShareAlt } from "react-icons/io";
+import Card from "../components/Card";
+import { format, isValid, parseISO } from "date-fns";
+import VideoCardHome from "../components/VideoCardHome";
+import BgImageCard from "../components/BgImageCard";
+import { FaComments } from "react-icons/fa";
+import Blogs from "../components/Blogs";
+import RoomOfice from "../components/RoomOfice";
+import SliderCard from "../components/SliderCard";
+import VideoTestimonialSlider from "../components/VideoTestimonialSlider";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import IconBox from "../components/IconBox";
+import CounterRow from "../components/CounterRow";
+import { useCallback, useEffect, useState } from "react";
+import ContactUsPopUp from "../components/ContactUsPopUp";
+import api from "@/utils/api";
+import HeadComponent from "../components/HeadComponent";
+
+const Home = () => {
+  // const [pageTitle, setPageTitle] = useState("homehc - My Website");
+  // const [pageDescription, setPageDescription] = useState(
+  //   "Learn team, and values."
+  // );
+
+  // useEffect(() => {
+  //   document.title = pageTitle;
+  // }, [pageTitle]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    contact: "",
+    email: "",
+    place: "",
+    query: "",
+    termsAndConditions: false,
+  });
+
+  const [submissionError, setSubmissionError] = useState("");
+  const [submissionMessage, setSubmissionMessage] = useState("");
+
+  const [homepageBannerData, setHomepageBannerData] = useState();
+
+  const fetchContentManagerPages = useCallback(async () => {
+    try {
+      const response = await api.get("/cms-content/homepage_banner", {});
+      if (response.data && response.data.json_content) {
+        setHomepageBannerData(response.data?.json_content);
+      }
+      setLoading(false);
+    } catch (err) {
+      toast.error(err.message ?? "Failed to fetch data. Please try again.");
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchContentManagerPages();
+  }, [fetchContentManagerPages]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    console.log(formData);
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({ ...prevData, termsAndConditions: checked }));
+    console.log("Checkbox state:", checked);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.termsAndConditions) {
+      setSubmissionError(
+        "You must agree to the Terms & Conditions before submitting."
+      );
+      return;
+    }
+
+    const formRequestData = {
+      name: formData.fullName,
+      mobile: formData.contact,
+      email: formData.email,
+      place: formData.place,
+      query: formData.query,
+    };
+
+    try {
+      const response = await api.post("/user-queries", formRequestData);
+      console.log(response);
+      if (response.status === 201) {
+        setSubmissionMessage("Form submitted successfully!");
+        setFormData({
+          fullName: "",
+          contact: "",
+          email: "",
+          place: "",
+          query: "",
+          termsAndConditions: false,
+        });
+      } else {
+        setSubmissionError("Failed to submit form. Please try again.");
+      }
+    } catch (error) {
+      setSubmissionError("Error submitting form. Please try again.", error);
+      console.error("Error:", error);
+    } finally {
+      // Clear error message after some time
+      setTimeout(() => {
+        setSubmissionError("");
+        setSubmissionMessage("");
+      }, 5000);
+    }
+  };
+
+  const handleModalStateChange = useCallback((isOpen) => {
+    setIsModalOpen(isOpen);
+  }, []);
+
+  const [blogs, setBlogs] = useState([]);
+  const [error, setError] = useState(null);
+
+  // Fetch only the latest 3 blogs
+  const fetchLatestBlogs = useCallback(async () => {
+    try {
+      const response = await api.get("/cms-blog"); // API to fetch all blogs
+      if (response.status === 200) {
+        // Get only the latest 3 blogs
+        setBlogs(response.data.slice(0, 3)); // Slice to get only the first 3 blogs
+      }
+    } catch (err) {
+      setError(err.message || "Failed to load blogs.");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchLatestBlogs(); // Call the function to fetch the latest blogs
+  }, [fetchLatestBlogs]);
+  const formatDate = (dateString) => {
+    // Ensure the dateString is not empty and parse it
+    const date = dateString ? parseISO(dateString) : null;
+
+    // If date is valid, format it, else return "Invalid Date"
+    return date && isValid(date) ? format(date, "dd-MM-yyyy") : "Invalid Date";
+  };
+
+  return (
+    <>
+      <head>
+        <title>Top Interior Designers In Delhi NCR For Home</title>
+        <meta
+          name="description"
+          content="Home interior designers in Delhi NCR - Elevate your living space with best interior design company in Noida & Delhi NCR. Book free consultation today"
+        />
+      </head>
+      <div className={isModalOpen ? "blur-bg" : ""}>
+        <section className="position-relative">
+          <div
+            id="carouselExampleAutoplaying"
+            className="carousel slide"
+            data-bs-ride="carousel"
+          >
+            <div className="carousel-inner">
+              {homepageBannerData?.map((banner, index) => (
+                <div
+                  className={`carousel-item ${index === 0 ? "active" : ""}`}
+                  key={index}
+                >
+                  <img
+                    src={banner?.banner_image ?? "/images/home-banner-1.png"}
+                    className="d-block carousel_img"
+                    alt="carousel1"
+                  />
+                  <div className="pt-0 carousel-caption d-md-block">
+                    <img
+                      src={banner?.top_icon ?? "/images/banner-icon.png"}
+                      width={90}
+                      alt="cc"
+                    />
+                    <h6 className="pb-0 mb-0 fw-lighter fs-3 home_subhead">
+                      {banner?.top_slogan}
+                    </h6>
+                    <div className="d-lg-flex">
+                      <div>
+                        <h3 className="letheading home_banner_heading">
+                          {banner?.title ?? "Perfect Home"}
+                        </h3>
+                        <div className="font_stylish_home">
+                          {banner?.sub_title}
+                        </div>
+                      </div>
+                      <div className="ps-lg-5">
+                        <div className="my-4 my-lg-5"></div>
+                        <div>
+                          <a
+                            href="contact"
+                            className="text-black home_btn bg-light fw-bold"
+                          >
+                            Let&apos;s Connect{" "}
+                            <MdKeyboardArrowRight className="fs-3" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button
+              className="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselExampleAutoplaying"
+              data-bs-slide="prev"
+            >
+              <span
+                className="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span className="visually-hidden">Previous</span>
+            </button>
+            <button
+              className="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselExampleAutoplaying"
+              data-bs-slide="next"
+            >
+              <span
+                className="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span className="visually-hidden">Next</span>
+            </button>
+          </div>
+
+          <div className="rotate_div container-fluid">
+            <div className="sssss ms-auto me-0">
+              <a href="/contact" className="know_moress">
+                Enquiry Now
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section className="my-5 about_wrapper">
+          <RowImage
+            imageColLg="6"
+            imageColXl="6"
+            imageColMd="6"
+            imageCol="12"
+            ImgAbout={"/images/new_hc_logo.png"}
+            ImgAboutClass={"aboout_img object-fit-contain w-100"}
+            imgAlt="About"
+            titleHeading="About"
+            subHeading={"High Creation"}
+            subHeadingClass="font_stylish ps-3"
+            description="HC Interior is a leading interior design company focused on crafting personalized,
+functional spaces for homes and businesses. With a blend of creativity and expertise,
+the team delivers designs tailored to individual tastes, ensuring comfort and style. They
+handle a wide variety of projects, including living rooms, bedrooms, kitchens, and
+corporate oBices, with an emphasis on cost-eBective, customized solutions. HC
+Interior’s commitment to quality and detail ensures that each space is both beautiful
+and practical, oBering free consultations, a one-year maintenance plan, and long-term
+warranties."
+            textAboutBtn="READ MORE"
+            btnLink="/about-us"
+            textAboutBtnCLass="read_morebtn"
+          />
+        </section>
+
+        <div className="my-5 oofer_card">
+          <div className="container">
+            <div className="mx-0 row g-4">
+              <h2 className="pb-3 font_about">
+                <span className="font_stylish">Explore</span> What we Offer
+              </h2>
+              <div className="col-lg-3 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/explore_offer_img1.webp"}
+                  imgAlt={"room"}
+                  imgClass={"offerimg"}
+                  titleCard={"Design & Planning"}
+                  descriptionCard={
+                    "We collaborate with you to bring your vision to life, ensuring tailored solutions that fit your needs"
+                  }
+                  buttonTextCard={"Know More"}
+                  linkCard={"/design-idea"}
+                />
+              </div>
+              <div className="col-lg-3 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/explore_offer_img2.webp"}
+                  imgAlt={"room"}
+                  imgClass={"offerimg"}
+                  titleCard={"Custom & Solution"}
+                  descriptionCard={
+                    "Our team works to craft unique and personalized designs, meeting both style and functionality."
+                  }
+                  buttonTextCard={"Know More"}
+                  linkCard={"/design-idea"}
+                />
+              </div>
+              <div className="col-lg-3 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/explore_offer_img3.webp"}
+                  imgAlt={"room"}
+                  imgClass={"offerimg"}
+                  titleCard={"Furniture & Decor"}
+                  descriptionCard={
+                    "We provide a curated selection of furniture and decor items that perfectly complement your space. "
+                  }
+                  buttonTextCard={"Know More"}
+                  linkCard={"/design-idea"}
+                />
+              </div>
+              <div className="col-lg-3 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/explore_offer_img4.webp"}
+                  imgAlt={"room"}
+                  imgClass={"offerimg"}
+                  titleCard={"Kitchen"}
+                  descriptionCard={
+                    "Our expert designs focus on creating practical, stylish kitchens suited to way your lifestyle. "
+                  }
+                  buttonTextCard={"Know More"}
+                  linkCard={"/design-idea"}
+                />
+              </div>
+
+              <div className="mt-5 text-end">
+                <a href="/design-idea" className="pe-2 know_more fs-6">
+                  View More <MdKeyboardArrowRight className="fs-4" />{" "}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="way_wework">
+          <div className="container">
+            <h3 className="text-center font_about">
+              The Way <span className="font_stylish">We Work</span>
+            </h3>
+            <div className="mx-0 row justify-content-center g-lg-0">
+              <div className="col-lg-2 col-md-3 col-6 pe-0">
+                <div className="box1">
+                  <h3 className="box_heading">01</h3>
+                </div>
+              </div>
+              <div className="col-lg-2 col-md-3 col-6 ps-0">
+                <div className="box2">
+                  <div className="px-3 px-lg-4 py-4">
+                    <img src="/images/wework_icon1.png" width={60} alt="" />
+                    <h4 className="py-2 text-white"> Initial Concept:</h4>
+                    <p className="box_para">
+                      Your dream interior begins a vision Mision.
+                    </p>
+                    <div className="text-lg-center">
+                      <a className="know_mores" href="/how-its-works/">
+                        Know More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-2 col-md-3 col-6 ps-lg-3 pe-0">
+                <div className="box_2">
+                  <h3 className="box_heading">02</h3>
+                </div>
+              </div>
+              <div className="col-lg-2 col-md-3 col-6 ps-0">
+                <div className="box2_data">
+                  <div className="px-3 px-lg-4 py-4">
+                    <img src="/images/wework_icon2.png" width={60} alt="" />
+                    <h4 className="py-2 text-white">Creative Blueprint:</h4>
+                    <p className="box_para">
+                      Every design starts with a unique concept.
+                    </p>
+                    <div className="text-lg-center">
+                      <a className="know_mores" href="/how-its-works/">
+                        Know More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-2 col-md-3 col-6 pe-0 ps-lg-3">
+                <div className="box_3">
+                  <h3 className="box_heading">03</h3>
+                </div>
+              </div>
+              <div className="col-lg-2 col-md-3 col-6 ps-0">
+                <div className="box3_data">
+                  <div className="px-3 px-lg-4 py-4">
+                    <img src="/images/wework_icon3.png" width={60} alt="" />
+                    <h4 className="py-2 text-white">Design Strategy:</h4>
+                    <p className="box_para">
+                      Your dreams&apos; interiors originate with an idea.
+                    </p>
+                    <div className="text-lg-center">
+                      <a className="know_mores" href="/how-its-works/">
+                        Know More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-2 col-md-3 col-6 pe-0 ps-lg-3 mt-lg-3">
+                <div className="box4 box_3">
+                  <h3 className="box_heading">04</h3>
+                </div>
+              </div>
+              <div className="col-lg-2 col-md-3 col-6 ps-0 mt-lg-3">
+                <div className="box4_data">
+                  <div className="px-3 px-lg-4 py-4">
+                    <img src="/images/wework_icon4.png" width={60} alt="" />
+                    <h4 className="py-2 text-white">Plan Progress:</h4>
+                    <p className="box_para">
+                      An idea becomes your desired design Ideas.
+                    </p>
+                    <div className="text-lg-center">
+                      <a className="know_mores" href="/how-its-works/">
+                        Know More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-2 col-md-3 col-6 pe-0 ps-lg-3 mt-lg-3">
+                <div className="box5 box_3">
+                  <h3 className="box_heading">05</h3>
+                </div>
+              </div>
+              <div className="col-lg-2 col-md-3 col-6 ps-0 mt-lg-3">
+                <div className="box5_data">
+                  <div className="px-3 px-lg-4 py-4">
+                    <img src="/images/wework_icon5.png" width={60} alt="" />
+                    <h4 className="py-2 text-white">Customized Planning:</h4>
+                    <p className="box_para">
+                      It all starts with a tailored concept space.
+                    </p>
+                    <div className="text-lg-center">
+                      <a className="know_mores" href="/how-its-works/">
+                        Know More
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="container my-5 video">
+          <div className="row mx-0">
+            <h3 className="pb-2 text-center">
+              <span className="font_stylish">Meet Us</span>
+            </h3>
+            <p className="pb-4 text-center">
+              Let us know more about each other. We can meet over a cup of
+              coffee or even online too. We’d like to know what you ’re looking
+              for .
+            </p>
+            <div className="">
+              {/* <iframe
+              width="100%"
+              height="480"
+              className="map"
+              src="https://www.youtube.com/embed/REdh8A490Co"
+              title="DESIGN YOUR DREAM HOME INTERIOR – TURNING LUXURY INTERIOR DESIGN SPACES"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            ></iframe> */}
+              <div class="col-lg-12 col-md-6 col-12">
+                {/* <VideoBox
+                videoUrl="https://www.youtube.com/embed/REdh8A490Co" // Replace with your video URL
+                imageUrl="/images/video-bg-home.png"
+              /> */}
+                <VideoCardHome
+                  videoUrl="https://www.youtube.com/embed/REdh8A490Co" // Replace with your video URL
+                  imageUrl="/images/video-bg-home.png"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-5 my-5 designidea">
+          <div className="container">
+            <div className="mx-0 row ">
+              <h2 className="pb-5 text-center font_about">
+                Design Idea for
+                <span className="font_stylish">Every Space</span>
+              </h2>
+              <div className="mb-5 col-lg-6 col-md-6 col-12 mb-lg-0">
+                <RoomOfice
+                  cardRoomOffice={"card card_room border-0"}
+                  badge_circle="badge_circle"
+                  arrowIcon="images/arrow_icon.png"
+                  altArrow="arrow"
+                  width="80"
+                  imageRoom_Office="images/residential_img.webp"
+                  roomImg="residential_imgs"
+                  altImage="Luxury Spaces"
+                  cardBody="card_body room_card_body"
+                  cardTitle="Residential Space "
+                  cardText="The interior design of
+your dream begins with
+a concept."
+                  btnText="Know More "
+                  btnLink="/residential-projects"
+                  btnClass={"btn_knowmore"}
+                />
+              </div>
+              <div className="col-lg-6 col-md-6 col-12 mt-4 mt-lg-0">
+                <RoomOfice
+                  cardRoomOffice={"card card_room border-0"}
+                  badge_circle="badge_circleblack"
+                  arrowIcon="images/arrow_icon.png"
+                  altArrow="arrow"
+                  width="80"
+                  imageRoom_Office="images/office_img.webp"
+                  roomImg="residential_imgs"
+                  altImage="room"
+                  cardBody="card_body office_card_body"
+                  cardTitle="Luxury Spaces"
+                  cardText="The interior design of
+your dream begins with
+a concept."
+                  btnText="Know More "
+                  btnLink="/luxury-projects"
+                  btnClass={"btn_knowmoreblack"}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section className="my-5">
+          <div className="container">
+            <div className="mx-0 row position-relative">
+              <span className="font_stylish ss ms-lg-5">
+                Ready ToGo Designs
+              </span>
+              <h3 className="text-center font_about with_heading w-auto">
+                with Our Exclusive Design Choices
+              </h3>
+            </div>
+            <SliderCard />
+          </div>
+        </section>
+
+        <div className="my-5 bgsectionroom">
+          <div className="container ">
+            <div className="row position-relative mx-0">
+              <span className="pb-0 mb-0 font_stylish d-grid ms-lg-5 designer">
+                Designer&apos;s Choice:
+              </span>
+
+              <h3 className="pb-4 w-auto font_about excluisive_home_heading">
+                Exclusive Design Specials
+              </h3>
+            </div>
+            <div className="mt-4 row g-4 mx-0">
+              <div className="col-lg-5 col-md-6 col-12">
+                <BgImageCard
+                  cardLinkTag="/gallery-inner"
+                  designerCardBgDiv={"designercard designercardimg1"}
+                  titleBgImage={"Black Beauty"}
+                  descriptionBg={"Designed By Ranveer Singh "}
+                  // ratingBg={"4.73(130)"}
+                  // buttonShareBg={<IoIosShareAlt className="text-white fs-4" />}
+                  // buttonCommentBg={<FaComments className="text-white fs-4" />}
+                />
+              </div>
+              <div className="col-lg-7 col-md-6 col-12">
+                <BgImageCard
+                  cardLinkTag="/gallery-inner"
+                  designerCardBgDiv={"designercard designercardimg2"}
+                  titleBgImage={"Natural"}
+                  descriptionBg={"Designed By Ranveer Singh "}
+                  // ratingBg={"4.73(130)"}
+                  // buttonShareBg={<IoIosShareAlt className="text-white fs-4" />}
+                  // buttonCommentBg={<FaComments className="text-white fs-4" />}
+                />
+              </div>
+              <div className="col-lg-7 col-md-6 col-12">
+                <BgImageCard
+                  cardLinkTag="/gallery-inner"
+                  designerCardBgDiv={"designercard designercardimg3"}
+                  titleBgImage={"Pink Floyed"}
+                  descriptionBg={"Designed By Ranveer Singh "}
+                  // ratingBg={"4.73(130)"}
+                  // buttonShareBg={<IoIosShareAlt className="text-white fs-4" />}
+                  // buttonCommentBg={<FaComments className="text-white fs-4" />}
+                />
+              </div>
+              <div className="col-lg-5 col-md-6 col-12">
+                <BgImageCard
+                  cardLinkTag="/gallery-inner"
+                  designerCardBgDiv={"designercard designercardimg4"}
+                  titleBgImage={"Sage Green"}
+                  descriptionBg={"Designed By Ranveer Singh "}
+                  // ratingBg={"4.73(130)"}
+                  // buttonShareBg={<IoIosShareAlt className="text-white fs-4" />}
+                  // buttonCommentBg={<FaComments className="text-white fs-4" />}
+                />
+              </div>
+              <div className="col-lg-12 ">
+                <BgImageCard
+                  cardLinkTag="/gallery-inner"
+                  designerCardBgDiv={"designercard designercardimg5"}
+                  titleBgImage={"Vintage Blue"}
+                  descriptionBg={"Designed By Ranveer Singh "}
+                  // ratingBg={"4.73(130)"}
+                  // buttonShareBg={<IoIosShareAlt className="text-white fs-4" />}
+                  // buttonCommentBg={<FaComments className="text-white fs-4" />}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="my-5 celebereting">
+          <div className="container">
+            <div className="mx-0 row">
+              <h3 className="text-center">
+                <span className="font_stylish">Celebrating Excellence:</span>
+              </h3>
+              <CounterRow
+                ImgCounter="/images/CelebratingExcellenc.jpeg"
+                ImgCounterClass="w-100"
+                imgAltCounter="CelebratingExcellenc"
+                divClassCounter="text-end"
+                counterStart="0"
+                counterEnd="2200"
+                counterDuration="5"
+                counterSuffix=""
+                counterStart2="0"
+                counterEnd2="2200"
+                counterDuration2="5"
+                counterSuffix2=""
+                counterStart3="0"
+                counterEnd3="200"
+                counterDuration3="5"
+                counterSuffix3=""
+                counterStart4="0"
+                counterEnd4="8"
+                counterDuration4="5"
+                er=""
+                descriptionCounter="We believe that every home should be a reflection of its owner's unique taste and personality. Our passion for interior design goes beyond mere aesthetics; it’s about creating spaces that inspire, elevate, and enhance everyday living. Whether you're envisioning a cozy retreat, a modern sanctuary, or an elegant entertaining space, our team specializes in transforming ideas into reality with attention to detail, quality, and innovative design.
+             &nbsp;  From concept to completion, we pride ourselves on delivering excellence through personalized, curated designs that suit your lifestyle. Explore our gallery for a glimpse into our exceptional portfolio, and let us guide you in bringing your vision to life. At Celebrating Excellence, it’s not just about design – it’s about celebrating the art of making your home an extraordinary place."
+                textAboutBtnCounter="View Our Projects"
+                btnLink="/residential-projects"
+                textAboutBtnCLass="know_more me-lg-4"
+                textAboutBtnCounter2="All Services"
+                textAboutBtnCLass2="btn_services"
+                btnLink2="/services"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="savedesign">
+          <div className="container">
+            <div className="mx-0 row g-4 justify-content-center ">
+              <div className="mb-5 position-relative">
+                <div>
+                  <h3 className="mb-0">
+                    <span className="font_stylish">Lets Save time</span>
+                  </h3>
+                </div>
+                <h3 className="pb-0 pb-lg-4 font_about mt-0 designs_lets">
+                  Choose our Existing Exclusive designs.
+                </h3>
+              </div>
+              <div className="col-lg-4 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/Bhk/1bhk.png"}
+                  imgAlt={"room"}
+                  imgClass={"bhkimg"}
+                  titleCard={"1 BHK"}
+                  titleClass="text-center mb-0 pb-0"
+                />
+              </div>
+
+              <div className="col-lg-4 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/Bhk/2bh.png"}
+                  imgAlt={"room"}
+                  imgClass={"bhkimg"}
+                  titleCard={"2 BHK"}
+                  titleClass="text-center mb-0 pb-0"
+                />
+              </div>
+              <div className="col-lg-4 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/Bhk/3bhk.webp"}
+                  imgAlt={"room"}
+                  imgClass={"bhkimg"}
+                  titleCard={"3 BHK"}
+                  titleClass="text-center mb-0 pb-0"
+                />
+              </div>
+              <div className="col-lg-4 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/Bhk/4bh.webp"}
+                  imgAlt={"room"}
+                  imgClass={"bhkimg"}
+                  titleCard={"4 BHK"}
+                  titleClass="text-center mb-0 pb-0"
+                />
+              </div>
+              <div className="col-lg-4 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/Bhk/vill.webp"}
+                  imgAlt={"room"}
+                  imgClass={"bhkimg"}
+                  titleCard={"Villa"}
+                  titleClass="text-center mb-0 pb-0"
+                />
+              </div>
+              <div className="col-lg-4 col-md-6 col-12">
+                <Card
+                  cardNameALl="cardoffer"
+                  imgSrc={"/images/Bhk/farmhous.webp"}
+                  imgAlt={"room"}
+                  imgClass={"bhkimg"}
+                  titleCard={"Farm House"}
+                  titleClass="text-center mb-0 pb-0"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section className="mb-5 lettransformbg">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-2 col-md-3 col-3">
+                <img src="/images\home_Icon.png" width={150} alt="home-icon" />
+              </div>
+              <div className="col-lg-10 col-md-9 col-9">
+                <div className="pt-3 text-end">
+                  <h3 className="text-white letheading">
+                    Let&apos;s transform your vision
+                  </h3>
+                  <p className="text-white">into interior masterpieces</p>
+                  <a href="/services/" className="know_more">
+                    Know More
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="my-5 blogs_wrapper">
+          <div className="container">
+            <div className="row g-2 g-lg-4 justify-content-center mx-1">
+              <h3 className="pb-2 pb-lg-4 text-center font_about">Blogs</h3>
+              {/* <div className="col-lg-4 col-md-6 col-12">
+                <Blogs
+                  blogCard="blog_cards"
+                  imgSrcBlog="/images/Blog/blo_img1.webp"
+                  blogImglink="/blog-detail"
+                  blogImgALt="blog1"
+                  blogClassImg={"card-img-top rounded-4 object-fit-cover"}
+                  blogdate="published on April 21, 2024"
+                  blogTitle="Interior decorator charge for the project in Noida 2024"
+                  blogDescription="Interior decorator charge for the project in Noida Finding the best interior designer in NOIDA."
+                  buttonBlog="Continue Reading"
+                  blogBtnHref="/blog-detail"
+                />
+              </div>
+              <div className="col-lg-4 col-md-6 col-12">
+                <Blogs
+                  blogCard="blog_cards"
+                  imgSrcBlog="/images/Blog/10Blog.jpg"
+                  blogImglink="/blog-detail"
+                  blogImgALt="blog2"
+                  blogClassImg={"card-img-top rounded-4 object-fit-cover"}
+                  blogdate="published on April 21, 2024"
+                  blogTitle="10 Types Of Sofa Design For Modern Home Interior"
+                  blogDescription="A sofa set is one of the most essential pieces of furniture that you can find in Indian homes."
+                  buttonBlog="Continue Reading"
+                  blogBtnHref="/blog-detail"
+                />
+              </div>
+              <div className="col-lg-4 col-md-6 col-12">
+                <Blogs
+                  blogCard="blog_cards"
+                  imgSrcBlog="/images/Blog/blog_del.webp"
+                  blogImglink="/blog-detail"
+                  blogImgALt="blog2"
+                  blogClassImg={"card-img-top rounded-4 object-fit-cover"}
+                  blogdate="published on April 21, 2024"
+                  blogTitle="How To Decorate Your Home for Diwali Under ₹5000!"
+                  blogDescription="How to Decorate Your Home for Diwali Under ₹5000!, Diwali festival lights is an exciting time to refresh your home."
+                  buttonBlog="Continue Reading"
+                  blogBtnHref="/blog-detail"
+                />
+              </div> */}
+
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
+
+              {blogs.map((blog, index) => (
+                <div key={index} className="col-lg-4 col-md-6 col-12">
+                  <Blogs
+                    blogCard="blog_cards"
+                    imgSrcBlog={blog?.image || "/images/default.jpg"} // Default image if none is provided
+                    blogImglink={`/${
+                      blog?.seo_content?.slug || `blog-detail?id=${blog?.id}`
+                    }`} // Link to the full blog
+                    blogImgALt={blog?.title || "Blog Image"}
+                    blogClassImg="card-img-top rounded-4 object-fit-cover"
+                    blogdate={
+                      blog?.published_on
+                        ? formatDate(blog.published_on)
+                        : "Date not available"
+                    } // Handle missing date
+                    blogTitle={blog?.title || "Untitled Blog"}
+                    blogDescription={
+                      blog?.description || "No description available"
+                    }
+                    buttonBlog="Continue Reading"
+                    blogBtnHref={`/${
+                      blog?.seo_content?.slug || `blog-detail?id=${blog?.id}`
+                    }`} // Link to the detailed blog page
+                    writer_name={blog?.writer_name || "High Creation"}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <hr />
+        <section className="my-5">
+          <h3 className="text-center font_stylish">What People Say</h3>
+          <VideoTestimonialSlider />
+        </section>
+        <hr />
+        <section className="container my-5 iconbox">
+          <div className="row justify-content-center mx-0">
+            <div className="col-lg-11">
+              <div className="row justify-content-center align-items-center g-4">
+                <div className="col-12 col-md-6 col-lg-4">
+                  <IconBox
+                    iconUrl="/images/icon_check.png"
+                    iconAlt="checkicon"
+                    iconWidth="70"
+                    iconDescription="Because every corner hold a unique design potentiBecause every
+                corner hold a unique design potential"
+                    descr="descriptionClass"
+                  />
+                </div>
+                <div className="col-12 col-md-6 col-lg-4">
+                  <IconBox
+                    iconUrl="/images/icon_mobile.png"
+                    iconAlt="mobileicon"
+                    iconWidth="70"
+                    iconDescription="Because every corner hold a unique design potentiBecause every
+                corner hold a unique design potential"
+                    descr="descriptionClass"
+                  />
+                </div>
+                <div className="col-12 col-md-6 col-lg-4">
+                  <IconBox
+                    iconUrl="/images/icon_play.png"
+                    iconAlt="play"
+                    iconWidth="70"
+                    iconDescription="Because every corner hold a unique design potentiBecause every
+                corner hold a unique design potential"
+                    descr="descriptionClass"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <hr />
+        <div className="my-5 form">
+          <div className="container">
+            <div className="row position-relative card_form_row mx-0">
+              <div className="col-lg-7 col-md-5 col-12">
+                <div className="rounded map pe-lg-5">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.086690960129!2d77.3736059745727!3d28.62716378432606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce935de2f5987%3A0x4333ffee08ad5270!2sHigh%20Creation%20Interior%20-%20Best%20Home%20And%20Office%20Interior%20Designer%20In%20Noida!5e0!3m2!1sen!2sin!4v1727021310878!5m2!1sen!2sin"
+                    width="100%"
+                    height="525"
+                    className="map"
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
+              </div>
+              <div className="col-lg-5 col-md-7 col-12 mt-4 mt-lg-0" id="form">
+                <div className="contact_form">
+                  <h4 className="mb-3 text-black form_heading">
+                    Reach Out With Confidence
+                  </h4>
+                  <form className="row" onSubmit={handleSubmit}>
+                    {submissionMessage && (
+                      <div className="text-center alert alert-success alert-dismissible fade show">
+                        {submissionMessage}
+                      </div>
+                    )}
+                    {submissionError && (
+                      <div className="text-center alert alert-danger alert-dismissible fade show">
+                        {submissionError}
+                      </div>
+                    )}
+                    <div className="mb-3 col-md-6">
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={formData.fullName}
+                        id="fullName"
+                        name="fullName"
+                        placeholder="Full Name"
+                        required
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="mb-3 col-md-6">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="contact"
+                        name="contact"
+                        value={formData.contact}
+                        placeholder="Contact No."
+                        required
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="mb-3 col-md-12">
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        placeholder="Email"
+                        required
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="mb-3 col-md-12">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="place"
+                        name="place"
+                        value={formData.place}
+                        onChange={handleInputChange}
+                        placeholder="Place"
+                        required
+                      />
+                    </div>
+                    <div className="mb-3 col-md-12">
+                      <textarea
+                        className="form-control"
+                        id="query"
+                        name="query"
+                        value={formData.query}
+                        placeholder="Query"
+                        rows="3"
+                        onChange={handleInputChange}
+                      ></textarea>
+                    </div>
+                    <div className="col-12">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value={formData.termsAndConditions}
+                          id="termsAndConditions"
+                          name="terms_and_conditions"
+                          required
+                          onChange={handleCheckboxChange}
+                        />
+                        <label
+                          className="text-black form-check-label"
+                          htmlFor="termsAndConditions"
+                        >
+                          Accept Terms & condition
+                        </label>
+                        <div className="text-black invalid-feedback">
+                          You must agree before submitting.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="m-auto mt-3 col-12 d-flex justify-content-center">
+                      <button className="px-5 btn know_more" type="submit">
+                        SEND
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <ContactUsPopUp onModalStateChange={handleModalStateChange} />
+      </div>
+    </>
+  );
+};
+
+export default Home;
