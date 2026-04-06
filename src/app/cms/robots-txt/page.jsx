@@ -81,7 +81,7 @@ Sitemap: https://hcinterior.in/sitemap.xml`;
                 <h1 className="h3 mb-1 text-gray-800 d-flex align-items-center gap-2">
                   <FaRobot className="text-primary" /> Robots.txt Editor
                 </h1>
-                <p className="text-muted mb-0 small">Manage your site's search engine crawling rules.</p>
+                <p className="text-muted mb-0 small">Manage your site&apos;s search engine crawling rules.</p>
               </div>
               
               <button

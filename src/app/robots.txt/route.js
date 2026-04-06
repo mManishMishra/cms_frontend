@@ -4,11 +4,13 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:9
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const fetchCache = 'force-no-store';
 
-export async function GET() {
+export async function GET(request) {
   try {
     const res = await fetch(`${API_BASE_URL}/robots-txt`, {
       cache: 'no-store',
+      next: { revalidate: 0 },
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Pragma': 'no-cache'
@@ -20,7 +22,7 @@ export async function GET() {
       return new NextResponse(data.content, {
         headers: {
           'Content-Type': 'text/plain',
-          'Cache-Control': 'no-cache, no-store, must-revalidate'
+          'Cache-Control': 'public, s-maxage=0, max-age=0, must-revalidate, no-cache, no-store'
         },
       });
     }
