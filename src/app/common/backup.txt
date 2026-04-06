@@ -1,0 +1,617 @@
+import Style from "../../../public/css/style.module.css";
+import { IoIosArrowUp } from "react-icons/io";
+
+const Hero = () => {
+  return (
+    <div>
+      <section className="about_wrapper my-5">
+        <div className="container">
+          <div className="row g-5">
+            <div className="col-lg-6">
+              <img
+                src="images/room.jpg"
+                className="w-100 object-fit-cover  rounded-3"
+                height={350}
+                alt=""
+              />
+            </div>
+            <div className="col-lg-6">
+              <h2>
+                About <span>High Creation</span>
+              </h2>
+              <p>
+                is a premier interior design company dedicated to transforming
+                spaces into beautiful, functional environments. Our team of
+                talented designers combines creativity and expertise to deliver
+                personalized design solutions that reflect our clients' unique
+                tastes and lifestyles. Whether it's a residential or commercial
+                project, we focus on every detail to ensure exceptional quality
+                and timeless elegance. At , we believe in creating spaces that
+                inspire and enhance the everyday lives of those who inhabit
+                them.
+              </p>
+              <div className="mt-3">
+                <button type="button" className="btn btn-danger">
+                  READ MORE
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className="my-5 oofer_card">
+        <div className="container">
+          <div className="row">
+            <h2 className="pb-3">
+              <span>Explore</span> What we Offer
+            </h2>
+            <div className="col-lg-3">
+              <div className={[Style.cardoffer, ]}>
+                <img
+                  src="/images/office.jpg"
+                  className={Style.offerimg}
+                  alt="img"
+                />
+                <div className="card-body px-3 pt-3">
+                  <h5 className="card-title pb-2">Design & Panning</h5>
+                  <p className="card-text pb-3">
+                    We will help you to get the result you dreamed of.
+                  </p>
+                  <a href="#" className={Style.know_more}>
+                    Know More
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-3">
+              <div className={Style.cardoffer}>
+                <img
+                  src="/images/office.jpg"
+                  className={Style.offerimg}
+                  alt="img"
+                />
+                <div className="card-body px-3 pt-3">
+                  <h5 className="card-title pb-2">Design & Panning</h5>
+                  <p className="card-text pb-3">
+                    We will help you to get the result you dreamed of.
+                  </p>
+                  <a href="#" className={Style.know_more}>
+                    Know More
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-3">
+              <div className={Style.cardoffer}>
+                <img
+                  src="/images/office.jpg"
+                  className={Style.offerimg}
+                  alt="img"
+                />
+                <div className="card-body px-3 pt-3">
+                  <h5 className="card-title pb-2">Design & Panning</h5>
+                  <p className="card-text pb-3">
+                    We will help you to get the result you dreamed of.
+                  </p>
+                  <a href="#" className={Style.know_more}>
+                    Know More
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-3">
+              <div className={Style.cardoffer}>
+                <img
+                  src="/images/office.jpg"
+                  className={Style.offerimg}
+                  alt="img"
+                />
+                <div className="card-body px-3 pt-3">
+                  <h5 className="card-title pb-2">Design & Panning</h5>
+                  <p className="card-text pb-3">
+                    We will help you to get the result you dreamed of.
+                  </p>
+                  <a href="#" className={Style.know_more}>
+                    Know More
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={Style.way_wework}>
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-2">
+              <div className={Style.box1}>
+                <h3 className={Style.box_heading}>01</h3>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className={Style.box2}>
+                <div className="py-4 px-4">
+                  <img src="/images/men-group.svg" width={60} alt="" />
+                  <h4 className="text-white py-2">Planning</h4>
+                  <p className={Style.box_para}>
+                    The Interior Design of your dreams begin with a concept.
+                  </p>
+                  <button className={Style.know_mores} href="">
+                    Know More
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className={Style.box_2}>
+                <h3 className={Style.box_heading}>02</h3>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className={Style.box2_data}>
+                <div className="py-4 px-4">
+                  <img src="/images/men-group.svg" width={60} alt="" />
+                  <h4 className="text-white py-2">Planning</h4>
+                  <p className={Style.box_para}>
+                    The Interior Design of your dreams begin with a concept.
+                  </p>
+                  <button className={Style.know_mores} href="">
+                    Know More
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className={Style.box_3}>
+                <h3 className={Style.box_heading}>03</h3>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className={Style.box3_data}>
+                <div className="py-4 px-4">
+                  <img src="/images/men-group.svg" width={60} alt="" />
+                  <h4 className="text-white py-2">Planning</h4>
+                  <p className={Style.box_para}>
+                    The Interior Design of your dreams begin with a concept.
+                  </p>
+                  <button className={Style.know_mores} href="">
+                    Know More
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className={Style.box1}>
+                <h3 className={Style.box_heading}>04</h3>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className={Style.box2}>
+                <div className="py-4 px-4">
+                  <img src="/images/men-group.svg" width={60} alt="" />
+                  <h4 className="text-white py-2">Planning</h4>
+                  <p className={Style.box_para}>
+                    The Interior Design of your dreams begin with a concept.
+                  </p>
+                  <button className={Style.know_mores} href="">
+                    Know More
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className={Style.box1}>
+                <h3 className={Style.box_heading}>05</h3>
+              </div>
+            </div>
+            <div className="col-lg-2">
+              <div className={Style.box2}>
+                <div className="py-4 px-4">
+                  <img src="/images/men-group.svg" width={60} alt="" />
+                  <h4 className="text-white py-2">Planning</h4>
+                  <p className={Style.box_para}>
+                    The Interior Design of your dreams begin with a concept.
+                  </p>
+                  <button className={Style.know_mores} href="">
+                    Know More
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="video container my-5">
+        <h3 className="pb-2 text-center">
+          <span>Meet Us</span>
+        </h3>
+        <p className="pb-4 text-center">
+          Let us know more about each other. We can meet over a cup of coffee or
+          even online too. We’d like to know what you ’re looking for .
+        </p>
+        <div className="">
+          <iframe
+            width="100%"
+            height="480"
+            src="https://www.youtube.com/embed/OzUkvzyBttA"
+            title="Simple &amp; Elegent 3bhk Home Tour @ Dighi | Best Interior Designer in Pune | Kams Designer Zone"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+      <div className="my-5 pt-5">
+        <div className="container">
+          <div className="row">
+            <h2 className="pb-5 text-center">
+              Design Idea for
+              <span>Every Space</span>
+            </h2>
+            <div className="col-lg-6">
+              <div className="card position-relative">
+                <span className={Style.badge_circle}>
+                  <IoIosArrowUp className={Style.downarrow} />
+                </span>
+                <img
+                  src="/images/room.jpg"
+                  className="w-100"
+                  height={370}
+                  alt="..."
+                />
+                <div className="card-body bg-warning-subtle">
+                  <h5 className="card-title">Residential Space</h5>
+                  <p className="card-text">
+                    The interior design of <br />
+                    your dream begins with <br />
+                    a concept. <br />
+                  </p>
+                  <div className="text-end">
+                    <button className="btn btn-danger ">Know More</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6">
+              <div className="card position-relative">
+                <span className={Style.badge_circleblack}>
+                  <IoIosArrowUp className={Style.downarrow} />
+                </span>
+                <img
+                  src="/images/office.jpg"
+                  className="w-100"
+                  height={370}
+                  alt="..."
+                />
+                <div className="card-body bg-dark">
+                  <h5 className="card-title text-white">Office Space</h5>
+                  <p className="card-text text-white">
+                    The interior design of <br />
+                    your dream begins with <br />
+                    a concept. <br />
+                  </p>
+                  <div className="text-end">
+                    <button className="btn btn-danger">Know More</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="celebereting my-5">
+        <div className="container">
+          <div className="row">
+            <h3 className="text-center pb-3">
+              <span>Celebrating Excellence:</span>
+            </h3>
+            <div className="col-lg-6">
+              <img
+                src="/images/room.jpg"
+                className="w-100 object-fit-contain"
+                height={400}
+                alt=""
+              />
+            </div>
+            <div className="col-lg-6">
+              <h3 className="text-end">Our Projects Journey</h3>
+              <p className="text-end pb-3">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book. It has
+                survived not only five centuries, but also the leap into
+                electronic typesetting, remaining essentially unchanged. It was
+                popularised in the 1960s with the release of Letraset sheets
+                containing Lorem Ipsum passages, and more recently with desktop
+                publishing software like Aldus PageMaker including versions of
+                Lorem Ipsum.
+              </p>
+              <div className="text-end mt-3">
+                <button className="btn btn-danger me-4" href="">
+                  View Our Products
+                </button>
+                <button className="btn btn-dark" href="">
+                  All Services
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={Style.savedesign}>
+        <div className="container">
+          <div className="row ">
+            <h3>
+              <span>Lets Save time</span>
+            </h3>
+            <h3 className="pb-5">Choose our Existing Exclusive designs.</h3>
+
+            <div className="col-lg-4">
+              <div className={Style.cardbhk}>
+                <img
+                  src="https://img.freepik.com/free-photo/luxury-bedroom-suite-resort-high-rise-hotel-with-working-table_105762-1783.jpg?t=st=1726747375~exp=1726750975~hmac=e05244b51d6600754d9e266fbc4fc273455f9ab8380e296ab2f3b0cd5c8c259c&w=740"
+                  className="card-img-top rounded-4 object-fit-cover"
+                  height={320}
+                  alt="..."
+                />
+                <div className="card-body">
+                  <h5
+                    className="card-title text-center cl
+                  pt-3"
+                  >
+                    1 BHK
+                  </h5>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4">
+              <div className={Style.cardbhk}>
+                <img
+                  src="https://img.freepik.com/free-photo/luxury-bedroom-suite-resort-high-rise-hotel-with-working-table_105762-1783.jpg?t=st=1726747375~exp=1726750975~hmac=e05244b51d6600754d9e266fbc4fc273455f9ab8380e296ab2f3b0cd5c8c259c&w=740"
+                  className="card-img-top rounded-4 object-fit-cover"
+                  height={320}
+                  alt="..."
+                />
+                <div className="card-body">
+                  <h5
+                    className="card-title text-center cl
+                  pt-3"
+                  >
+                    1 BHK
+                  </h5>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4">
+              <div className={Style.cardbhk}>
+                <img
+                  src="https://img.freepik.com/free-photo/luxury-bedroom-suite-resort-high-rise-hotel-with-working-table_105762-1783.jpg?t=st=1726747375~exp=1726750975~hmac=e05244b51d6600754d9e266fbc4fc273455f9ab8380e296ab2f3b0cd5c8c259c&w=740"
+                  className="card-img-top rounded-4 object-fit-cover"
+                  height={320}
+                  alt="..."
+                />
+                <div className="card-body">
+                  <h5
+                    className="card-title text-center cl
+                  pt-3"
+                  >
+                    1 BHK
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="blogs_wrapper my-5">
+        <div className="container">
+          <div className="row">
+            <h3 className="text-center pb-4 font-bold">Blogs</h3>
+            <div className="col-lg-4">
+              <div className={Style.blog_cards}>
+                <img
+                  src="https://img.freepik.com/free-photo/luxury-bedroom-suite-resort-high-rise-hotel-with-working-table_105762-1783.jpg?t=st=1726747375~exp=1726750975~hmac=e05244b51d6600754d9e266fbc4fc273455f9ab8380e296ab2f3b0cd5c8c259c&w=740"
+                  className="card-img-top rounded-4 object-fit-cover"
+                  height={220}
+                  alt="blog1"
+                />
+                <div className="card-body px-3 pt-3">
+                  <span className={Style.blog_span}>
+                    published on April 21, 2024
+                  </span>
+                  <h5 className="blog-title pt-2">
+                    High creation’s Premier Services for Interior Design Tours
+                  </h5>
+                  <p className="blog-text">
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the industry.
+                  </p>
+                  <button href="#" className="btn btn_continue text-danger">
+                    Continue Reading
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4">
+              <div className={Style.blog_cards}>
+                <img
+                  src="https://img.freepik.com/free-photo/luxury-bedroom-suite-resort-high-rise-hotel-with-working-table_105762-1783.jpg?t=st=1726747375~exp=1726750975~hmac=e05244b51d6600754d9e266fbc4fc273455f9ab8380e296ab2f3b0cd5c8c259c&w=740"
+                  className="card-img-top rounded-4 object-fit-cover"
+                  height={220}
+                  alt="blog1"
+                />
+                <div className="card-body px-3 pt-3">
+                  <span className={Style.blog_span}>
+                    published on April 21, 2024
+                  </span>
+                  <h5 className="blog-title pt-2">
+                    High creation’s Premier Services for Interior Design Tours
+                  </h5>
+                  <p className="blog-text">
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the industry.
+                  </p>
+                  <button href="#" className="btn btn_continue text-danger">
+                    Continue Reading
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4">
+              <div className={Style.blog_cards}>
+                <img
+                  src="https://img.freepik.com/free-photo/luxury-bedroom-suite-resort-high-rise-hotel-with-working-table_105762-1783.jpg?t=st=1726747375~exp=1726750975~hmac=e05244b51d6600754d9e266fbc4fc273455f9ab8380e296ab2f3b0cd5c8c259c&w=740"
+                  className="card-img-top rounded-4 object-fit-cover"
+                  height={220}
+                  alt="blog1"
+                />
+                <div className="card-body px-3 pt-3">
+                  <span className={Style.blog_span}>
+                    published on April 21, 2024
+                  </span>
+                  <h5 className="blog-title pt-2">
+                    High creation’s Premier Services for Interior Design Tours
+                  </h5>
+                  <p className="blog-text">
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the industry.
+                  </p>
+                  <button href="#" className="btn btn_continue text-danger">
+                    Continue Reading
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div className="form my-5">
+        <div className="container">
+          <div className="row position-relative card_form_row">
+            <div className="col-lg-7 ">
+              <div className="map pe-5 rounded">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.086690960129!2d77.3736059745727!3d28.62716378432606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce935de2f5987%3A0x4333ffee08ad5270!2sHigh%20Creation%20Interior%20-%20Best%20Home%20And%20Office%20Interior%20Designer%20In%20Noida!5e0!3m2!1sen!2sin!4v1727021310878!5m2!1sen!2sin"
+                  width="100%"
+                  height="500"
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+            </div>
+            <div className="col-lg-5">
+              <div className={Style.contact_form}>
+                <h4 className="text-black form_heading mb-3">
+                  Reach Out With Confidence
+                </h4>
+                <form className="row">
+                  <div className="col-md-6 mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="validationCustom01"
+                      placeholder="*Full Name"
+                      required=""
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="validationCustom02"
+                      placeholder="*Pick Up Location"
+                      required=""
+                    />
+                  </div>
+
+                  <div className="col-md-6 mb-3">
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="validationCustom03"
+                      placeholder="*Email"
+                      required=""
+                    />
+                  </div>
+
+                  <div className="col-md-6 mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="validationCustom05"
+                      placeholder="*Contact No."
+                      required=""
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="validationCustom05"
+                      placeholder="*Check In Date"
+                      onFocus="(this.type='date')"
+                      required=""
+                    />
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="validationCustom05"
+                      placeholder="*Check Out Date"
+                      onFocus="(this.type='date')"
+                      required=""
+                    />
+                  </div>
+                  <div className="col-md-12 mb-3">
+                    <textarea
+                      className="form-control"
+                      id="exampleFormControlTextarea1"
+                      placeholder="Query"
+                      rows="3"
+                    ></textarea>
+                  </div>
+                  <div className="col-12">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="invalidCheck"
+                        required=""
+                      />
+                      <label className="form-check-label" htmlFor="invalidCheck ">
+                        Agree to terms and conditions
+                      </label>
+                      <div className="invalid-feedback">
+                        You must agree before submitting.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 mt-3 d-flex m-auto justify-content-center">
+                    <button className="btn btn-danger" type="submit">
+                      SEND
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
+  );
+};
+
+export default Hero;

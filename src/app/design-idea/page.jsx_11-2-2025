@@ -1,0 +1,210 @@
+"use client";
+import MainLayout from "../layouts/MainLayout";
+import PortfolioCard from "../components/PortfolioCard";
+import BackgroundImageRow from "../components/BackgroundImageRow";
+import { useEffect, useState } from "react";
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
+import api from "@/utils/api";
+
+const Designidea = () => {
+  const [designIdea, setDesignIdea] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [seoData, setSeoData] = useState({});
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchDesignIdea = async () => {
+      try {
+        const response = await api.get("/cms-parent-child/gallery_design");
+        setDesignIdea(response.data);
+      } catch (err) {
+        console.error("Error fetching design idea:", err);
+        setError(
+          err.message ?? "Failed to load design idea. Please try again."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDesignIdea();
+  }, []);
+
+  useEffect(() => {
+    const fetchSeoData = async () => {
+      try {
+        const response = await api.get("/content-manager/slug/design-idea");
+        setSeoData(response.data);
+      } catch (err) {
+        console.error("Error fetching SEO data:", err);
+      }
+    };
+
+    fetchSeoData();
+  }, []);
+
+  return (
+    <div>
+      <head>
+        <title>{seoData?.title ?? "High Creation Interior - Interior Design gallery for your home "}</title>
+        <meta name="title" content={seoData?.metaTitle ?? "High Creation Interior - Interior Design gallery for your home "} />
+        <meta
+          name="description"
+          content={
+            seoData?.metaDescription ??
+            "Explore Interior Design gallery for your home , designed by Top interior designers at High Creation Interior. "
+          }
+        />
+        <meta
+          name="keywords"
+          content={
+            seoData?.metaKeywords ??
+            "design idea, living room interior, living room design, living room decor, modular TV units, wall art, wall designs"
+          }
+        />
+      </head>
+      <MainLayout>
+        <main>
+          <BackgroundImageRow
+            sectionBgImages={"contact_wrapper portfolio"}
+            sectionBgHeading="Design Gallery"
+            secBgHeadingClass="sec_bgheading_lass"
+            sectionBgDescription="Explore a curated selection of premium living room interior
+             designs and décor ideas at High Creation.
+             We offer customizable, functional, and stylish solutions to
+             elevate your living space. From modular TV
+             units to wall art and innovative wall designs, find all the
+             inspiration you need to transform your living
+             room. Start browsing today to discover designs that perfectly
+             reflect your personal style"
+            secBgDesClass="secbgbesclass"
+          />
+
+          {loading ? (
+            <div className="text-center">Loading...</div>
+          ) : error ? (
+            <div className="text-center alert alert-danger">{error}</div>
+          ) : (
+            <section className="container my-5">
+              <div className="row mx-0">
+                <div className="col-lg-7">
+                  <PortfolioCard
+                    cardDetailLink={`/design-idea/gallery?id=${designIdea[0]?.id}`}
+                    portCard={"card_portfolio portfolio_1"}
+                    portfolioImgBg={"portfolioimgall desig_gal_bg1"}
+                    portfolioImg={designIdea[0]?.child_content?.image}
+                    portfolioTitle={designIdea && designIdea[0]?.child_content?.title}
+                    // portfolioDescription="Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, neque!"
+                    // portfolioClassCss="text-white w-75 mb-0 my-2 team_designation"
+                    // firstKey="Style"
+                    // firstValue={designIdea && designIdea[0]?.style}
+                    // secondKey="Room Dimension"
+                    // secondValue={designIdea && designIdea[0]?.room_dimension}
+                  />
+                  <PortfolioCard
+                    cardDetailLink={`/design-idea/gallery?id=${designIdea[1]?.id}`}
+                    portCard={"card_portfolio portfolio_1"}
+                    portfolioImgBg={"portfolioimgall desig_gal_bg2"}
+                    portfolioImg={designIdea[1]?.child_content?.image}
+                    portfolioTitle={designIdea && designIdea[1]?.child_content?.title}
+                    // portfolioDescription="Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, neque!"
+                    // portfolioClassCss="text-white w-75 mb-0 my-2 team_designation"
+                    // firstKey="Style"
+                    // firstValue={designIdea&&designIdea[1]?.style}
+                    // secondKey="Room Dimension"
+                    // secondValue={designIdea&&designIdea[1]?.room_dimension}
+                  />
+                </div>
+                <div className="col-lg-5">
+                  <PortfolioCard
+                    cardDetailLink={`/design-idea/gallery?id=${designIdea[2]?.id}`}
+                    portCard={"card_portfolio portfolio_1"}
+                    portfolioImgBg={"portfolioimgall desig_gal_bg3"}
+                    portfolioImg={designIdea[2]?.child_content?.image}
+                    portfolioTitle={designIdea && designIdea[2]?.child_content?.title}
+                    // portfolioDescription="Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, neque!"
+                    // portfolioClassCss="text-white w-75 mb-0 my-2 team_designation"
+                    // firstKey="Style"
+                    // firstValue={designIdea && designIdea[2]?.style}
+                    // secondKey="Room Dimension"
+                    // secondValue={designIdea && designIdea[2]?.room_dimension}
+                  />
+                </div>
+                <div className="col-lg-12">
+                  <PortfolioCard
+                    cardDetailLink={`/design-idea/gallery?id=${designIdea[3]?.id}`}
+                    portCard={"card_portfolio portfolio_1"}
+                    portfolioImgBg={"portfolioimgall desig_gal_bg4"}
+                    portfolioImg={designIdea[3]?.child_content?.image}
+                    portfolioTitle={designIdea && designIdea[3]?.child_content?.title}
+                    // portfolioDescription="Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, neque!"
+                    // portfolioClassCss="text-white w-75 mb-0 my-2 team_designation"
+                    // firstKey="Style"
+                    // firstValue={designIdea && designIdea[3]?.style}
+                    // secondKey="Room Dimension"
+                    // secondValue={designIdea && designIdea[3]?.room_dimension}
+                  />
+                </div>
+                <div className="col-lg-9">
+                  <PortfolioCard
+                    cardDetailLink={`/design-idea/gallery?id=${designIdea[4]?.id}`}
+                    portCard={"card_portfolio portfolio_1"}
+                    portfolioImgBg={"portfolioimgall desig_gal_bg5"}
+                    portfolioImg={designIdea[4]?.child_content?.image}
+                    portfolioTitle={designIdea && designIdea[4]?.child_content?.title}
+                    // portfolioDescription="Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, neque!"
+                    // portfolioClassCss="text-white w-75 mb-0 my-2 team_designation"
+                    // firstKey="Style"
+                    // firstValue={designIdea && designIdea[4]?.style}
+                    // secondKey="Room Dimension"
+                    // secondValue={designIdea && designIdea[4]?.room_dimension}
+                  />
+                </div>
+                <div className="col-lg-3">
+                  <PortfolioCard
+                    cardDetailLink={`/design-idea/gallery?id=${designIdea[5]?.id}`}
+                    portCard={"card_portfolio portfolio_1"}
+                    portfolioImgBg={"portfolioimgall desig_gal_bg6"}
+                    portfolioImg={designIdea[5]?.child_content?.image}
+                    portfolioTitle={designIdea && designIdea[5]?.child_content?.title}
+                    // portfolioDescription="Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, neque!"
+                    // portfolioClassCss="text-white w-75 mb-0 my-2 team_designation"
+                    // firstKey="Style"
+                    // firstValue={designIdea && designIdea[5]?.style}
+                    // secondKey="Room Dimension"
+                    // secondValue={designIdea && designIdea[5]?.room_dimension}
+                  />
+                </div>
+                <div className="col-lg-6">
+                <PortfolioCard
+                  cardDetailLink={`/design-idea/gallery?id=${designIdea[6]?.id}`}
+                  portCard={"card_portfolio portfolio_1"}
+                  portfolioImgBg={"portfolioimgall desig_gal_bg7"}
+                  portfolioImg={designIdea[6]?.child_content?.image}
+                  portfolioTitle={designIdea && designIdea[6]?.child_content?.title}
+                  portfolioClassCss="text-white w-75 mb-0 my-2 team_designation"
+                />
+              </div>
+              <div className="col-lg-6">
+                <PortfolioCard
+                  cardDetailLink={`/design-idea/gallery?id=${designIdea[7]?.id}`}
+                  portCard={"card_portfolio portfolio_1"}
+                  portfolioImgBg={"portfolioimgall desig_gal_bg8"}
+                  portfolioImg={designIdea[7]?.child_content?.image}
+                  portfolioTitle={designIdea && designIdea[7]?.child_content?.title}
+                  portfolioClassCss="text-white w-75 mb-0 my-2 team_designation"
+                />
+              </div>
+              </div>
+
+            </section>
+          )}
+          <hr className="mt-5" />
+        </main>
+      </MainLayout>
+    </div>
+  );
+};
+
+export default Designidea;

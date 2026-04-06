@@ -1,0 +1,50 @@
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import {
+    ClassicEditor,
+    Bold,
+    Essentials,
+    Heading,
+    Indent,
+    IndentBlock,
+    Italic,
+    List,
+    Undo,
+    Link
+} from 'ckeditor5';
+
+import 'ckeditor5/ckeditor5.css';
+
+const CKEditorComponent = (props) => {
+    return (
+        <CKEditor
+            editor={ClassicEditor}
+            data={props.pageData}
+            onChange={(event, editor) => {
+                const data = editor.getData();
+                props.setPageData(data);
+            }}
+            config={{
+                licenseKey: 'GPL',
+                toolbar: [
+                    'undo', 'redo', '|',
+                    'heading', '|', 'bold', 'italic', '|',
+                    'link', 'insertTable', 'mediaEmbed', '|',
+                    'bulletedList', 'numberedList', 'indent', 'outdent'
+                ],
+                plugins: [
+                    Bold,
+                    Essentials,
+                    Heading,
+                    Indent,
+                    IndentBlock,
+                    Italic,
+                    List,
+                    Undo,
+                    Link
+                ],
+            }}
+        />
+    );
+}
+
+export default CKEditorComponent;
