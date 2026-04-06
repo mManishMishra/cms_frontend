@@ -1,0 +1,158 @@
+import { Injectable } from '@nestjs/common';
+import { CreateCmsParentChildDto } from './dto/create-cms_parent_child.dto';
+import { UpdateCmsParentChildDto } from './dto/update-cms_parent_child.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CmsParentChild, PageType } from './entities/cms_parent_child.entity';
+import { Repository } from 'typeorm';
+import { basename } from 'path';
+
+@Injectable()
+export class CmsParentChildService {
+
+  constructor(
+    @InjectRepository(CmsParentChild)
+    private readonly cmsParentChildRepository: Repository<CmsParentChild>,
+  ) {}
+
+  async create(createCmsParentChildDto: CreateCmsParentChildDto): Promise<CmsParentChild> {
+    const imagePath = createCmsParentChildDto.image ? basename(createCmsParentChildDto.image) : 'default.png';
+    const createData = {
+      page_type: createCmsParentChildDto.page_type,
+      child_content: {
+        title: createCmsParentChildDto.title,
+        description: createCmsParentChildDto.description,
+        image: imagePath,
+      },
+      child_images: [
+        { image: 'default.png' },
+        { image: 'default.png' },
+        { image: 'default.png' },
+        { image: 'default.png' },
+        { image: 'default.png' },
+        { image: 'default.png' },
+      ],
+    };
+
+    console.log('Create Data:', createData);
+
+    try {
+      const result = await this.cmsParentChildRepository.save(createData);
+      console.log('Save Result:', result);
+      return result;
+    } catch (error) {
+      console.error('Error Saving Data:', error);
+      throw error;
+    }
+  }
+
+  findAll() {
+    return this.cmsParentChildRepository.find();
+  }
+
+  async findById(id: number) {
+    const parentChild = await this.cmsParentChildRepository.findOne({ where: { id } });
+    if (!parentChild) {
+      return null;
+    }
+    const baseUrl = `${process.env.BASE_URL}/uploads/parent-child/`;
+
+    const updatedChildContent = {
+      title: parentChild.child_content.title,
+      description: parentChild.child_content.description,
+      image: parentChild.child_content.image ? `${baseUrl}${parentChild.child_content.image}` : null,
+    };
+
+    const updatedChildImages = parentChild.child_images.map(imageObj => ({
+      ...imageObj,
+      image: imageObj.image ? `${baseUrl}${imageObj.image}` : null,
+    }));
+
+    return {
+      ...parentChild,
+      child_content: updatedChildContent,
+      child_images: updatedChildImages,
+    };
+  }
+
+  async findAllByPageType(page_type: PageType) {
+    const parentChildRecords = await this.cmsParentChildRepository.find({ where: { page_type }, order: { id: 'DESC' } });
+    if (!parentChildRecords.length) {
+      return [];
+    }
+    const baseUrl = `${process.env.BASE_URL}/uploads/parent-child/`;
+
+    return parentChildRecords.map(parentChild => {
+      const updatedChildContent = {
+        ...parentChild.child_content,
+        image: parentChild.child_content.image ? `${baseUrl}${parentChild.child_content.image}` : null,
+      };
+
+      const updatedChildImages = parentChild.child_images.map(imageObj => {
+        const updatedImageObj = {};
+        for (const key in imageObj) {
+          if (imageObj.hasOwnProperty(key)) {
+            updatedImageObj[key] = imageObj[key] ? `${baseUrl}${imageObj[key]}` : null;
+          }
+        }
+        return updatedImageObj;
+      });
+
+      return {
+        ...parentChild,
+        child_content: updatedChildContent,
+        child_images: updatedChildImages,
+      };
+    });
+  }
+
+  async update(id: number, updateData: { title: string; description: string; image?: string }) {
+    const existingRecord = await this.cmsParentChildRepository.findOne({ where: { id } });
+    if (!existingRecord) {
+      throw new Error('Record not found');
+    }
+
+    const childContent = existingRecord.child_content;
+
+    if (updateData.image) {
+      const imageName = basename(updateData.image); // Extract the filename from the path
+      childContent.image = imageName;
+    }
+
+    childContent.title = updateData?.title;
+    childContent.description = updateData.description;
+
+    existingRecord.child_content = childContent;
+
+    await this.cmsParentChildRepository.save(existingRecord);
+    return this.cmsParentChildRepository.findOne({ where: { id } });
+  }
+
+  async updateChildImage(id: number, childImageIndex: number, imagePath: string | null) {
+    const existingRecord = await this.cmsParentChildRepository.findOne({ where: { id } });
+    if (!existingRecord) {
+      throw new Error('Record not found');
+    }
+
+    if (childImageIndex < 0 || childImageIndex >= existingRecord.child_images.length) {
+      throw new Error('Invalid child image index');
+    }
+
+    const childImages = existingRecord.child_images[childImageIndex];
+
+    if (imagePath) {
+      const imageName = basename(imagePath); // Extract the filename from the path
+      childImages.image = imageName;
+    }
+
+    existingRecord.child_images[childImageIndex] = childImages;
+
+    console.log('existingRecord', existingRecord);
+
+    await this.cmsParentChildRepository.save(existingRecord);
+    return this.cmsParentChildRepository.findOne({ where: { id } });
+  }
+
+  remove(id: number) {
+    return this.cmsParentChildRepository.delete(id);
+  }
+}

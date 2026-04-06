@@ -1,0 +1,77 @@
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpException, HttpStatus } from '@nestjs/common';
+import { UserQueriesService } from './user_queries.service';
+import { CreateUserQueryDto } from './dto/create-user_query.dto';
+import { UpdateUserQueryDto } from './dto/update-user_query.dto';
+import * as ExcelJS from 'exceljs';
+import { Response } from 'express';
+
+@Controller('user-queries')
+export class UserQueriesController {
+  constructor(private readonly userQueriesService: UserQueriesService) {}
+
+  @Post()
+  create(@Body() createUserQueryDto: CreateUserQueryDto) {
+    return this.userQueriesService.create(createUserQueryDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.userQueriesService.findAll();
+  }
+
+  @Get('export')
+  async exportToExcel(@Res() res: Response) {
+    try {
+      const userQueries = await this.userQueriesService.findAll();
+
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('User Queries');
+
+      worksheet.columns = [
+        { header: 'SN', key: 'sn', width: 5 },
+        { header: 'Full Name', key: 'fullName', width: 30 },
+        { header: 'Email', key: 'email', width: 25 },
+        { header: 'Phone Number', key: 'phoneNumber', width: 15 },
+        { header: 'Place', key: 'place', width: 20 },
+        { header: 'Query', key: 'query', width: 30 },
+        { header: 'Submitted At', key: 'submittedAt', width: 20 },
+      ];
+
+      userQueries.forEach((query, index) => {
+        worksheet.addRow({
+          sn: index + 1,
+          fullName: query.name,
+          email: query.email,
+          phoneNumber: query.mobile,
+          place: query.place,
+          query: query.query,
+          submittedAt: query.created_at,
+        });
+      });
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename=user-queries.xlsx');
+
+      await workbook.xlsx.write(res);
+      res.end();
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      throw new HttpException('Failed to export data to Excel', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.userQueriesService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserQueryDto: UpdateUserQueryDto) {
+    return this.userQueriesService.update(+id, updateUserQueryDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.userQueriesService.remove(+id);
+  }
+}

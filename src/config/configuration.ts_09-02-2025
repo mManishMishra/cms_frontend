@@ -1,0 +1,6 @@
+export default () => ({
+    smsProvider: {
+        apiKey: process.env.MESSAGE_CENTRAL_API_KEY,
+        encodedPassword: process.env.MESSAGE_CENTRAL_ENCODED_PASSWORD,
+    },
+});

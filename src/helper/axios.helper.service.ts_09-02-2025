@@ -1,0 +1,116 @@
+import { HttpService } from "@nestjs/axios";
+import {
+    BadRequestException,
+    Injectable,
+    InternalServerErrorException,
+} from "@nestjs/common";
+import configuration from "src/config/configuration";
+
+@Injectable()
+export class AxiosHelperService {
+    config = configuration();
+    constructor(private readonly httpService: HttpService) { }
+
+    async messageCentralGetAuthToken() {
+        // console.log("API KEY : ",this.config.smsProvider.apiKey);
+        // console.log("ENCODED PASSWORD : ",this.config.smsProvider.encodedPassword);
+        try {
+            let config = {
+                method: "get",
+                maxBodyLength: Infinity,
+                url: `https://cpaas.messagecentral.com/auth/v1/authentication/token?country=IN&customerId=${this.config.smsProvider.apiKey}&key=${this.config.smsProvider.encodedPassword}&scope=NEW`,
+            };
+            const response = await this.httpService.axiosRef.request(config);
+            // const response = await this.httpService.axiosRef.get(
+            //     `https://cpaas.messagecentral.com/auth/v1/authentication/token?country=IN&customerId=${this.config.smsProvider.apiKey}&key=${this.config.smsProvider.encodedPassword}&scope=NEW`,
+            // );
+            // console.log(response);
+            if (response?.data?.status !== 200) {
+                throw new InternalServerErrorException(
+                    "Something went wrong please try again",
+                );
+            }
+
+            return response.data.token;
+        } catch (error) {
+            console.error("Error in messageCentralGetAuthToken", error.message);
+            throw error;
+        }
+    }
+
+    async messageCentralSendOtp(phoneNumber: string, token: string) {
+        // console.log("API KEY : ",this.config.smsProvider.apiKey);
+        // console.log("ENCODED PASSWORD : ",this.config.smsProvider.encodedPassword);
+        // console.log("Phone : ",phoneNumber);
+        // console.log("Token : ",token);
+        const actualPhoneNumber = phoneNumber;
+        try {
+            let config = {
+                method: "post",
+                maxBodyLength: Infinity,
+                url: `https://cpaas.messagecentral.com/verification/v3/send?countryCode=91&flowType=SMS&mobileNumber=${actualPhoneNumber}`,
+                headers: {
+                    authToken: token,
+                },
+            };
+            const response = await this.httpService.axiosRef.request(config);
+            if (response?.data?.responseCode !== 200) {
+                throw new InternalServerErrorException(
+                    "Something went wrong try again",
+                );
+            }
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error("Error in messageCentralSendOtp", error);
+            throw error;
+        }
+    }
+
+    async messageCentralVerifyOtp(
+        phoneNumber: string,
+        token: string,
+        otpVerificationID: string,
+        otp: string,
+    ) {
+        try {
+            const countryCode = "91";
+            const actualPhoneNumber = phoneNumber;
+
+            console.log(`Verifying OTP for phone number: ${phoneNumber}, Verification ID: ${otpVerificationID}, OTP: ${otp}`);
+
+            let config = {
+                method: "get",
+                maxBodyLength: Infinity,
+                url: `https://cpaas.messagecentral.com/verification/v3/validateOtp?countryCode=${countryCode}&mobileNumber=${actualPhoneNumber}&verificationId=${otpVerificationID}&customerId=${this.config.smsProvider.apiKey}&code=${otp}`,
+                headers: {
+                    authToken: token,
+                },
+            };
+
+            // Log the config for verification
+            console.log('Verification request config:', config);
+
+            const response = await this.httpService.axiosRef.request(config);
+
+            // Log the full response to check what's happening
+            console.log('Response from Message Central OTP verification:', response.data);
+            console.log(response.data.responseCode)
+            // if (
+            //     response.data.responseCode !== 200 ||
+            //     response?.data?.verificationStatus !== "VERIFICATION_COMPLETED"
+            // ) {
+            //     throw new BadRequestException("Incorrect or expired OTP");
+            // }
+            // if(response.data.responseCode === 200) {
+            // }
+            return response.data;
+        } catch (error) {
+            console.error("Error in messageCentralVerifyOtp:", error.message);
+            console.log("Error response data:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+
+
+}
