@@ -1,0 +1,32 @@
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+
+export enum PageType {
+    READY_TO_GO_DESIGN = 'ready_to_go_design',
+    WALLPAPER = 'wallpaper',
+    SPACE_SAVING_FURNITURE = 'space_saving_furniture',
+    SUSTAINABLE_FURNITURE = 'sustainable_furniture',
+    FURNITURE = 'furniture',
+    SUSTAINABLE_FURNITURE_RATTAN = 'sustainable_furniture_rattan',
+    SUSTAINABLE_FURNITURE_RECLAIMED_WOOD = 'sustainable_furniture_reclaimed_wood',
+    GALLERY_DESIGN = 'gallery_design',
+    EXPERIENCE_CENTER = 'experience_center',
+    PRODUCT = 'product',
+}
+
+@Entity('cms_parent_child')
+export class CmsParentChild {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({
+        type: 'enum',
+        enum: PageType,
+    })
+    page_type: PageType;
+
+    @Column('json')
+    child_content: any;
+
+    @Column('json')
+    child_images: any;
+}

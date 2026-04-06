@@ -1,0 +1,286 @@
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CreateCmsContentDto } from './dto/create-cms_content.dto';
+import { UpdateCmsContentDto, UpdateCmsContentHomepageBannerDto, UpdateJsonContentChildImageDto } from './dto/update-cms_content.dto';
+import { CmsContent, PageType } from './entities/cms_content.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { basename } from 'path';
+
+@Injectable()
+export class CmsContentService {
+  constructor(
+    @InjectRepository(CmsContent)
+    private readonly cmsContentRepository: Repository<CmsContent>,
+  ) {}
+
+
+  create(page_type: PageType, createCmsContentDto: CreateCmsContentDto, imagePath: string) {
+    const newContent = this.cmsContentRepository.create({
+      page_type,
+      json_content: createCmsContentDto,
+    });
+
+    if (imagePath) {
+      newContent.json_content.image = basename(imagePath);
+    }
+
+    return this.cmsContentRepository.save(newContent);
+  }
+
+  findAll() {
+    return this.cmsContentRepository.find();
+  }
+
+  async findOne(page_type: PageType) {
+    const contentDataArray = await this.cmsContentRepository.find({ where: { page_type }, order: { id: 'DESC' } });
+    if (!contentDataArray || contentDataArray.length === 0) {
+      return null;
+    }
+
+    const baseUrl = `${process.env.BASE_URL}/uploads/cms-content/`;
+    if (contentDataArray.length > 1) {
+      
+      switch (page_type) {
+        case PageType.TEAM:
+          contentDataArray.forEach((contentData) => {
+            const jsonContent = contentData.json_content;
+            jsonContent.image = jsonContent.image ? `${baseUrl}${jsonContent.image}` : null;
+            contentData.json_content = jsonContent;
+          });
+          return contentDataArray;
+        default:
+          return contentDataArray;
+      }
+
+    } else {
+      const contentData = contentDataArray[0];
+      const jsonContent = contentData.json_content;
+
+      switch (contentData.page_type) {
+        case PageType.ABOUT_US:
+          jsonContent.mid_image = jsonContent.mid_image ? `${baseUrl}${jsonContent.mid_image}` : null;
+          contentData.json_content = jsonContent;
+          break;
+          case PageType.CREATING_THE_HOME_OF_YOUR_DREAMS:
+            jsonContent.mid_image = jsonContent.mid_image ? `${baseUrl}${jsonContent.mid_image}` : null;
+            contentData.json_content = jsonContent;
+            break;
+            case PageType.CREATING_THE_HOME_OF_YOUR_DREAMS_2:
+              jsonContent.mid_image = jsonContent.mid_image ? `${baseUrl}${jsonContent.mid_image}` : null;
+              contentData.json_content = jsonContent;
+              break;
+        case PageType.ABOUT_US_SLIDER:
+        case PageType.HOW_IT_WORKS:
+        case PageType.REFER_AND_EARN:
+          jsonContent.forEach((content) => {
+            content.image = content.image ? `${baseUrl}${content.image}` : null;
+          });
+          break;
+        case PageType.HOMEPAGE_BANNER:
+          jsonContent.forEach((content) => {
+            content.top_icon = content.top_icon ? `${baseUrl}${content.top_icon}` : null;
+            content.banner_image = content.banner_image ? `${baseUrl}${content.banner_image}` : null;
+          });
+          break;
+        case PageType.TEAM:
+          contentData.json_content.image = contentData.json_content.image ? `${baseUrl}${contentData.json_content.image}` : null;
+          return [contentData];
+
+        default:
+      }
+
+      return contentData;
+    }
+
+  }
+
+  update(id: number, updateCmsContentDto: UpdateCmsContentDto) {
+    const updateContent: Partial<CmsContent> = {
+      json_content: updateCmsContentDto?.json_content,
+    };
+    return this.cmsContentRepository.update(id, updateContent);
+}
+
+  async updateWithImage(id: number, updateCmsContentDto: UpdateCmsContentDto, imagePath: string) {
+
+    const exitingContent = await this.cmsContentRepository.findOne({ where: { id } });
+
+    switch (exitingContent.page_type) {
+      case PageType.ABOUT_US:
+        const updateContent: Partial<CmsContent> = {
+          json_content: {
+            top_title: updateCmsContentDto?.json_content?.top_title || "",
+            top_description: updateCmsContentDto?.json_content?.top_description || "",
+            mid_sub_title: updateCmsContentDto?.json_content?.mid_sub_title || "",
+            mid_sub_description: updateCmsContentDto?.json_content?.mid_sub_description || "",
+            mid_image: imagePath ? basename(imagePath) : exitingContent.json_content.mid_image,
+          },
+        };
+        return this.cmsContentRepository.update(id, updateContent);
+
+        
+      case PageType.CREATING_THE_HOME_OF_YOUR_DREAMS:
+        const updateContentImage: Partial<CmsContent> = {
+          json_content: {
+            top_title: updateCmsContentDto?.json_content?.top_title || "",
+            top_description: updateCmsContentDto?.json_content?.top_description || "",
+            mid_sub_title: updateCmsContentDto?.json_content?.mid_sub_title || "",
+            mid_sub_description: updateCmsContentDto?.json_content?.mid_sub_description || "",
+            mid_image: imagePath ? basename(imagePath) : exitingContent.json_content.mid_image,
+          },
+        };
+        return this.cmsContentRepository.update(id, updateContentImage);
+
+      case PageType.CREATING_THE_HOME_OF_YOUR_DREAMS_2:
+        const updateContent2: Partial<CmsContent> = {
+          json_content: {
+            top_title: updateCmsContentDto?.json_content?.top_title || "",
+            top_description: updateCmsContentDto?.json_content?.top_description || "",
+            mid_sub_title: updateCmsContentDto?.json_content?.mid_sub_title || "",
+            mid_sub_description: updateCmsContentDto?.json_content?.mid_sub_description || "",
+            mid_image: imagePath ? basename(imagePath) : exitingContent.json_content.mid_image,
+          },
+        };
+        return this.cmsContentRepository.update(id, updateContent2);
+
+
+
+      case PageType.TEAM:
+        const updateContentTeam: Partial<CmsContent> = {
+          json_content: {
+            title: updateCmsContentDto?.title || "",
+            description: updateCmsContentDto?.description || "",
+            designation: updateCmsContentDto?.designation || "",
+            image: imagePath ? basename(imagePath) : exitingContent.json_content.image,
+          },
+        };
+        console.log('updateContentTeam:', updateContentTeam);
+
+        return this.cmsContentRepository.update(id, updateContentTeam);
+
+        case PageType.FAQS:
+        const updateContentFaqs: Partial<CmsContent> = {
+          json_content: {
+            title: updateCmsContentDto?.title || "",
+            description: updateCmsContentDto?.description || "",
+            designation: updateCmsContentDto?.designation || "",
+            image: imagePath ? basename(imagePath) : exitingContent.json_content.image,
+          },
+        };
+        console.log('updateContentFaqs:', updateContentFaqs);
+        return this.cmsContentRepository.update(id, updateContentFaqs);
+
+      default:
+        return this.update(id, updateCmsContentDto);
+    }
+
+
+}
+
+async updateJsonContentChildImage(id: number, updateCmsContentDto: UpdateJsonContentChildImageDto, imagePath: string) {
+  // Fetch the existing content from the database
+  const existingContent = await this.cmsContentRepository.findOne({ where: { id } });
+  if (!existingContent) {
+    console.error('Content not found for id:', id);
+    return null;
+  }
+
+  // Parse the existing json_content
+  const jsonContent = existingContent.json_content;
+  if (!jsonContent || !Array.isArray(jsonContent)) {
+    console.error('Invalid json_content format:', jsonContent);
+    return null;
+  }
+
+  // Update the specific item in the json_content array
+  const itemIndex = updateCmsContentDto?.item_index;
+  if (itemIndex === undefined || itemIndex < 0 || itemIndex >= jsonContent.length) {
+    console.error('Invalid item_index:', itemIndex);
+    return null;
+  }
+
+  jsonContent[itemIndex].title = updateCmsContentDto?.title || '';
+  jsonContent[itemIndex].description = updateCmsContentDto?.description || '';
+
+  //designation for team page
+  if(jsonContent[itemIndex].designation) {
+    jsonContent[itemIndex].designation = updateCmsContentDto?.designation || '';
+  }
+
+  if (imagePath) {
+    jsonContent[itemIndex].image = basename(imagePath);
+  }
+
+  // Prepare the update content
+  const updateContent: Partial<CmsContent> = {
+    json_content: jsonContent,
+  };
+
+  // Perform the update
+  try {
+    const result = await this.cmsContentRepository.update(id, updateContent);
+    if (result.affected === 0) {
+      console.error('Update failed, no rows affected');
+      return null;
+    }
+    return result;
+  } catch (error) {
+    console.error('Error updating content:', error);
+    throw error;
+  }
+}
+
+async updateJsonContentHomepageBanner(id: number, updateCmsContentDto: any, topIconPath: string, bannerImagePath: string) {
+ 
+  // Fetch the existing content from the database
+  const existingContent = await this.cmsContentRepository.findOne({ where: { id } });
+  if (!existingContent) {
+    throw new BadRequestException(`Content not found for id: ${id}`);
+  }
+
+  // Parse the existing json_content
+  const jsonContent = existingContent.json_content;
+  if (!jsonContent || !Array.isArray(jsonContent)) {
+    throw new BadRequestException('Invalid json_content format:', jsonContent);
+  }
+
+  // Update the specific item in the json_content array
+  const itemIndex = updateCmsContentDto?.item_index;
+  if (itemIndex === undefined || itemIndex < 0 || itemIndex >= jsonContent.length) {
+    throw new BadRequestException(`Invalid item_index: ${itemIndex}`);
+  }
+
+  jsonContent[itemIndex].title = updateCmsContentDto?.title || '';
+  jsonContent[itemIndex].sub_title = updateCmsContentDto?.sub_title || '';
+  jsonContent[itemIndex].top_slogan = updateCmsContentDto?.top_slogan || '';
+
+  if (topIconPath) {
+    jsonContent[itemIndex].top_icon = basename(topIconPath);
+  }
+
+  if (bannerImagePath) {
+    jsonContent[itemIndex].banner_image = basename(bannerImagePath);
+  }
+
+  // Prepare the update content
+  const updateContent: Partial<CmsContent> = {
+    json_content: jsonContent,
+  };
+
+  // Perform the update
+  try {
+    const result = await this.cmsContentRepository.update(id, updateContent);
+    if (result.affected === 0) {
+      throw new BadRequestException('Update failed, no rows affected');
+    }
+    return result;
+  } catch (error) {
+    throw new BadRequestException('Error updating content:', error);
+  }
+ 
+}
+
+  remove(id: number) {
+    return this.cmsContentRepository.delete(id);
+  }
+}

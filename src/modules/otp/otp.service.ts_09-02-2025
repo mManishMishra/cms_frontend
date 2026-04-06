@@ -1,0 +1,79 @@
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { AxiosHelperService } from 'src/helper/axios.helper.service';
+
+@Injectable()
+export class OtpService {
+    constructor(private readonly axiosService: AxiosHelperService) {}
+
+    async sendOtp(requestBody: any) {
+        try {
+            const authToken = await this.axiosService.messageCentralGetAuthToken();
+            const response = await this.axiosService.messageCentralSendOtp(requestBody.phoneNumber, authToken);
+
+            // Step 3: Handle the response
+            if (response?.responseCode === 200 || response?.responseCode === 201) {
+                return {
+                    success: true,
+                    message: 'OTP sent successfully',
+                    otpToken: response.data.otpToken,
+                    data: response.data,
+                    mobileNumber: response.data.mobileNumber,
+                    verificationId: response.data.verificationId,
+                };
+            } else {
+                return {
+                    success: false,
+                    message: 'Failed to send OTP. Please try again.',
+                    data: response.data
+                };
+            }
+        } catch (error) {
+            console.error('Error in sendOtp:', error.message);
+            throw new InternalServerErrorException('An error occurred while sending OTP');
+        }
+    }
+
+    async verifyOtp(requestBody: any) {
+        try {
+            // Log the incoming request body for debugging
+            console.log('Verifying OTP with request body:', requestBody);
+
+            // Fetch the auth token
+            const authToken = await this.axiosService.messageCentralGetAuthToken();
+            console.log('Received authToken for OTP verification:', authToken);
+
+            // Call the MessageCentral OTP verification
+            const response = await this.axiosService.messageCentralVerifyOtp(
+                requestBody.phoneNumber,
+                authToken,
+                requestBody.otpVerificationID,
+                requestBody.otp
+            );
+
+            // Log the response for debugging
+            console.log('Response from OTP verification:', response);
+
+            // Check the response code and verification status
+            if (response.responseCode !== 200) {
+                return {
+                    success: false,
+                    message: 'Invalid or expired OTP. Please try again.',
+                    data: response
+                };
+            } else {
+                return response;
+            }
+        } catch (error) {
+            console.error('Error in verifyOtp:', error);
+
+            // Log error details for debugging
+            console.log('Error details:', error.response?.data || error.message);
+
+            if (error.response?.status === 400) {
+                throw new BadRequestException('Incorrect or expired OTP');
+            }
+            throw new InternalServerErrorException('An error occurred while verifying OTP');
+        }
+    }
+
+}
