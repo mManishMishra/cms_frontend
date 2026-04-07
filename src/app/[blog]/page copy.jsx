@@ -48,7 +48,7 @@ const BlogDetail = async ({ params }) => {
                         src={blogDetails.image}
                         className="image_blog"
                         alt={blogDetails.title}
-                      />
+                      decoding="async"  loading="lazy" />
                     )}
                   </div>
                   <div className="details py-4">

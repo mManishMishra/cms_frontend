@@ -1,17 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function HeroCarousel({ bannerData }) {
-  const [loadHeavyAssets, setLoadHeavyAssets] = useState(false);
   const banners = bannerData?.slice(0, 3) || [];
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoadHeavyAssets(true);
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <section className="position-relative">
@@ -29,32 +20,22 @@ export default function HeroCarousel({ bannerData }) {
                     position: 'relative',
                     width: '100%',
                     aspectRatio: '192/85', // <--- EXACT RATIO FROM YOUR IMAGE
-                    // maxHeight: '85vh',   
                     backgroundColor: '#f0f0f0',
-                    // overflow: 'hidden'
                   }}
                 >
                   
                   {isVideo ? (
-                    <>
-                      {loadHeavyAssets && (
-                        <video 
-                          className="object-fit-cover home_video_banner" 
-                          autoPlay 
-                          loop 
-                          muted 
-                          playsInline
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
-                        >
-                          <source src={banner?.banner_image} type="video/mp4" />
-                        </video>
-                      )}
-                      {!loadHeavyAssets && (
-                         <div className="d-flex align-items-center justify-content-center h-100 text-white bg-dark">
-                            <span className="visually-hidden">Loading Video...</span>
-                         </div>
-                      )}
-                    </>
+                    <video 
+                      className="object-fit-cover home_video_banner" 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline
+                      poster={banner?.banner_image_poster || ""} 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
+                    >
+                      <source src={banner?.banner_image} type="video/mp4" />
+                    </video>
                   ) : (
                     <>
                       <Image
@@ -70,7 +51,7 @@ export default function HeroCarousel({ bannerData }) {
                   )}
                   
                   <div className="pt-0 carousel-caption d-md-block" style={{ zIndex: 2 }}>
-                    <h6 className="pb-0 mb-0 fw-lighter fs-3 home_subhead">{banner?.top_slogan}</h6>
+                    <h3 className="pb-0 mb-0 fw-lighter fs-3 home_subhead">{banner?.top_slogan}</h3>
                     <div className="d-lg-flex">
                       <div>
                         <h3 className="letheading home_banner_heading">{banner?.title ?? ""}</h3>

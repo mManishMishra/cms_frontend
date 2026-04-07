@@ -123,7 +123,7 @@ export default async function FaridabadCityPage() {
                 src={cityData.location_image || "/images/services/1-min.png"} 
                 alt="Interior Designers in Faridabad" 
                 className="img-fluid rounded shadow"
-              />
+              decoding="async"  loading="lazy" />
             </div>
             <div className="col-lg-6">
               <h2 className="mb-4">{displayTitle}</h2>

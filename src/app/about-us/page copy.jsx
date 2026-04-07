@@ -85,7 +85,7 @@ const AboutUs = () => {
                     src={formData.mid_image}
                     className="w-100"
                     alt="About High Creation"
-                  />
+                  decoding="async"  loading="lazy" />
                 </div>
               </div>
               <p className="px-lg-5 pt-4 team_description">{formData.top_description}</p>
@@ -111,7 +111,7 @@ const AboutUs = () => {
                   src="/images/about/Whatmakes.png"
                   className="w-100"
                   alt="What makes us best"
-                />
+                decoding="async"  loading="lazy" />
               </div>
             </div>
           </div>

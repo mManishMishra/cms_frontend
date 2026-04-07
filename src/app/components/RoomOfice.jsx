@@ -7,7 +7,7 @@ const RoomOfice = (props) => {
         <span className={props.badge_circle}>
           <img src={props.arrowIcon} alt={props.altArrow} width={props.width}  fetchpriority="high"
   loading="eager"
-  data-no-lazy="1" />
+  data-no-lazy="1" decoding="async" />
         </span>
         <img
           src={props.imageRoom_Office}
@@ -16,7 +16,7 @@ const RoomOfice = (props) => {
           fetchPriority="high"
           loading="eager"
           data-no-lazy="1"
-        />
+        decoding="async" />
         <div className={props.cardBody}>
           <h5 className="">{props.cardTitle}</h5>
           <p className="text-white me-5 pe-5">{props.cardText}</p>

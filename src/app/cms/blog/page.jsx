@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
-import moment from "moment";
+import { format } from "date-fns";
 import dynamic from "next/dynamic";
 import {
     DEFAULT_SITEMAP_CHANGE_FREQUENCY,
@@ -371,14 +371,14 @@ const CmsBlog = () => {
                                         <td>{index + 1}</td>
                                         <td>{item.title}</td>
                                         <td>{item.writer_name}</td>
-                                        <td>{new Date(item?.published_on).toLocaleDateString()}</td>
+                                        <td>{item?.published_on ? new Date(item?.published_on).toLocaleDateString() : ""}</td>
                                         <td>
                                             <span className={`badge ${item.status === "Published" ? "bg-success" : item.status === "Pending Approval" ? "bg-info text-dark" : "bg-warning text-dark"}`}>
                                                 {item.status || "Draft"}
                                             </span>
                                         </td>
                                         <td>
-                                            <img src={item.image} alt={item.image_alt || item.title || "Blog Image"} height="80" />
+                                            <img src={item.image} alt={item.image_alt || item.title || "Blog Image"} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td width={150}>
                                             <button onClick={() => handleManageSeoContentClick(item.id, item.seo_content)} className="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#seoContentModal">SEO Content</button>
@@ -551,7 +551,7 @@ const CmsBlog = () => {
                                         className="form-control"
                                         name="published_on"
                                         placeholder="Published On"
-                                        value={formData.published_on ? moment(formData.published_on).format("YYYY-MM-DD") : ''}
+                                        value={formData.published_on && !isNaN(new Date(formData.published_on)) ? format(new Date(formData.published_on), "yyyy-MM-dd") : ''}
                                         onChange={handleInputChange}
                                         required
                                     />

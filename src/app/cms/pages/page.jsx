@@ -424,7 +424,7 @@ const CmsPages = () => {
                             </div>
                             <div className={block.data.reverse_layout ? 'col-md-6 order-1 text-center' : 'col-md-6 text-center'}>
                                 <div style={{width:'100%', height:'200px', backgroundColor:'#e9ecef', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                                    {block.data.image_url ? <img src={block.data.image_url} alt={block.data.image_alt || block.data.heading || 'Preview image'} style={{maxHeight:'100%', maxWidth:'100%', objectFit:'cover'}} /> : "Image Placeholder"}
+                                    {block.data.image_url ? <img src={block.data.image_url} alt={block.data.image_alt || block.data.heading || 'Preview image'} style={{maxHeight:'100%', maxWidth:'100%', objectFit:'cover'}} decoding="async"  loading="lazy" /> : "Image Placeholder"}
                                 </div>
                             </div>
                         </div>

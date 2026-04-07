@@ -21,7 +21,7 @@ export default function FullScreenImage() {
         
         onClick={handleClick}
         style={{ cursor: "pointer", width: "300px" }} // normal image size
-      />
+      decoding="async"  loading="lazy" />
 
       {/* Fullscreen Image with Close Button */}
       {isFullScreen && (
@@ -33,7 +33,7 @@ export default function FullScreenImage() {
         src="/images/Blog/blo_img1.webp"
             alt="Fullscreen Image"
             className="fullscreen-image"
-          />
+          decoding="async"  loading="lazy" />
         </div>
       )}
 

@@ -595,7 +595,7 @@ const CmsHowItsWorks = () => {
                                         <td>{item?.json_content?.description}</td>
                                         <td>{item?.json_content?.designation}</td>
                                         <td>
-                                            <img src={item?.json_content?.image} alt={item?.json_content?.title} height="80" />
+                                            <img src={item?.json_content?.image} alt={item?.json_content?.title} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td>
                                             <button onClick={() => handleEditClick(item, index)} type="button" className="read_morebtn" data-bs-toggle="modal" data-bs-target="#editNewpageModal">
@@ -791,7 +791,7 @@ const CmsHowItsWorks = () => {
             <td>{item?.json_content?.description}</td>
             <td>{item?.json_content?.designation}</td>
             <td>
-                <img src={item?.json_content?.image} alt={item?.json_content?.title} height="80" />
+                <img src={item?.json_content?.image} alt={item?.json_content?.title} height="80" decoding="async"  loading="lazy" />
             </td>
             <td>
                 <button onClick={() => handleEditClick(item, index)} type="button" className="read_morebtn" data-bs-toggle="modal" data-bs-target="#editNewpageModal_what_we_offer">
@@ -1016,7 +1016,7 @@ const CmsHowItsWorks = () => {
                                     />
                                 </div>
                                 <div className="col-md-6">
-                                        {typeof formData?.mid_image === 'string' && <img src={formData?.mid_image} alt="Mid Image" style={{ height: '100px', marginTop: '10px' }} />}
+                                        {typeof formData?.mid_image === 'string' && <img src={formData?.mid_image} alt="Mid Image" style={{ height: '100px', marginTop: '10px' }} decoding="async"  loading="lazy" />}
                                     </div>
                                </div>
                                 <div className="m-auto mt-2 col-12 d-flex justify-content-center">
@@ -1103,7 +1103,7 @@ const CmsHowItsWorks = () => {
                                     />
                                 </div>
                                 <div className="col-md-6">
-                                        {typeof formData2?.mid_image === 'string' && <img src={formData2?.mid_image} alt="Mid Image" style={{ height: '100px', marginTop: '10px' }} />}
+                                        {typeof formData2?.mid_image === 'string' && <img src={formData2?.mid_image} alt="Mid Image" style={{ height: '100px', marginTop: '10px' }} decoding="async"  loading="lazy" />}
                                     </div>
                                </div>
                                 <div className="m-auto mt-2 col-12 d-flex justify-content-center">

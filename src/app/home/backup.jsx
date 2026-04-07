@@ -100,7 +100,7 @@ const handleSubmit = async (e) => {
                     </div>
                     <div className="mt-4 me-0 ms-auto">
                         <a href="" className="">
-                            <img src="/images/whatsapp.svg" width={50} alt="" />
+                            <img src="/images/whatsapp.svg" width={50} alt="" decoding="async"  loading="lazy" />
                         </a>
                     </div>
                 </div>
@@ -213,7 +213,7 @@ const handleSubmit = async (e) => {
                         <div className="col-lg-2 col-md-3 col-6 ps-0">
                             <div className="box2">
                                 <div className="px-4 py-4">
-                                    <img src="/images/wework_icon1.png" width={60} alt="" />
+                                    <img src="/images/wework_icon1.png" width={60} alt="" decoding="async"  loading="lazy" />
                                     <h4 className="py-2 text-white"> Initial Concept:</h4>
                                     <p className="box_para">
                                         Your dream interior begins with a vision.
@@ -232,7 +232,7 @@ const handleSubmit = async (e) => {
                         <div className="col-lg-2 col-md-3 col-6 ps-0">
                             <div className="box2_data">
                                 <div className="px-4 py-4">
-                                    <img src="/images/wework_icon2.png" width={60} alt="" />
+                                    <img src="/images/wework_icon2.png" width={60} alt="" decoding="async"  loading="lazy" />
                                     <h4 className="py-2 text-white">Creative Blueprint:</h4>
                                     <p className="box_para">
                                         Every design starts with a unique concept.
@@ -251,7 +251,7 @@ const handleSubmit = async (e) => {
                         <div className="col-lg-2 col-md-3 col-6 ps-0">
                             <div className="box3_data">
                                 <div className="px-4 py-4">
-                                    <img src="/images/wework_icon3.png" width={60} alt="" />
+                                    <img src="/images/wework_icon3.png" width={60} alt="" decoding="async"  loading="lazy" />
                                     <h4 className="py-2 text-white">Design Strategy:</h4>
                                     <p className="box_para">
                                         Your dreams&apos; interiors originate with an idea.
@@ -270,7 +270,7 @@ const handleSubmit = async (e) => {
                         <div className="col-lg-2 col-md-3 col-6 ps-0">
                             <div className="box4_data">
                                 <div className="px-4 py-4">
-                                    <img src="/images/wework_icon4.png" width={60} alt="" />
+                                    <img src="/images/wework_icon4.png" width={60} alt="" decoding="async"  loading="lazy" />
                                     <h4 className="py-2 text-white">Plan Progress:</h4>
                                     <p className="box_para">
                                         An idea becomes your desired design.
@@ -289,7 +289,7 @@ const handleSubmit = async (e) => {
                         <div className="col-lg-2 col-md-3 col-6 ps-0">
                             <div className="box5_data">
                                 <div className="px-4 py-4">
-                                    <img src="/images/wework_icon5.png" width={60} alt="" />
+                                    <img src="/images/wework_icon5.png" width={60} alt="" decoding="async"  loading="lazy" />
                                     <h4 className="py-2 text-white">Customized Planning:</h4>
                                     <p className="box_para">
                                         It all starts with a tailored concept space.
@@ -547,7 +547,7 @@ PageMaker including versions of Lorem Ipsum."
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-2 col-md-3 col-3">
-                            <img src="/images\Home_icon.png" width={150} alt="" />
+                            <img src="/images\Home_icon.png" width={150} alt="" decoding="async"  loading="lazy" />
                         </div>
                         <div className="col-lg-10 col-md-9 col-9">
                             <div className="pt-3 text-end">

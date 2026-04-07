@@ -311,7 +311,7 @@ const Home = () => {
             src={banner?.banner_image ?? "/images/home-banner-1.png"}
             className="d-block carousel_img"
             alt="carousel1"
-          />
+          decoding="async"  loading="lazy" />
         )}
 
         <div className="pt-0 carousel-caption d-md-block">
@@ -319,10 +319,10 @@ const Home = () => {
             src={banner?.top_icon ?? "/images/banner-icon.png"}
             width={90}
             alt="cc"
-          />
-          <h6 className="pb-0 mb-0 fw-lighter fs-3 home_subhead">
+          decoding="async"  loading="lazy" />
+          <h3 className="pb-0 mb-0 fw-lighter fs-3 home_subhead">
             {banner?.top_slogan}
-          </h6>
+          </h3>
           <div className="d-lg-flex">
             <div>
               <h3 className="letheading home_banner_heading">
@@ -482,7 +482,7 @@ const Home = () => {
               <div className="col-lg-2 col-md-3 col-6 ps-0">
                 <div className="box2">
                   <div className="px-3 px-lg-4 py-4">
-                    <img src={HomePageContent[20]?.json_content?.image} width={60} alt="" />
+                    <img src={HomePageContent[20]?.json_content?.image} width={60} alt="" decoding="async"  loading="lazy" />
                     <h4 className="py-2 text-white">{HomePageContent[20]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[20]?.json_content?.description}
@@ -503,7 +503,7 @@ const Home = () => {
               <div className="col-lg-2 col-md-3 col-6 ps-0">
                 <div className="box2_data">
                 <div className="px-3 px-lg-4 py-4">
-                    <img src={HomePageContent[19]?.json_content?.image} width={60} alt="" />
+                    <img src={HomePageContent[19]?.json_content?.image} width={60} alt="" decoding="async"  loading="lazy" />
                     <h4 className="py-2 text-white">{HomePageContent[19]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[19]?.json_content?.description}
@@ -524,7 +524,7 @@ const Home = () => {
               <div className="col-lg-2 col-md-3 col-6 ps-0">
                 <div className="box3_data">
                 <div className="px-3 px-lg-4 py-4">
-                    <img src={HomePageContent[18]?.json_content?.image} width={60} alt="" />
+                    <img src={HomePageContent[18]?.json_content?.image} width={60} alt="" decoding="async"  loading="lazy" />
                     <h4 className="py-2 text-white">{HomePageContent[18]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[18]?.json_content?.description}
@@ -545,7 +545,7 @@ const Home = () => {
               <div className="col-lg-2 col-md-3 col-6 ps-0 mt-lg-3">
                 <div className="box4_data">
                 <div className="px-3 px-lg-4 py-4">
-                    <img src={HomePageContent[17]?.json_content?.image} width={60} alt="" />
+                    <img src={HomePageContent[17]?.json_content?.image} width={60} alt="" decoding="async"  loading="lazy" />
                     <h4 className="py-2 text-white">{HomePageContent[17]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[17]?.json_content?.description}
@@ -566,7 +566,7 @@ const Home = () => {
               <div className="col-lg-2 col-md-3 col-6 ps-0 mt-lg-3">
                 <div className="box5_data">
                 <div className="px-3 px-lg-4 py-4">
-                    <img src={HomePageContent[16]?.json_content?.image} width={60} alt="" />
+                    <img src={HomePageContent[16]?.json_content?.image} width={60} alt="" decoding="async"  loading="lazy" />
                     <h4 className="py-2 text-white">{HomePageContent[16]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[16]?.json_content?.description}
@@ -837,7 +837,7 @@ const Home = () => {
           <div className="container">
             <div className="row">
               <div className="col-lg-2 col-md-3 col-3">
-                <img src="/images\home_Icon.png" width={150} alt="home-icon" />
+                <img src="/images\home_Icon.png" width={150} alt="home-icon" decoding="async"  loading="lazy" />
               </div>
               <div className="col-lg-10 col-md-9 col-9">
                 <div className="pt-3 text-end">

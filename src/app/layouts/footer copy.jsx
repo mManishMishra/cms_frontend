@@ -38,7 +38,7 @@ const Footer = () => {
           <div>
             <img src="/images/Whatsapp-icon.png" width={40} alt="WhatsApp"  fetchPriority="high"
   loading="eager"
-  data-no-lazy="1" />
+  data-no-lazy="1" decoding="async" />
           </div>
         </a>
       </div>
@@ -60,23 +60,23 @@ const Footer = () => {
                         fetchPriority="high"
                         loading="eager"
                         data-no-lazy="1"
-                      />
+                      decoding="async" />
                     </a>
                   </div>
                   <div className="pt-3">
                     <h6>EMAIL US</h6>
-                    <a href="mailto:Info@hcinterior.in" className="text_mail">
+                    <a href="mailto:Info@hcinterior.in" className="text_mail p-2 m-n2 d-inline-block">
                       Info@hcinterior.in
                     </a>
                   </div>
                   <div>
                     <h6 className="pt-3">FOR QUERY</h6>
                     <p className="mb-0">
-                      <a href="callto:+19810506301" className="text_mail">
+                      <a href="callto:+19810506301" className="text_mail p-2 m-n2 d-inline-block">
                         +91 9810506301
                       </a>
                     </p>
-                    <a href="callto:+19810503881" className="text_mail">
+                    <a href="callto:+19810503881" className="text_mail p-2 m-n2 d-inline-block">
                       +91 9810503881
                     </a>
                   </div>
@@ -86,8 +86,8 @@ const Footer = () => {
                       src="/images/gpay.PNG"
                       className="me-3"
                       alt="google-playstore"
-                    />
-                    <img src="/images/apple.PNG" alt="ois-store" />
+                    decoding="async" />
+                    <img src="/images/apple.PNG" alt="ois-store" decoding="async" />
                   </div> */}
                 </div>
                 <div className="col-lg-2 col-md-3 col-6">

@@ -9,7 +9,7 @@ const SidebarDashboard = () => {
             <div className="position-sticky mt-3">
                 <div className="usercard">
                     <center>
-                        <img src="/images/user-icons.svg" width={70} alt="user" />
+                        <img src="/images/user-icons.svg" width={70} alt="user" decoding="async"  loading="lazy" />
                         <h6 className="pt-3 text-white">Suhail Siddiqui</h6>
                         <p className="text-white team_description">Suhail@gmail.com</p>
                     </center>

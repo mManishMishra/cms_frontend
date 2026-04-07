@@ -74,7 +74,7 @@ const ServicesDetailPage = async ({ searchParams }) => {
                       width={700}
                       alt={pageData?.main_title ?? defaultAltText}
                       className="pt-0 pt-lg-5 w-100 object-fit-contain"
-                    />
+                    decoding="async"  loading="lazy" />
                   </div>
                 </div>
               </div>
@@ -104,7 +104,7 @@ const ServicesDetailPage = async ({ searchParams }) => {
                           className="w-100 object-fit-contain"
                           height={150}
                           alt="team"
-                        />
+                        decoding="async"  loading="lazy" />
                         <div className="pt-3 text-center card-body">
                           <h4 className="px-4 py-3 text-center card-title card_Services_heading">
                             India&apos;s only full home warranty* up to 10-yrs
@@ -120,7 +120,7 @@ const ServicesDetailPage = async ({ searchParams }) => {
                           className="w-100 object-fit-contain"
                           height={150}
                           alt="team"
-                        />
+                        decoding="async"  loading="lazy" />
                         <div className="pt-3 text-center card-body">
                           <h4 className="px-4 py-3 text-center card-title card_Services_heading">
                             146 quality checks to give your home the best
@@ -135,7 +135,7 @@ const ServicesDetailPage = async ({ searchParams }) => {
                           className="w-100 object-fit-contain"
                           height={150}
                           alt="team"
-                        />
+                        decoding="async"  loading="lazy" />
                         <div className="pt-3 text-center card-body">
                           <h4 className="px-4 py-3 text-center card-title card_Services_heading">
                             45-day installation swift kitchens, wardrobes &

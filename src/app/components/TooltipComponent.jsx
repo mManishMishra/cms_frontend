@@ -15,7 +15,7 @@ function TooltipComponent({ info }) {
             className="ps-2"
             alt="ToolTip"
             width={25}
-          />
+          decoding="async"  loading="lazy" />
         </span>
       </OverlayTrigger>
     </div>

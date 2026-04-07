@@ -68,7 +68,7 @@ const MediaLibrary = () => {
 
     const handleCopyHtml = async (file) => {
         const altText = (altDrafts[file.filename] || file.alt_text || file.filename).replace(/"/g, "&quot;");
-        await navigator.clipboard.writeText(`<img src="${file.url}" alt="${altText}" />`);
+        await navigator.clipboard.writeText(`<img src="${file.url}" alt="${altText}" decoding="async"  loading="lazy" />`);
         toast.success("Image HTML copied with alt text.");
     };
 
@@ -318,7 +318,7 @@ const MediaLibrary = () => {
                                                     src={file.url}
                                                     alt={altDrafts[file.filename] || file.alt_text || file.filename}
                                                     style={{ maxHeight: "100%", maxWidth: "100%", objectFit: "contain" }}
-                                                />
+                                                decoding="async"  loading="lazy" />
                                             </div>
 
                                             <div className="card-body p-3 d-flex flex-column">

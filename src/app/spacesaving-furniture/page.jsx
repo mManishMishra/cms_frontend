@@ -1,4 +1,3 @@
-// "use client";
 // import { useCallback, useEffect, useState } from "react";
 // import WallpaperCard from "../components/WallpaperCard";
 // import MainLayout from "../layouts/MainLayout";

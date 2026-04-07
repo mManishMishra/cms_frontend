@@ -1,4 +1,3 @@
-// "use client";
 // import {useCallback, useEffect, useState } from "react";
 // import BackgroundImageRow from "../components/BackgroundImageRow";
 // import WallpaperCard from "../components/WallpaperCard";

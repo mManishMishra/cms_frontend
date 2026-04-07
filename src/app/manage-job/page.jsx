@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import $ from "jquery";
 import AuthMainLayout from "../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
-import moment from "moment";
+import { format } from "date-fns";
 import { toast } from "react-toastify";
 
 
@@ -175,8 +175,8 @@ const ManageJob = () => {
                                         <td>{query.experience_required}</td>
                                         <td>{query.location}</td>
                                         <td className="text-capitalize">{query.status}</td>
-                                        <td>{new Date(query.created_at).toLocaleString()}</td>
-                                        <td>{new Date(query.last_date).toLocaleString()}</td>
+                                        <td>{query.created_at ? new Date(query.created_at).toLocaleString() : ""}</td>
+                                        <td>{query.last_date ? new Date(query.last_date).toLocaleString() : ""}</td>
                                         <td>
                                             <button
                                                 onClick={() => handleEditClick(query)}
@@ -355,7 +355,7 @@ const ManageJob = () => {
                                         type="date"
                                         className="form-control"
                                         name="last_date"
-                                        value={moment(formData.last_date).format("YYYY-MM-DD")}
+                                        value={formData.last_date && !isNaN(new Date(formData.last_date)) ? format(new Date(formData.last_date), "yyyy-MM-dd") : ""}
                                         onChange={handleInputChange}
                                         required
                                     />

@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
@@ -31,7 +32,7 @@ const AuthHeader = ({ setIsSidebarOpen }) => {
                         src="/images/iconsHC.png" 
                         style={{ height: "45px", objectFit: "contain" }} 
                         alt="hc-logo" 
-                    />
+                    decoding="async" />
                     <span className="fs-5 fw-bold text-dark d-none d-md-block ms-2 border-start ps-3">
                         CMS Dashboard
                     </span>
@@ -66,7 +67,7 @@ const AuthHeader = ({ setIsSidebarOpen }) => {
                                         height: "35px",
                                         objectFit: "cover"
                                     }}
-                                />
+                                decoding="async" />
                             ) : (
                                 <div className="initials-circle">
                                     {getInitials(user?.firstName || "Admin")}

@@ -39,7 +39,7 @@ const WallpapersGallery = () => {
           {loading ? (
         <div className="loader-container">
           <div className="spinner">
-            <img src="https://raw.githubusercontent.com/Codelessly/FlutterLoadingGIFs/master/packages/cupertino_activity_indicator_large.gif"  alt="" /> 
+            <img src="https://raw.githubusercontent.com/Codelessly/FlutterLoadingGIFs/master/packages/cupertino_activity_indicator_large.gif"  alt="" decoding="async"  loading="lazy" /> 
           </div>
         </div>
       ) : (

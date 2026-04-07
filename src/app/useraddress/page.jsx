@@ -47,7 +47,7 @@ const Page = () => {
                     className="w-100 object-fit-contain"
                     height={180}
                     alt=""
-                  />
+                  decoding="async"  loading="lazy" />
                   <h5 className="text-center">Apartments</h5>
                   <div className="m-auto my-3 text-center">
                     <div className="form-check form-check-inline ">
@@ -118,7 +118,7 @@ const Page = () => {
                     className="w-100 object-fit-contain"
                     height={180}
                     alt=""
-                  />
+                  decoding="async"  loading="lazy" />
                   <h5 className="text-center">Villa</h5>
                   <div className="m-auto my-3 text-center">
                     <div className="form-check form-check-inline ">
@@ -189,7 +189,7 @@ const Page = () => {
                     className="w-100 object-fit-contain"
                     height={180}
                     alt=""
-                  />
+                  decoding="async"  loading="lazy" />
                   <h5 className="text-center">Flat</h5>
                   <div className="m-auto my-3 text-center">
                     <div className="form-check form-check-inline ">

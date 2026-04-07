@@ -244,7 +244,7 @@ const RegisterPage = () => {
                     className="w-100 object-fit-contain"
                     height={450}
                     alt=""
-                />
+                decoding="async"  loading="lazy" />
             </div>
         </div>
     );

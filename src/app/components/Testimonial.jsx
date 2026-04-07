@@ -73,7 +73,7 @@ const Testimonial = (props) => {
                 src="/images/hc_landing_2/testimonial_1.png"
                 className="testimonial-image"
                 alt=""
-              />
+              decoding="async"  loading="lazy" />
               <p className="testimonial-feedback">
                 I got my interior work done through HC interiors. The project
                 was handled well and the work was completed on time. Overall,
@@ -92,7 +92,7 @@ const Testimonial = (props) => {
                 src="/images/hc_landing_2/testimonial_2.png"
                 className="testimonial-image"
                 alt=""
-              />
+              decoding="async"  loading="lazy" />
               <p className="testimonial-feedback">
                 I got my interior work done through HC interiors. The project
                 was handled well and the work was completed on time. Overall,
@@ -111,7 +111,7 @@ const Testimonial = (props) => {
                 src="/images/hc_landing_2/testimonial_1.png"
                 className="testimonial-image"
                 alt=""
-              />
+              decoding="async"  loading="lazy" />
               <p className="testimonial-feedback">
                 I got my interior work done through HC interiors. The project
                 was handled well and the work was completed on time. Overall,
@@ -130,7 +130,7 @@ const Testimonial = (props) => {
                 src="/images/hc_landing_2/testimonial_2.png"
                 className="testimonial-image"
                 alt=""
-              />
+              decoding="async"  loading="lazy" />
               <p className="testimonial-feedback">
                 I got my interior work done through HC interiors. The project
                 was handled well and the work was completed on time. Overall,
@@ -149,7 +149,7 @@ const Testimonial = (props) => {
                 src="/images/hc_landing_2/testimonial_2.png"
                 className="testimonial-image"
                 alt=""
-              />
+              decoding="async"  loading="lazy" />
               <p className="testimonial-feedback">
                 I got my interior work done through HC interiors. The project
                 was handled well and the work was completed on time. Overall,

@@ -42,7 +42,7 @@ const Toggle = () => {
   return (
     <div>
       {/* Button to open sidebar */}
-      <button className="btn border-none d-block" onClick={openSidebar}>
+      <button className="btn border-none d-block" onClick={openSidebar} aria-label="Open sidebar menu">
         <FaBars className="fs-3 mt-1" />
       </button>
 
@@ -71,7 +71,7 @@ const Toggle = () => {
                 width={90}
                 height={90}
                 alt="hc-logo"
-              />
+              decoding="async"  loading="lazy" />
             </a>
           </div>
           <div className="close">
@@ -115,7 +115,7 @@ const Toggle = () => {
               <div className="col-lg-6 ">
                 <div className="row g-5">
                   <div className="col-6 col-lg-6 col-md-6 d-block d-lg-none">
-                    <h4 className="my-2 pb-2">Design Ideas</h4>
+                    <h3 className="my-2 pb-2">Design Ideas</h3>
                     <ul className="list-unstyled mb-0">
                       <li className="footer_li">
                         <a href="/design-idea/" className="offcanvas_anchor">
@@ -131,7 +131,7 @@ const Toggle = () => {
                   </div>
 
                   <div className="col-6 col-lg-6 col-md-6 d-block d-lg-none">
-                    <h4 className="my-2 pb-2">Portfolio</h4>
+                    <h3 className="my-2 pb-2">Portfolio</h3>
                     <ul className="list-unstyled mb-0">
                       <li className="footer_li">
                         <a
@@ -153,7 +153,7 @@ const Toggle = () => {
                   </div>
 
                   <div className="col-6 col-lg-6 col-md-6 d-block d-lg-none">
-                    <h4 className="my-2 pb-2">Exclusive Design</h4>
+                    <h3 className="my-2 pb-2">Exclusive Design</h3>
                     <ul className="list-unstyled mb-0">
                       <li className="footer_li">
                         <a href="/furniture/" className="offcanvas_anchor">
@@ -193,7 +193,7 @@ const Toggle = () => {
                   </div>
 
                   <div className="col-6 col-lg-6 col-md-6">
-                    <h4 className="my-2 pb-2">High Creation</h4>
+                    <h3 className="my-2 pb-2">High Creation</h3>
                     <ul className="list-unstyled mb-0">
                       <li className="footer_li d-block d-lg-none">
                         <a
@@ -251,7 +251,7 @@ const Toggle = () => {
                     </ul>
                   </div>
                   <div className="col-6 col-lg-6 col-md-6">
-                    <h4 className="my-2 pb-2">Looks</h4>
+                    <h3 className="my-2 pb-2">Looks</h3>
                     <ul className="list-unstyled mb-0">
 
                     {lookMenu.map((item) => (
@@ -270,7 +270,7 @@ const Toggle = () => {
                     </ul>
                   </div>
                   {/* <div className="col-6 col-lg-6 col-md-6">
-                    <h4 className="my-2 pb-2">Gallery</h4>
+                    <h3 className="my-2 pb-2">Gallery</h3>
                     <ul className="list-unstyled mb-0">
                       <li className="footer_li">
                         <a href="/gallery/" className="offcanvas_anchor">
@@ -286,7 +286,7 @@ const Toggle = () => {
                     </ul>
                   </div> */}
                   <div className="col-12 col-lg-6 col-md-6">
-                    <h4 className="my-2 pb-2">Cities</h4>
+                    <h3 className="my-2 pb-2">Cities</h3>
                     <ul className="list-unstyled mb-0">
                       <li className="footer_li">
                         <a

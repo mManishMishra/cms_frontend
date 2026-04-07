@@ -225,7 +225,7 @@ const CmsHowItsWorks = () => {
                                         <td>{item?.json_content?.description}</td>
                                         <td>{item?.json_content?.designation}</td>
                                         <td>
-                                            <img src={item?.json_content?.image} alt={item?.json_content?.title} height="80" />
+                                            <img src={item?.json_content?.image} alt={item?.json_content?.title} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td>
                                             <button onClick={() => handleEditClick(item, index)} type="button" className="read_morebtn" data-bs-toggle="modal" data-bs-target="#editNewpageModal">

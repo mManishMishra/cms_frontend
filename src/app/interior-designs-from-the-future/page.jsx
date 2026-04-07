@@ -131,7 +131,7 @@ const HcLandingTwo = () => {
                   height={90}
                   alt="hc-logo"
                   className="p-2"
-                />
+                decoding="async"  loading="lazy" />
               </a>
               <button
                 className="navbar-toggler d-block d-lg-none"
@@ -176,9 +176,9 @@ const HcLandingTwo = () => {
               <div className="row">
                 <div className="col-lg-7 d-flex align-items-center">
                   <div className="pe-lg-5">
-                    <h6 className="fw-lighter fs-3 pb-0 mb-0 home_subhead text-white">
+                    <h3 className="fw-lighter fs-3 pb-0 mb-0 home_subhead text-white">
                       Bringing Your
-                    </h6>
+                    </h3>
                     <h3 className="letheading home_banner_heading text-white">
                       Dream Home to Life
                     </h3>
@@ -299,7 +299,7 @@ const HcLandingTwo = () => {
                       src="/images/Whatsapp-icon.png"
                       width="40"
                       alt="whatsapp"
-                    />
+                    decoding="async"  loading="lazy" />
                   </div>
                 </a>
               </div>
@@ -464,7 +464,7 @@ interior project"
                           src="/images/hc_landing_2/testimonial_2.png"
                           width={70}
                           alt="user"
-                        />
+                        decoding="async"  loading="lazy" />
                       </div>
                       <div className="ps-4">
                         <p className="mb-1">
@@ -494,7 +494,7 @@ interior project"
                           className="w-100 object-fit-contain"
                           height={250}
                           alt=""
-                        />
+                        decoding="async"  loading="lazy" />
                       </div>
                     </div>
                   </div>
@@ -815,7 +815,7 @@ interior project"
                       className=""
                       width={150}
                       height={150}
-                    />
+                    decoding="async"  loading="lazy" />
                   </a>
                 </div>
 

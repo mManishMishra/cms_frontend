@@ -38,7 +38,7 @@
 //   src={imgGalUrl}
 //   alt={imgGalAlt}
 //   className={imgGalImgClass}
-//   onClick={() => handleClick(images.findIndex(img => img.image === imgGalUrl))}
+//   onClick={() = decoding="async" loading="lazy"> handleClick(images.findIndex(img => img.image === imgGalUrl))}
 //   style={{ cursor: "pointer" }}
 // />
 
@@ -47,7 +47,7 @@
 //         <div className="container-fluid2">
 //           <div className="container popup_container">
 //             <button className="close-btn" onClick={handleClose}>&times;</button>
-//             <img src={currentImage} alt="Fullscreen Image" className="popup_img" />
+//             <img src={currentImage} alt="Fullscreen Image" className="popup_img" decoding="async"  loading="lazy" />
 //             {hasImages && (
 //               <>
 //                 <button className="nav-btn left" onClick={handlePrev}>❮</button>
@@ -173,7 +173,7 @@ const GalleryDetail = ({ imgGalUrl, imgGalAlt, imgGalImgClass, images = [] }) =>
         className={imgGalImgClass}
         onClick={handleClick}
         style={{ cursor: "pointer" }}
-      />
+      decoding="async"  loading="lazy" />
 
       {/* Fullscreen View */}
       {isFullScreen && (
@@ -186,7 +186,7 @@ const GalleryDetail = ({ imgGalUrl, imgGalAlt, imgGalImgClass, images = [] }) =>
               src={currentImage}
               alt="Fullscreen Image"
               className="popup_img"
-            />
+            decoding="async"  loading="lazy" />
             {hasImages && (
               <>
                 <button className="nav-btn left" onClick={handlePrev}>

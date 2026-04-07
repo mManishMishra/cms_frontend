@@ -46,11 +46,8 @@ async function getBannerData() {
       : process.env.NEXT_PUBLIC_API_BASE_URL;
 
     // Use native fetch for better ISR support
-    // const res = await fetch(`${baseURL}/cms-content/homepage_banner`, {
-    //   next: { revalidate: 60 } 
-    // });
     const res = await fetch(`${baseURL}/cms-content/homepage_banner`, {
-      cache: "no-store", 
+      next: { revalidate: 60 } 
     });
 
     if (!res.ok) {

@@ -314,7 +314,7 @@ const Home = () => {
             loading="eager"
             data-no-lazy="1"
             heigth
-          />
+          decoding="async" />
         )}
 
         <div className="pt-0 carousel-caption d-md-block">
@@ -326,10 +326,10 @@ const Home = () => {
             fetchpriority="high"
             loading="eager"
             data-no-lazy="1"
-           alt="" /> */}
-          <h6 className="pb-0 mb-0 fw-lighter fs-3 home_subhead">
+           alt="" decoding="async" /> */}
+          <h3 className="pb-0 mb-0 fw-lighter fs-3 home_subhead">
             {banner?.top_slogan}
-          </h6>
+          </h3>
           <div className="d-lg-flex">
             <div>
               <h3 className="letheading home_banner_heading">
@@ -493,7 +493,7 @@ const Home = () => {
                     fetchpriority="high"
                     loading="eager"
                     data-no-lazy="1" 
-                    />
+                    decoding="async" />
                     <h4 className="py-2 text-white">{HomePageContent[20]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[20]?.json_content?.description}
@@ -516,7 +516,7 @@ const Home = () => {
                 <div className="px-3 px-lg-4 py-4">
                     <img src={HomePageContent[19]?.json_content?.image} width={60} alt=""  fetchpriority="high"
   loading="eager"
-  data-no-lazy="1"/>
+  data-no-lazy="1"decoding="async" />
                     <h4 className="py-2 text-white">{HomePageContent[19]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[19]?.json_content?.description}
@@ -537,7 +537,7 @@ const Home = () => {
               <div className="col-lg-2 col-md-3 col-6 ps-0">
                 <div className="box3_data">
                 <div className="px-3 px-lg-4 py-4">
-                    <img src={HomePageContent[18]?.json_content?.image} width={60} alt="" />
+                    <img src={HomePageContent[18]?.json_content?.image} width={60} alt="" decoding="async"  loading="lazy" />
                     <h4 className="py-2 text-white">{HomePageContent[18]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[18]?.json_content?.description}
@@ -560,7 +560,7 @@ const Home = () => {
                 <div className="px-3 px-lg-4 py-4">
                     <img src={HomePageContent[17]?.json_content?.image} width={60} alt=""  fetchpriority="high"
   loading="eager"
-  data-no-lazy="1" />
+  data-no-lazy="1" decoding="async" />
                     <h4 className="py-2 text-white">{HomePageContent[17]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[17]?.json_content?.description}
@@ -583,7 +583,7 @@ const Home = () => {
                 <div className="px-3 px-lg-4 py-4">
                     <img src={HomePageContent[16]?.json_content?.image} width={60} alt=""  fetchpriority="high"
   loading="eager"
-  data-no-lazy="1"/>
+  data-no-lazy="1"decoding="async" />
                     <h4 className="py-2 text-white">{HomePageContent[16]?.json_content?.title}</h4>
                     <p className="box_para">
                     {HomePageContent[16]?.json_content?.description}
@@ -858,7 +858,7 @@ const Home = () => {
                  fetchpriority="high"
                   loading="eager"
                   data-no-lazy="1"
-                  />
+                  decoding="async" />
               </div>
               <div className="col-lg-10 col-md-9 col-9">
                 <div className="pt-3 text-end">

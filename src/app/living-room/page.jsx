@@ -1,4 +1,3 @@
-// "use client";
 // import RowImage from "../components/RowImage";
 // import ProductCard from "../components/ProductCard";
 // import MainLayout from "../layouts/MainLayout";

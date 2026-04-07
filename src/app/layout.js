@@ -134,7 +134,7 @@ export default function RootLayout({ children }) {
             style={{ display: "none" }}
             alt="Facebook"
             src="https://www.facebook.com/tr?id=768898314129368&ev=PageView&cd[value]=1.00&cd[currency]=INR&noscript=1"
-          />
+          decoding="async"  loading="lazy" />
         </noscript>
 
         {/* Google Analytics - Loaded lazily to avoid blocking initial render */}

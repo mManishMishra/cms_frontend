@@ -21,7 +21,7 @@ const How = (props) => {
                 src={props.ServicesImgUrl}
                 className="services_img"
                 alt={props.servicesImgAlt}
-              />
+              decoding="async"  loading="lazy" />
             </div> */}
           </div>
         </div>

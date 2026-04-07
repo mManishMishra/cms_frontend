@@ -65,7 +65,7 @@ const Terms = () => {
           width="1"
           style={{ display: "none" }}
           src="https://www.facebook.com/tr?id=768898314129368&ev=PageView&noscript=1"
-         alt="" />
+         alt="" decoding="async"  loading="lazy" />
       </noscript>
 
       <MainLayout>

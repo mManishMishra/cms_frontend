@@ -138,7 +138,7 @@ const CmsRealLifePortfolio = () => {
                                     <tr key={item.id}>
                                         <td>{index+1}</td>
                                         <td>
-                                            <img src={item.image} alt={item.title} height="80" />
+                                            <img src={item.image} alt={item.title} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td>{item.title}</td>
                                         <td>{item.style}</td>

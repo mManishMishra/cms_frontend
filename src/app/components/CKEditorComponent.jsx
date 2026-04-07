@@ -1,3 +1,4 @@
+"use client";
 ﻿import { CKEditor } from '@ckeditor/ckeditor5-react';
 import DOMPurify from 'isomorphic-dompurify';
 import {

@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 
 const GalleryDetail = (props) => {
@@ -23,7 +24,7 @@ const GalleryDetail = (props) => {
         className={props.imgGalImgClass} // Dynamic class for styling
         onClick={handleClick}
         style={{ cursor: "pointer" }} // Adjust size as necessary
-      />
+      decoding="async"  loading="lazy" />
 
       {/* Fullscreen Mode */}
       {isFullScreen && (
@@ -48,7 +49,7 @@ const GalleryDetail = (props) => {
                 display: "flex",
                 margin: "auto",
               }}
-            />
+            decoding="async"  loading="lazy" />
           </div>
         </div>
       )}

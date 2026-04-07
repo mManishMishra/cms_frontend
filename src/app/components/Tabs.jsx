@@ -1,3 +1,4 @@
+"use client";
 // components/TabsComponent.js
 import { IoMdCloseCircle } from "react-icons/io";
 import { CiCirclePlus, CiCircleMinus, CiCircleCheck } from "react-icons/ci";

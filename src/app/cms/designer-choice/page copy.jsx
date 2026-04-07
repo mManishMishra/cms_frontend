@@ -175,7 +175,7 @@ const CmsDesignGallery = () => {
                                     <tr key={item.id}>
                                         <td>{index + 1}</td>
                                         <td>
-                                            <img src={item?.child_content?.image} alt={item?.child_content.title} height="80" />
+                                            <img src={item?.child_content?.image} alt={item?.child_content.title} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td>{item?.child_content.title}</td>
                                         <td>{item?.child_content?.description}</td>
@@ -303,7 +303,7 @@ const CmsDesignGallery = () => {
                                         />
                                     </div>
                                     <div className="col-md-6">
-                                        {imageItem && <img src={imageItem.image} alt={`Image ${index + 1}`} style={{ height: '100px', marginTop: '10px' }} />}
+                                        {imageItem && <img src={imageItem.image} alt={`Image ${index + 1}`} style={{ height: '100px', marginTop: '10px' }} decoding="async"  loading="lazy" />}
                                     </div>
                                 </div>
                             ))}

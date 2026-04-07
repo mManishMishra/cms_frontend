@@ -23,10 +23,10 @@ const Blogs = (props) => {
             </div>
             {/* <div className="d-flex">
               <a href="">
-                <img src="/images/share.png" width={20} alt="user" />
+                <img src="/images/share.png" width={20} alt="user" decoding="async"  loading="lazy" />
               </a>
               <a href="" className="ps-2">
-                <img src="/images/comment.png" width={20} alt="user" />
+                <img src="/images/comment.png" width={20} alt="user" decoding="async"  loading="lazy" />
               </a>
             </div> */}
           </div>

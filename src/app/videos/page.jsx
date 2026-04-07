@@ -28,7 +28,7 @@ const Videos = () => {
                         height={500}
                         className="w-100 object-fit-cover"
                         alt=""
-                      />
+                      decoding="async"  loading="lazy" />
                       <h6 className="pt-5">
                       Bed Rooms videos
                       </h6>
@@ -47,7 +47,7 @@ const Videos = () => {
                         height={500}
                         className="w-100 object-fit-cover"
                         alt=""
-                      />
+                      decoding="async"  loading="lazy" />
                       <h6 className="pt-5">
                       Bed Rooms videos
                       </h6>
@@ -66,7 +66,7 @@ const Videos = () => {
                         height={500}
                         className="w-100 object-fit-cover"
                         alt=""
-                      />
+                      decoding="async"  loading="lazy" />
                       <h6 className="pt-5">
                       Bed Rooms videos
                       </h6>
@@ -85,7 +85,7 @@ const Videos = () => {
                         height={500}
                         className="w-100 object-fit-cover"
                         alt=""
-                      />
+                      decoding="async"  loading="lazy" />
                       <h6 className="pt-5">
                       Bed Rooms videos
                       </h6>
@@ -104,7 +104,7 @@ const Videos = () => {
                         height={500}
                         className="w-100 object-fit-cover"
                         alt=""
-                      />
+                      decoding="async"  loading="lazy" />
                       <h6 className="pt-5">
                       Bed Rooms videos
                       </h6>

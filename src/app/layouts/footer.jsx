@@ -151,18 +151,18 @@ const Footer = () => {
                   </div>
                   <div className="pt-3">
                     <h6>EMAIL US</h6>
-                    <a href={`mailto:${settings?.email || 'Info@hcinterior.in'}`} className="text_mail">
+                    <a href={`mailto:${settings?.email || 'Info@hcinterior.in'}`} className="text_mail p-2 m-n2 d-inline-block">
                       {settings?.email || 'Info@hcinterior.in'}
                     </a>
                   </div>
                   <div>
                     <h6 className="pt-3">FOR QUERY</h6>
                     <p className="mb-0">
-                      <a href={`tel:${settings?.phone || '+918527750562'}`} className="text_mail">
+                      <a href={`tel:${settings?.phone || '+918527750562'}`} className="text_mail p-2 m-n2 d-inline-block">
                         {settings?.phone || '+91 8527750562'}
                       </a>
                     </p>
-                    <a href="tel:+917070701373" className="text_mail">
+                    <a href="tel:+917070701373" className="text_mail p-2 m-n2 d-inline-block">
                       +91 7070701373
                     </a>
                   </div>
@@ -290,8 +290,8 @@ const Footer = () => {
                       </a>
                     </li>
 
-                    <h6>Workshop</h6>
-                    <li className="footer_li pb-2">
+                    <li className="footer_li pb-2 pt-2">
+                      <h6>Workshop</h6>
                       <span className="text-black">
                         Plot No-3, Sorkha Village , Sector-115, Noida, Uttar
                         Pradesh- 201301

@@ -1,4 +1,3 @@
-// "use client";
 // import { toast } from "react-toastify";
 // import BackgroundImageWithHeading from "../components/BackgroundImageWithHeading";
 // import MainLayout from "../layouts/MainLayout";

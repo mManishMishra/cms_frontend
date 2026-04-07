@@ -64,7 +64,7 @@ const BlogDetail = () => {
                         src={blogDetails?.image}
                         className="image_blog"
                         alt={blogDetails?.image_alt || blogDetails?.title || defaultAltText}
-                      />
+                      decoding="async"  loading="lazy" />
                     )}
                   </div>
                   <div className="details py-4">

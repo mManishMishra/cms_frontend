@@ -139,7 +139,7 @@ const CmsHowItsWorks = () => {
                                         <td>{item.title}</td>
                                         <td>{item.description}</td>
                                         <td>
-                                            <img src={item?.image} alt={item.title} height="80" />
+                                            <img src={item?.image} alt={item.title} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td>
                                             <button onClick={() => handleEditClick(item, index)} type="button" className="read_morebtn" data-bs-toggle="modal" data-bs-target="#addNewpageModal">

@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { MdOutlineDashboard, MdMessage, MdLeaderboard } from "react-icons/md";
 import { FaBlog, FaCalculator, FaFileAlt, FaQuestionCircle, FaRegUser } from "react-icons/fa";
@@ -29,7 +30,7 @@ function AuthSidebar() {
             <div className="mt-3 position-sticky my_admin_sidebar">
                 <div className="usercard">
                     <center>
-                        <img src="/images/user-icons.svg" width={70} alt="user" />
+                        <img src="/images/user-icons.svg" width={70} alt="user" decoding="async"  loading="lazy" />
                         <h6 className="pt-3 text-white">{user?.firstName} {user?.lastName}</h6>
                         <p className="text-white team_description">{user?.email}</p>
                     </center>

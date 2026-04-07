@@ -21,7 +21,7 @@ const FourZeroFour = () => {
         <main>
          <section>
        <a href="/" aria-label="Home">
-       <img src="/images/four.png" className="w-100 object-fit-cover" height={500} alt="404" />
+       <img src="/images/four.png" className="w-100 object-fit-cover" height={500} alt="404" decoding="async"  loading="lazy" />
        </a>
          </section>
           <hr className="mt-5" />

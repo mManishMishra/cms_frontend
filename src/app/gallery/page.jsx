@@ -1,5 +1,4 @@
 import BackgroundImageWithHeading from "../components/BackgroundImageWithHeading";
-import { Metadata } from "next";
 import PortfolioCard from "../components/PortfolioCard";
 import MainLayout from "../layouts/MainLayout";
 export const metadata = {

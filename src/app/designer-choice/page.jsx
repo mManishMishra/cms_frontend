@@ -1,4 +1,3 @@
-// "use client";
 // import MainLayout from "../layouts/MainLayout";
 // import PortfolioCard from "../components/PortfolioCard";
 // import BgImageCard from "../components/BgImageCard";

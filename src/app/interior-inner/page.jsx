@@ -84,7 +84,7 @@ style. We provide affordable interior design services in Delhi"
                       className="w-100 object-fit-contain"
                       height={150}
                       alt="team"
-                    />
+                    decoding="async"  loading="lazy" />
                     <div className="pt-3 text-center card-body">
                       <h4 className="px-4 py-3 text-center card-title">
                         India&apos;s only full home warranty* up to 10-yrs for
@@ -100,7 +100,7 @@ style. We provide affordable interior design services in Delhi"
                       className="w-100 object-fit-contain"
                       height={150}
                       alt="team"
-                    />
+                    decoding="async"  loading="lazy" />
                     <div className="pt-3 text-center card-body">
                       <h4 className="px-4 py-3 text-center card-title">
                         146 quality checks to give your home the best
@@ -115,7 +115,7 @@ style. We provide affordable interior design services in Delhi"
                       className="w-100 object-fit-contain"
                       height={150}
                       alt="team"
-                    />
+                    decoding="async"  loading="lazy" />
                     <div className="pt-3 text-center card-body">
                       <h4 className="px-4 py-3 text-center card-title">
                         45-day installation swift kitchens, wardrobes & storage

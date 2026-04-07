@@ -262,7 +262,7 @@ const CmsProjectPortfolio = () => {
                                             </span>
                                         </td>
                                         <td>
-                                            <img src={item?.image} alt={item.title} height="80" />
+                                            <img src={item?.image} alt={item.title} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td>
                                             {item.status === true ? "Active" : "Inactive"}
@@ -450,7 +450,7 @@ const CmsProjectPortfolio = () => {
                                         />
                                     </div>
                                     <div className="col-md-6">
-                                        {imageItem && <img src={imageItem.image} alt={`Image ${index + 1}`} style={{ height: '100px', marginTop: '10px' }} />}
+                                        {imageItem && <img src={imageItem.image} alt={`Image ${index + 1}`} style={{ height: '100px', marginTop: '10px' }} decoding="async"  loading="lazy" />}
                                     </div>
                                 </div>
                             ))}

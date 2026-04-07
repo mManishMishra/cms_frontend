@@ -271,7 +271,7 @@ const HCLandingPage = () => {
                   height={90}
                   alt="hc-logo"
                   className="p-2"
-                />
+                decoding="async"  loading="lazy" />
               </a>
               <button
                 className="navbar-toggler d-block d-lg-none"
@@ -323,9 +323,9 @@ const HCLandingPage = () => {
               <div className="row">
                 <div className="col-lg-7 d-flex align-items-center">
                   <div className="pe-lg-5">
-                    <h6 className="fw-lighter fs-3 pb-0 mb-0 home_subhead">
+                    <h3 className="fw-lighter fs-3 pb-0 mb-0 home_subhead">
                     {data1?.top_title}
-                    </h6>
+                    </h3>
                     <h3 className="letheading home_banner_heading">
                   
                       {data1?.mid_sub_title}
@@ -435,7 +435,7 @@ const HCLandingPage = () => {
               </div>
               <div className="mt-4    me-0">
                 <a href="https://wa.me/919560277787">
-                  <img src="/images/whatsapp.svg" width={50} alt="" />
+                  <img src="/images/whatsapp.svg" width={50} alt="" decoding="async"  loading="lazy" />
                 </a>
               </div>
             </div>
@@ -811,7 +811,7 @@ const HCLandingPage = () => {
                           className=""
                           width={150}
                           height={150}
-                        />
+                        decoding="async"  loading="lazy" />
                       </a>
                     </div>
 

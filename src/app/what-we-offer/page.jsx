@@ -1,4 +1,3 @@
-// "use client";
 // import MainLayout from "../layouts/MainLayout";
 // import BackgroundImageRow from "../components/BackgroundImageRow";
 // import RowImage from "../components/RowImage";
@@ -196,7 +195,9 @@ async function getWhatWeOfferContent() {
       return "";
     }
 
-    const data = await res.json();
+    const text = await res.text();
+    if (!text) return "";
+    const data = JSON.parse(text);
     return data?.json_content?.html || "";
   } catch (err) {
     console.error("What We Offer Content Fetch Error:", err);

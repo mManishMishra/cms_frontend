@@ -160,7 +160,7 @@ const CmsAboutUs = () => {
                                     />
                                 </div>
                                 <div className="col-md-6">
-                                        {typeof formData?.mid_image === 'string' && <img src={formData?.mid_image} alt="Mid Image" style={{ height: '100px', marginTop: '10px' }} />}
+                                        {typeof formData?.mid_image === 'string' && <img src={formData?.mid_image} alt="Mid Image" style={{ height: '100px', marginTop: '10px' }} decoding="async"  loading="lazy" />}
                                     </div>
                                </div>
                                 <div className="m-auto mt-2 col-12 d-flex justify-content-center">

@@ -158,7 +158,7 @@ const CmsDesignGallery = () => {
                                     <tr key={item.id}>
                                         <td>{index + 1}</td>
                                         <td>
-                                            <img src={item?.child_content?.image} alt={item?.child_content?.title} height="80" />
+                                            <img src={item?.child_content?.image} alt={item?.child_content?.title} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td>{item?.child_content?.title}</td>
                                         <td>{item?.child_content?.description}</td>

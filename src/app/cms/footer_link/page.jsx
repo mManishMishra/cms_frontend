@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import $ from "jquery";
 import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
 import api from "@/utils/api";
-import moment from "moment";
+import { format } from "date-fns";
 import { toast } from "react-toastify";
 import {
     getCmsAccess,

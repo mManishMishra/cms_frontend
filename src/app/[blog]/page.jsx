@@ -424,7 +424,7 @@ const DynamicRootPage = async ({ params }) => {
                                     alt={block.data.image_alt || block.data.heading || defaultAltText} 
                                     className="img-fluid rounded shadow" 
                                     style={{ maxHeight: '350px', objectFit: 'cover' }} 
-                                  />
+                                  decoding="async"  loading="lazy" />
                                 )}
                               </div>
                             </div>

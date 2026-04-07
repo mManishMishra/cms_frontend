@@ -153,10 +153,10 @@ const CmsHomepageBanner = () => {
                                         <td>{item.sub_title}</td>
                                         <td>{item.top_slogan}</td>
                                         <td>
-                                            <img src={item?.top_icon} alt={item.title} height="80" />
+                                            <img src={item?.top_icon} alt={item.title} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td>
-                                            <img src={item?.banner_image} alt={item.title} height="80" />
+                                            <img src={item?.banner_image} alt={item.title} height="80" decoding="async"  loading="lazy" />
                                         </td>
                                         <td>
                                             <button onClick={() => handleEditClick(item, index)} type="button" className="read_morebtn" data-bs-toggle="modal" data-bs-target="#addNewpageModal">

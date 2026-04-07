@@ -58,7 +58,7 @@ const AboutUsContent = () => {
               <h2 className="pb-4 wallpaperHeading">{formData.top_title}</h2>
               <div className="row justify-content-center">
                 <div className="col-lg-6">
-                  <img src={formData.mid_image || ""} className="w-100" alt="About High Creation" />
+                  <img src={formData.mid_image || ""} className="w-100" alt="About High Creation" decoding="async"  loading="lazy" />
                 </div>
               </div>
               <p className="px-lg-5 pt-4 team_description">{formData.top_description}</p>
@@ -78,7 +78,7 @@ const AboutUsContent = () => {
                 </div>
               </div>
               <div className="col-lg-5">
-                <img src="/images/about/Whatmakes.png" className="w-100" alt="What makes us best" />
+                <img src="/images/about/Whatmakes.png" className="w-100" alt="What makes us best" decoding="async"  loading="lazy" />
               </div>
             </div>
           </div>

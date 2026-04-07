@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 // import React, { useState, useEffect, useCallback } from "react";
 // import { useSelector } from "react-redux";
 // import AuthMainLayout from "../../layouts/auth/AuthMainLayout";
@@ -222,14 +222,14 @@
 //                                             <span className="d-inline-block text-truncate" style={{ width: "250px" }} dangerouslySetInnerHTML={{ __html: item.main_description }}></span>
 //                                         </td>
 //                                         <td>
-//                                             <img src={item.location_image} alt="Location Image" height="80" />
+//                                             <img src={item.location_image} alt="Location Image" height="80" decoding="async"  loading="lazy" />
 //                                         </td>
 //                                         <td>{item.side_title}</td>
 //                                         <td>
 //                                             <span className="d-inline-block text-truncate" style={{ width: "250px" }} dangerouslySetInnerHTML={{ __html: item.side_description }}></span>
 //                                         </td>
 //                                         <td>
-//                                             <img src={item.side_image} alt="Side Image" height="80" />
+//                                             <img src={item.side_image} alt="Side Image" height="80" decoding="async"  loading="lazy" />
 //                                         </td>
 //                                         <td width={150}>
 //                                             <button onClick={() => handleManageSeoContentClick(item.id, item.seo_content)} className="btn btn-info text-nowrap" type="button" data-bs-toggle="modal" data-bs-target="#seoContentModal">SEO Content</button>
@@ -642,14 +642,14 @@ const CmsCity = () => {
                                             <span className="d-inline-block text-truncate" style={{ width: "250px" }} dangerouslySetInnerHTML={{ __html: item.main_description }}></span>
                                         </td>
                                         <td>
-                                            {item.location_image && <img src={item.location_image} alt="Location Image" height="80" />}
+                                            {item.location_image && <img src={item.location_image} alt="Location Image" height="80" decoding="async"  loading="lazy" />}
                                         </td>
                                         <td>{item.side_title}</td>
                                         <td>
                                             <span className="d-inline-block text-truncate" style={{ width: "250px" }} dangerouslySetInnerHTML={{ __html: item.side_description }}></span>
                                         </td>
                                         <td>
-                                            {item.side_image && <img src={item.side_image} alt="Side Image" height="80" />}
+                                            {item.side_image && <img src={item.side_image} alt="Side Image" height="80" decoding="async"  loading="lazy" />}
                                         </td>
                                         <td width={150}>
                                             <button onClick={() => handleManageSeoContentClick(item.id, item.seo_content)} className="btn btn-info text-nowrap" type="button" data-bs-toggle="modal" data-bs-target="#seoContentModal">SEO Content</button>

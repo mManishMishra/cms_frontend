@@ -40,8 +40,8 @@ const AuthFooter = () => {
                                             src="/images/gpay.PNG"
                                             className="me-3"
                                             alt="google-playstore"
-                                        />
-                                        <img src="/images/apple.PNG" alt="ois-store" />
+                                        decoding="async"  loading="lazy" />
+                                        <img src="/images/apple.PNG" alt="ois-store" decoding="async"  loading="lazy" />
                                     </div>
                                 </div>
                                 <div className="col-lg-2 col-md-4 col-6">

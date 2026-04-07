@@ -116,7 +116,7 @@ export default async function AboutUs() {
                       src={formData.mid_image}
                       className="w-100"
                       alt={formData?.top_title || "About Us"}
-                    />
+                    decoding="async"  loading="lazy" />
                   )}
                 </div>
               </div>
@@ -149,7 +149,7 @@ export default async function AboutUs() {
                   src="/images/about/Whatmakes.png"
                   className="w-100"
                   alt="What makes us best"
-                />
+                decoding="async"  loading="lazy" />
               </div>
             </div>
           </div>
